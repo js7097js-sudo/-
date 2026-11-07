@@ -10,7 +10,7 @@
     body { background: #070b14; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow-x: hidden; }
 
     /* 대기실 */
-    #lobby-view { width: 92%; max-width: 500px; background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 26px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.7); }
+    #lobby-view { width: 92%; max-width: 500px; background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 26px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
     .lobby-title { font-size: 24px; font-weight: 800; color: #38bdf8; margin-bottom: 8px; }
     .lobby-desc { font-size: 13.5px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
     .input-row { display: flex; gap: 8px; margin-bottom: 15px; }
@@ -23,54 +23,62 @@
     .player-item { padding: 9px 12px; border-radius: 6px; background: #1e293b; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
     .tag-host { background: #f59e0b; color: #070b14; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
 
-    /* 루미큐브 테이블 레이아웃 (4대 종교 외곽 + 중앙 대형 지도) */
-    #game-view { display: none; width: 100vw; height: 100vh; max-width: 1440px; grid-template-rows: 90px 1fr 100px; grid-template-columns: 260px 1fr 260px; gap: 12px; padding: 14px; box-sizing: border-box; }
+    /* 인게임 테이블 레이아웃 (루미큐브 스타일 4방면) */
+    #game-view { display: none; width: 100vw; height: 100vh; max-width: 1440px; grid-template-rows: 95px 1fr 105px; grid-template-columns: 260px 1fr 260px; gap: 12px; padding: 14px; box-sizing: border-box; }
 
     @media (max-width: 1024px) {
       #game-view { display: none; height: auto; grid-template-rows: auto; grid-template-columns: 1fr; }
     }
 
-    /* 4방향 종교 카드 */
-    .religion-card { background: #0f172a; border: 2px solid #1e293b; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; position: relative; }
-    .religion-card.active-turn { border-color: #facc15; box-shadow: 0 0 20px rgba(250, 204, 21, 0.45); transform: scale(1.02); }
+    /* 종교별 전용 테마 패널 (교과서 캐릭터 스타일 테두리 및 배색) */
+    .religion-card { background: #0f172a; border: 2px solid #1e293b; border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; position: relative; }
+    .religion-card.active-turn { border-color: #facc15 !important; box-shadow: 0 0 25px rgba(250, 204, 21, 0.5) !important; transform: scale(1.02); }
+    .card-top { display: flex; justify-content: space-between; align-items: center; }
     .religion-name { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-    .religion-score { font-size: 26px; font-weight: 900; margin-top: 4px; }
-    .region-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .religion-score { font-size: 26px; font-weight: 900; }
+    .region-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
     .region-tag { font-size: 11px; padding: 3px 7px; border-radius: 4px; background: #1e293b; color: #cbd5e1; }
 
-    .panel-north { grid-column: 2; grid-row: 1; border-top: 5px solid #8b5cf6; }   /* 크리스트교 (보라) */
-    .panel-west  { grid-column: 1; grid-row: 2; border-left: 5px solid #10b981; }  /* 이슬람교 (초록) */
-    .panel-east  { grid-column: 3; grid-row: 2; border-right: 5px solid #f59e0b; } /* 불교 (주황) */
-    .panel-south { grid-column: 2; grid-row: 3; border-bottom: 5px solid #ea580c; }/* 힌두교 (적주황) */
+    /* 4방향 고유 종교 데코레이션 */
+    .panel-north { grid-column: 2; grid-row: 1; border-top: 5px solid #8b5cf6; background: linear-gradient(180deg, rgba(139,92,246,0.15) 0%, #0f172a 100%); }
+    .panel-west  { grid-column: 1; grid-row: 2; border-left: 5px solid #10b981; background: linear-gradient(90deg, rgba(16,185,129,0.15) 0%, #0f172a 100%); }
+    .panel-east  { grid-column: 3; grid-row: 2; border-right: 5px solid #f59e0b; background: linear-gradient(270deg, rgba(245,158,11,0.15) 0%, #0f172a 100%); }
+    .panel-south { grid-column: 2; grid-row: 3; border-bottom: 5px solid #ea580c; background: linear-gradient(0deg, rgba(234,88,12,0.15) 0%, #0f172a 100%); }
 
     /* 중앙 세계 지도 캔버스 */
-    .board-center { grid-column: 2; grid-row: 2; background: #090e1a; border-radius: 16px; border: 1px solid #1e293b; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; padding: 10px; }
-    .map-svg { width: 100%; height: 100%; max-height: 520px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+    .board-center { grid-column: 2; grid-row: 2; background: #090e1a; border-radius: 16px; border: 1px solid #1e293b; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
+    .map-svg { width: 100%; height: 100%; max-height: 520px; }
 
-    /* 대륙 패스 & 인터랙티브 노드 */
-    .continent-shape { fill: #172033; stroke: #2a3854; stroke-width: 1.2; transition: 0.3s; }
-    .region-zone { cursor: pointer; transition: 0.25s; }
-    .region-zone:hover rect { stroke: #ffffff; stroke-width: 2.5; }
-    .region-zone.selected rect { stroke: #facc15; stroke-width: 3.5; filter: drop-shadow(0 0 8px #facc15); }
+    .continent-base { fill: #131b2e; stroke: #23314d; stroke-width: 1.2; }
+    .trade-line { stroke: #2a3b5c; stroke-width: 1.5; stroke-dasharray: 4; }
 
-    /* 하단 조작 바 */
-    .action-panel { position: absolute; bottom: 16px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px); border: 1px solid #38bdf8; border-radius: 12px; padding: 10px 18px; display: flex; gap: 10px; align-items: center; z-index: 10; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+    /* 국가 노드 */
+    .nation-node { cursor: pointer; transition: 0.2s; }
+    .nation-node:hover rect { stroke: #ffffff; stroke-width: 2.5; }
+    .nation-node.selected rect { stroke: #facc15; stroke-width: 3.5; filter: drop-shadow(0 0 10px #facc15); }
+
+    /* 하단 조작 컨트롤 */
+    .action-panel { position: absolute; bottom: 14px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px); border: 1px solid #38bdf8; border-radius: 12px; padding: 10px 18px; display: flex; gap: 10px; align-items: center; z-index: 10; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
     .method-btn { background: #1e293b; color: white; padding: 9px 14px; border-radius: 8px; font-size: 13px; border: 1px solid #475569; }
     .method-btn.selected { background: #38bdf8; color: #070b14; font-weight: bold; border-color: #38bdf8; }
     .btn-spread { background: #e11d48; color: white; padding: 10px 20px; font-size: 14px; border-radius: 8px; font-weight: 800; }
     .btn-spread:disabled { opacity: 0.35; cursor: not-allowed; }
 
-    /* 중앙 결과 알림 모달 카드 (사진 + 사건 팝업) */
-    #result-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 999; align-items: center; justify-content: center; }
-    .modal-card { width: 90%; max-width: 540px; background: #0f172a; border: 2px solid #38bdf8; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.9); animation: popUp 0.3s ease-out; }
-    .modal-img { width: 100%; height: 210px; object-fit: cover; border-bottom: 2px solid #1e293b; }
+    /* 결과 모달 카드 (고화질 실사 + 캐릭터 + 사건) */
+    #result-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 999; align-items: center; justify-content: center; }
+    .modal-card { width: 90%; max-width: 550px; background: #0f172a; border: 2px solid #38bdf8; border-radius: 18px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.95); animation: popUp 0.3s ease-out; }
+    .modal-img-wrap { width: 100%; height: 230px; position: relative; background: #000; overflow: hidden; }
+    .modal-img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-char-badge { position: absolute; bottom: 10px; right: 12px; background: rgba(15,23,42,0.9); border: 1px solid #facc15; padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+
     .modal-content { padding: 20px; text-align: left; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .modal-badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
     .modal-title { font-size: 20px; font-weight: 800; color: #ffffff; }
-    .modal-desc { font-size: 13.5px; color: #94a3b8; line-height: 1.5; margin-bottom: 14px; }
+    .modal-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; margin: 6px 0 14px 0; }
+    
     .modal-event-box { background: #1e293b; border-radius: 10px; padding: 12px 14px; margin-bottom: 15px; border-left: 4px solid #facc15; }
-    .event-score-tag { font-size: 18px; font-weight: 900; float: right; }
+    .event-score-tag { font-size: 20px; font-weight: 900; float: right; }
     .btn-close-modal { width: 100%; background: #38bdf8; color: #070b14; padding: 12px; font-size: 15px; font-weight: 800; border-radius: 8px; }
 
     @keyframes popUp {
@@ -81,12 +89,12 @@
 </head>
 <body>
 
-  <!-- 1. 입장 대기실 -->
+  <!-- 대기실 -->
   <div id="lobby-view">
     <div class="lobby-title">🌍 세계 종교 전파 시뮬레이션</div>
     <div class="lobby-desc">
-      교과서 세계 종교 분포 지도를 바탕으로 종교의 실제 발상지와 역사적 전파 방식을 배우는 턴제 게임입니다.<br>
-      <span style="color:#38bdf8;">(혼자 테스트 시 바로 '솔로 테스트 시작'을 눌러 4개 종교를 모두 체험할 수 있습니다)</span>
+      교과서 속 4대 종교의 실제 발상지와 대표 국가, 그리고 전파 경로를 탐험합니다.<br>
+      <span style="color:#38bdf8;">(혼자 테스트 시 '솔로 테스트 시작'으로 4개 종교를 모두 조작해볼 수 있습니다)</span>
     </div>
 
     <div id="join-form" class="input-row">
@@ -101,151 +109,147 @@
     <button id="startBtn" class="btn-start" onclick="startGame()" style="display:none;">게임 시작</button>
   </div>
 
-  <!-- 2. 인게임 메인 화면 -->
+  <!-- 인게임 화면 -->
   <div id="game-view">
     
-    <!-- 북쪽: 크리스트교 -->
+    <!-- 북쪽: 크리스트교 (로마 가톨릭 교황 풍) -->
     <div id="card-christianity" class="religion-card panel-north">
-      <div class="religion-name" style="color:#a78bfa;">✝️ 크리스트교 <span id="turn-tag-christianity" style="display:none; font-size:11px; background:#facc15; color:black; padding:1px 6px; border-radius:3px;">내 턴</span></div>
-      <div id="score-christianity" class="religion-score">60점</div>
-      <div id="regions-christianity" class="region-tags"><span class="region-tag">유럽</span></div>
+      <div class="card-top">
+        <div class="religion-name" style="color:#c4b5fd;">✝️ 크리스트교 <span id="turn-tag-christianity" style="display:none; font-size:11px; background:#facc15; color:black; padding:1px 6px; border-radius:3px;">내 턴</span></div>
+        <div id="score-christianity" class="religion-score">60점</div>
+      </div>
+      <div id="regions-christianity" class="region-tags"><span class="region-tag">이탈리아(로마)</span></div>
     </div>
 
-    <!-- 서쪽: 이슬람교 -->
+    <!-- 서쪽: 이슬람교 (아랍 학자/상인 풍) -->
     <div id="card-islam" class="religion-card panel-west">
-      <div class="religion-name" style="color:#34d399;">☪️ 이슬람교 <span id="turn-tag-islam" style="display:none; font-size:11px; background:#facc15; color:black; padding:1px 6px; border-radius:3px;">내 턴</span></div>
-      <div id="score-islam" class="religion-score">60점</div>
-      <div id="regions-islam" class="region-tags"><span class="region-tag">서남아시아</span></div>
+      <div class="card-top">
+        <div class="religion-name" style="color:#6ee7b7;">☪️ 이슬람교 <span id="turn-tag-islam" style="display:none; font-size:11px; background:#facc15; color:black; padding:1px 6px; border-radius:3px;">내 턴</span></div>
+        <div id="score-islam" class="religion-score">60점</div>
+      </div>
+      <div id="regions-islam" class="region-tags"><span class="region-tag">사우디아라비아(메카)</span></div>
     </div>
 
-    <!-- 중앙: 대형 세계 대륙 지도 SVG -->
+    <!-- 중앙: 대형 세계 지도 SVG (대륙 + 대표 국가 노드) -->
     <div class="board-center">
       <svg class="map-svg" viewBox="0 0 1000 550">
-        <!-- 바다 배경 -->
         <rect width="1000" height="550" fill="#090e1a" rx="14"/>
 
-        <!-- 실제 세계 지도 대륙 윤곽선 벡터 -->
-        <g class="world-continents" opacity="0.65">
-          <!-- 북아메리카 -->
-          <path class="continent-shape" d="M 120 70 L 260 70 L 290 120 L 250 190 L 190 220 L 140 180 L 110 130 Z" />
-          <!-- 라틴아메리카 -->
-          <path class="continent-shape" d="M 210 240 L 270 250 L 320 330 L 280 460 L 230 460 L 220 360 L 190 280 Z" />
-          <!-- 유럽 -->
-          <path class="continent-shape" d="M 440 80 L 530 80 L 550 140 L 480 180 L 430 160 Z" />
-          <!-- 아프리카 (북부 + 사하라 이남) -->
-          <path class="continent-shape" d="M 450 200 L 570 200 L 590 310 L 540 440 L 480 430 L 440 290 Z" />
-          <!-- 서남아시아 (아라비아) -->
-          <path class="continent-shape" d="M 570 190 L 650 190 L 640 260 L 580 270 Z" />
-          <!-- 아시아 대륙 본토 (동아시아, 남아시아) -->
-          <path class="continent-shape" d="M 560 90 L 850 90 L 880 220 L 810 270 L 730 240 L 660 300 L 630 200 Z" />
-          <!-- 동남아시아 도서 및 반도 -->
-          <path class="continent-shape" d="M 740 270 L 830 270 L 850 350 L 760 370 Z" />
-          <!-- 오세아니아 (호주) -->
-          <path class="continent-shape" d="M 800 390 L 920 390 L 940 470 L 820 480 Z" />
+        <!-- 실제 세계 대륙 윤곽선 -->
+        <g opacity="0.4">
+          <path class="continent-base" d="M 120 70 L 260 70 L 290 120 L 250 190 L 190 220 L 140 180 L 110 130 Z" /> <!-- 북미 -->
+          <path class="continent-base" d="M 210 240 L 270 250 L 320 330 L 280 460 L 230 460 L 220 360 L 190 280 Z" /> <!-- 남미 -->
+          <path class="continent-base" d="M 440 80 L 530 80 L 550 140 L 480 180 L 430 160 Z" /> <!-- 유럽 -->
+          <path class="continent-base" d="M 450 200 L 570 200 L 590 310 L 540 440 L 480 430 L 440 290 Z" /> <!-- 아프리카 -->
+          <path class="continent-base" d="M 570 190 L 650 190 L 640 260 L 580 270 Z" /> <!-- 서남아 -->
+          <path class="continent-base" d="M 560 90 L 850 90 L 880 220 L 810 270 L 730 240 L 660 300 L 630 200 Z" /> <!-- 아시아 -->
+          <path class="continent-base" d="M 740 270 L 830 270 L 850 350 L 760 370 Z" /> <!-- 동남아 -->
         </g>
 
-        <!-- 교역 및 항로 점선 -->
-        <g stroke="#2a3854" stroke-width="1.5" stroke-dasharray="4">
-          <line x1="220" y1="140" x2="460" y2="130"/> <!-- 북미-유럽 -->
-          <line x1="460" y1="130" x2="250" y2="330"/> <!-- 유럽-라틴미 -->
-          <line x1="480" y1="170" x2="600" y2="220"/> <!-- 유럽-서남아 -->
-          <line x1="600" y1="220" x2="680" y2="280"/> <!-- 서남아-남아시아 -->
-          <line x1="680" y1="280" x2="780" y2="310"/> <!-- 남아시아-동남아 -->
-          <line x1="680" y1="280" x2="790" y2="160"/> <!-- 실크로드 (남아시아-동아시아) -->
-          <line x1="780" y1="310" x2="860" y2="420"/> <!-- 동남아-오세아니아 -->
+        <!-- 교과서 전파 교역로 -->
+        <g class="trade-line">
+          <line x1="200" y1="140" x2="480" y2="130"/>
+          <line x1="480" y1="130" x2="260" y2="340"/>
+          <line x1="480" y1="130" x2="620" y2="220"/>
+          <line x1="480" y1="210" x2="620" y2="220"/>
+          <line x1="620" y1="220" x2="690" y2="280"/>
+          <line x1="690" y1="280" x2="780" y2="260"/>
+          <line x1="690" y1="280" x2="790" y2="350"/>
+          <line x1="780" y1="260" x2="840" y2="150"/>
         </g>
 
-        <!-- 10개 선택 가능한 전파 권역 노드 (초기 발상지 컬러링) -->
-        <!-- 1. 북아메리카 -->
-        <g class="region-zone" onclick="clickRegion('북아메리카')">
-          <rect id="node-북아메리카" x="140" y="120" width="115" height="50" rx="8" fill="#172033" stroke="#334155" stroke-width="2"/>
-          <text x="197" y="151" fill="white" font-size="13" font-weight="bold" text-anchor="middle">북아메리카</text>
+        <!-- 교과서 맞춤형 9개 대표 국가 노드 -->
+        <!-- 1. 미국 -->
+        <g class="nation-node" onclick="clickRegion('미국')">
+          <rect id="node-미국" x="140" y="115" width="115" height="48" rx="8" fill="#131b2e" stroke="#334155" stroke-width="2"/>
+          <text x="197" y="145" fill="white" font-size="13" font-weight="bold" text-anchor="middle">🇺🇸 미국</text>
         </g>
 
-        <!-- 2. 라틴아메리카 -->
-        <g class="region-zone" onclick="clickRegion('라틴아메리카')">
-          <rect id="node-라틴아메리카" x="200" y="320" width="120" height="50" rx="8" fill="#172033" stroke="#334155" stroke-width="2"/>
-          <text x="260" y="351" fill="white" font-size="13" font-weight="bold" text-anchor="middle">라틴아메리카</text>
+        <!-- 2. 브라질 -->
+        <g class="nation-node" onclick="clickRegion('브라질')">
+          <rect id="node-브라질" x="200" y="320" width="115" height="48" rx="8" fill="#131b2e" stroke="#334155" stroke-width="2"/>
+          <text x="257" y="350" fill="white" font-size="13" font-weight="bold" text-anchor="middle">🇧🇷 브라질</text>
         </g>
 
-        <!-- 3. 유럽 (크리스트교 발상 기점) -->
-        <g class="region-zone" onclick="clickRegion('유럽')">
-          <rect id="node-유럽" x="430" y="105" width="100" height="50" rx="8" fill="#8b5cf6" stroke="#c4b5fd" stroke-width="2"/>
-          <text x="480" y="136" fill="white" font-size="13" font-weight="bold" text-anchor="middle">유럽</text>
+        <!-- 3. 이탈리아(로마) - 크리스트교 본산 -->
+        <g class="nation-node" onclick="clickRegion('이탈리아(로마)')">
+          <rect id="node-이탈리아(로마)" x="420" y="105" width="125" height="48" rx="8" fill="#8b5cf6" stroke="#c4b5fd" stroke-width="2"/>
+          <text x="482" y="135" fill="white" font-size="12" font-weight="bold" text-anchor="middle">🇮🇹 이탈리아(바티칸)</text>
         </g>
 
-        <!-- 4. 북부아프리카 -->
-        <g class="region-zone" onclick="clickRegion('북부아프리카')">
-          <rect id="node-북부아프리카" x="430" y="220" width="110" height="48" rx="8" fill="#172033" stroke="#334155" stroke-width="2"/>
-          <text x="485" y="250" fill="white" font-size="12" font-weight="bold" text-anchor="middle">북부아프리카</text>
+        <!-- 4. 이집트·북아프리카 -->
+        <g class="nation-node" onclick="clickRegion('이집트·북아프리카')">
+          <rect id="node-이집트·북아프리카" x="425" y="210" width="125" height="48" rx="8" fill="#131b2e" stroke="#334155" stroke-width="2"/>
+          <text x="487" y="240" fill="white" font-size="12" font-weight="bold" text-anchor="middle">🇪🇬 이집트·북아프리카</text>
         </g>
 
-        <!-- 5. 사하라 이남 아프리카 -->
-        <g class="region-zone" onclick="clickRegion('사하라남부아프리카')">
-          <rect id="node-사하라남부아프리카" x="460" y="330" width="125" height="50" rx="8" fill="#172033" stroke="#334155" stroke-width="2"/>
-          <text x="522" y="361" fill="white" font-size="12" font-weight="bold" text-anchor="middle">사하라남부아프리카</text>
+        <!-- 5. 사우디아라비아(메카) - 이슬람교 본산 -->
+        <g class="nation-node" onclick="clickRegion('사우디아라비아(메카)')">
+          <rect id="node-사우디아라비아(메카)" x="560" y="195" width="130" height="48" rx="8" fill="#10b981" stroke="#6ee7b7" stroke-width="2"/>
+          <text x="625" y="225" fill="white" font-size="12" font-weight="bold" text-anchor="middle">🇸🇦 사우디(메카)</text>
         </g>
 
-        <!-- 6. 서남아시아 (이슬람교 발상 기점) -->
-        <g class="region-zone" onclick="clickRegion('서남아시아')">
-          <rect id="node-서남아시아" x="575" y="195" width="105" height="50" rx="8" fill="#10b981" stroke="#6ee7b7" stroke-width="2"/>
-          <text x="627" y="226" fill="white" font-size="13" font-weight="bold" text-anchor="middle">서남아시아</text>
+        <!-- 6. 인도 - 힌두교 본산 -->
+        <g class="nation-node" onclick="clickRegion('인도')">
+          <rect id="node-인도" x="635" y="280" width="110" height="48" rx="8" fill="#ea580c" stroke="#fdba74" stroke-width="2"/>
+          <text x="690" y="310" fill="white" font-size="13" font-weight="bold" text-anchor="middle">🇮🇳 인도</text>
         </g>
 
-        <!-- 7. 남아시아 (힌두교 발상 기점) -->
-        <g class="region-zone" onclick="clickRegion('남아시아')">
-          <rect id="node-남아시아" x="650" y="275" width="100" height="50" rx="8" fill="#ea580c" stroke="#fdba74" stroke-width="2"/>
-          <text x="700" y="306" fill="white" font-size="13" font-weight="bold" text-anchor="middle">남아시아</text>
+        <!-- 7. 태국·캄보디아 - 불교 중심 -->
+        <g class="nation-node" onclick="clickRegion('태국·캄보디아')">
+          <rect id="node-태국·캄보디아" x="725" y="240" width="120" height="48" rx="8" fill="#f59e0b" stroke="#fde68a" stroke-width="2"/>
+          <text x="785" y="270" fill="white" font-size="12" font-weight="bold" text-anchor="middle">🇹🇭 태국·캄보디아</text>
         </g>
 
-        <!-- 8. 동아시아 (불교 기점) -->
-        <g class="region-zone" onclick="clickRegion('동아시아')">
-          <rect id="node-동아시아" x="750" y="135" width="100" height="50" rx="8" fill="#f59e0b" stroke="#fde68a" stroke-width="2"/>
-          <text x="800" y="166" fill="white" font-size="13" font-weight="bold" text-anchor="middle">동아시아</text>
+        <!-- 8. 인도네시아 - 세계 최대 무슬림국 -->
+        <g class="nation-node" onclick="clickRegion('인도네시아')">
+          <rect id="node-인도네시아" x="735" y="335" width="120" height="48" rx="8" fill="#131b2e" stroke="#334155" stroke-width="2"/>
+          <text x="795" y="365" fill="white" font-size="12" font-weight="bold" text-anchor="middle">🇮🇩 인도네시아</text>
         </g>
 
-        <!-- 9. 동남아시아 -->
-        <g class="region-zone" onclick="clickRegion('동남아시아')">
-          <rect id="node-동남아시아" x="760" y="275" width="105" height="50" rx="8" fill="#172033" stroke="#334155" stroke-width="2"/>
-          <text x="812" y="306" fill="white" font-size="13" font-weight="bold" text-anchor="middle">동남아시아</text>
-        </g>
-
-        <!-- 10. 오세아니아 -->
-        <g class="region-zone" onclick="clickRegion('오세아니아')">
-          <rect id="node-오세아니아" x="830" y="405" width="105" height="50" rx="8" fill="#172033" stroke="#334155" stroke-width="2"/>
-          <text x="882" y="436" fill="white" font-size="13" font-weight="bold" text-anchor="middle">오세아니아</text>
+        <!-- 9. 한국 - 종합 다종교 국가 특별존 -->
+        <g class="nation-node" onclick="clickRegion('한국')">
+          <rect id="node-한국" x="800" y="130" width="110" height="48" rx="8" fill="#131b2e" stroke="#38bdf8" stroke-width="2"/>
+          <text x="855" y="160" fill="white" font-size="13" font-weight="bold" text-anchor="middle">🇰🇷 한국 (종합)</text>
         </g>
       </svg>
 
-      <!-- 조작 패널 -->
+      <!-- 조작 바 -->
       <div class="action-panel">
-        <span id="targetLabel" style="font-size:13px; color:#cbd5e1; font-weight:600;">지도에서 권역을 선택하세요</span>
-        <button class="method-btn selected" id="btn-direct" onclick="setMethod('직접전파')">인접로 직접 전파</button>
-        <button class="method-btn" id="btn-long" onclick="setMethod('장거리')">교역로·해양 장거리 전파</button>
+        <span id="targetLabel" style="font-size:13px; color:#cbd5e1; font-weight:600;">국가를 선택하세요</span>
+        <button class="method-btn selected" id="btn-direct" onclick="setMethod('직접전파')">인접로 직접전파</button>
+        <button class="method-btn" id="btn-long" onclick="setMethod('장거리')">교역·해상 장거리전파</button>
         <button id="execBtn" class="btn-spread" onclick="sendAction()" disabled>전파 실행</button>
       </div>
     </div>
 
-    <!-- 동쪽: 불교 -->
+    <!-- 동쪽: 불교 (가사 입은 승려 풍) -->
     <div id="card-buddhism" class="religion-card panel-east">
-      <div class="religion-name" style="color:#fbbf24;">☸️ 불교 <span id="turn-tag-buddhism" style="display:none; font-size:11px; background:#facc15; color:black; padding:1px 6px; border-radius:3px;">내 턴</span></div>
-      <div id="score-buddhism" class="religion-score">60점</div>
-      <div id="regions-buddhism" class="region-tags"><span class="region-tag">동아시아</span></div>
+      <div class="card-top">
+        <div class="religion-name" style="color:#fde68a;">☸️ 불교 <span id="turn-tag-buddhism" style="display:none; font-size:11px; background:#facc15; color:black; padding:1px 6px; border-radius:3px;">내 턴</span></div>
+        <div id="score-buddhism" class="religion-score">60점</div>
+      </div>
+      <div id="regions-buddhism" class="region-tags"><span class="region-tag">태국·캄보디아</span></div>
     </div>
 
-    <!-- 남쪽: 힌두교 -->
+    <!-- 남쪽: 힌두교 (브라만 수행자 풍) -->
     <div id="card-hinduism" class="religion-card panel-south">
-      <div class="religion-name" style="color:#fb923c;">🕉️ 힌두교 <span id="turn-tag-hinduism" style="display:none; font-size:11px; background:#facc15; color:black; padding:1px 6px; border-radius:3px;">내 턴</span></div>
-      <div id="score-hinduism" class="religion-score">60점</div>
-      <div id="regions-hinduism" class="region-tags"><span class="region-tag">남아시아</span></div>
+      <div class="card-top">
+        <div class="religion-name" style="color:#fdba74;">🕉️ 힌두교 <span id="turn-tag-hinduism" style="display:none; font-size:11px; background:#facc15; color:black; padding:1px 6px; border-radius:3px;">내 턴</span></div>
+        <div id="score-hinduism" class="religion-score">60점</div>
+      </div>
+      <div id="regions-hinduism" class="region-tags"><span class="region-tag">인도</span></div>
     </div>
 
   </div>
 
-  <!-- 3. 전파 결과 시각 일러스트 모달 팝업 -->
+  <!-- 결과 모달 카드 (실사 랜드마크 + 캐릭터 엠블럼 + 사건) -->
   <div id="result-modal">
     <div class="modal-card">
-      <img id="modalImg" class="modal-img" src="" alt="지역 전파 이미지">
+      <div class="modal-img-wrap">
+        <img id="modalImg" class="modal-img" src="" alt="지역 전파 건축물">
+        <div id="modalCharBadge" class="modal-char-badge"></div>
+      </div>
       <div class="modal-content">
         <div class="modal-header">
           <div id="modalRegionBadge" class="modal-badge"></div>
@@ -256,11 +260,11 @@
 
         <div class="modal-event-box">
           <div id="modalEventScore" class="event-score-tag"></div>
-          <div style="font-size:11px; color:#facc15; font-weight:bold; margin-bottom:4px;">⚡ 역사적 사건 / 현지 반응</div>
+          <div style="font-size:11.5px; color:#facc15; font-weight:bold; margin-bottom:4px;">⚡ 발생 사건 및 현지 반응</div>
           <div id="modalEventText" style="font-size:14px; color:#ffffff; font-weight:600;"></div>
         </div>
 
-        <button class="btn-close-modal" onclick="closeModal()">확인 및 다음 턴으로</button>
+        <button class="btn-close-modal" onclick="closeModal()">확인 및 다음 턴 진행</button>
       </div>
     </div>
   </div>
@@ -268,22 +272,69 @@
   <script>
     const socket = io();
     let myId = null;
-    let selectedRegion = null;
+    let selectedRegionKey = null;
     let selectedMethod = '직접전파';
     let currentActiveReligion = '크리스트교';
     let myAssignedReligion = null;
     let isSolo = false;
 
+    // Web Audio API 자체 신시사이저 (종교별 고유 사운드 + 효과음)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type, duration, delay = 0) {
+      setTimeout(() => {
+        try {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch(e) {}
+      }, delay);
+    }
+
+    // 종교별 사운드 연출
+    function playReligionSound(religion) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (religion === '크리스트교') {
+        // 장엄한 성당 종소리 톤 (화음)
+        playTone(523.25, 'sine', 1.2, 0);   // C5
+        playTone(659.25, 'sine', 1.2, 100); // E5
+        playTone(783.99, 'sine', 1.5, 200); // G5
+      } else if (religion === '이슬람교') {
+        // 신비로운 아잔 톤
+        playTone(440, 'triangle', 0.8, 0);
+        playTone(466.16, 'triangle', 0.8, 150);
+        playTone(554.37, 'triangle', 1.2, 300);
+      } else if (religion === '불교') {
+        // 청아한 사찰 목탁/풍경 소리
+        playTone(880, 'sine', 0.4, 0);
+        playTone(880, 'sine', 0.6, 120);
+        playTone(1760, 'sine', 1.0, 250);
+      } else if (religion === '힌두교') {
+        // 시타르 풍의 웅장한 배음
+        playTone(293.66, 'sawtooth', 0.8, 0);
+        playTone(440, 'sawtooth', 0.8, 100);
+        playTone(587.33, 'sine', 1.2, 200);
+      }
+    }
+
     const RELIGION_META = {
-      '크리스트교': { id: 'christianity', color: '#8b5cf6' },
-      '이슬람교': { id: 'islam', color: '#10b981' },
-      '불교': { id: 'buddhism', color: '#f59e0b' },
-      '힌두교': { id: 'hinduism', color: '#ea580c' }
+      '크리스트교': { id: 'christianity', color: '#8b5cf6', char: '✝️ 교황·성직자' },
+      '이슬람교': { id: 'islam', color: '#10b981', char: '☪️ 무슬림 학자·상인' },
+      '불교': { id: 'buddhism', color: '#f59e0b', char: '☸️ 구법승·수행승' },
+      '힌두교': { id: 'hinduism', color: '#ea580c', char: '🕉️ 브라만·요가수행자' }
     };
 
     socket.on('connect', () => { myId = socket.id; });
 
     function joinGame() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       const name = document.getElementById('playerName').value;
       socket.emit('joinGame', name);
       document.getElementById('join-form').style.display = 'none';
@@ -291,21 +342,19 @@
     }
 
     function startGame() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       socket.emit('startGame');
     }
 
     socket.on('updateLobby', ({ players, hostId, gameStarted }) => {
       if (gameStarted) return;
       const list = document.getElementById('playerList');
-      list.innerHTML = players.map(p => {
-        const isHost = (p.id === hostId);
-        return `
-          <li class="player-item">
-            <span>${p.name} ${p.id === myId ? '<strong>(나)</strong>' : ''}</span>
-            ${isHost ? '<span class="tag-host">방장</span>' : ''}
-          </li>
-        `;
-      }).join('');
+      list.innerHTML = players.map(p => `
+        <li class="player-item">
+          <span>${p.name} ${p.id === myId ? '<strong>(나)</strong>' : ''}</span>
+          ${p.id === hostId ? '<span class="tag-host">방장</span>' : ''}
+        </li>
+      `).join('');
 
       const startBtn = document.getElementById('startBtn');
       if (socket.id === hostId && players.length >= 1) {
@@ -326,50 +375,64 @@
 
       updateBoard(mapOwnership, religionStates);
       setActiveTurn(currentReligion);
+      playReligionSound(currentReligion);
     });
 
-    function clickRegion(rName) {
+    function clickRegion(key) {
       if (!isSolo && myAssignedReligion !== currentActiveReligion) {
         alert(`현재는 [${currentActiveReligion}] 차례입니다!`);
         return;
       }
-      selectedRegion = rName;
-      document.getElementById('targetLabel').innerText = `선택 지역: ${rName}`;
+      selectedRegionKey = key;
+      document.getElementById('targetLabel').innerText = `선택: ${key}`;
       document.getElementById('execBtn').disabled = false;
 
-      document.querySelectorAll('.region-zone').forEach(z => z.classList.remove('selected'));
-      const activeZone = document.querySelector(`[onclick="clickRegion('${rName}')"]`);
-      if (activeZone) activeZone.classList.add('selected');
+      document.querySelectorAll('.nation-node').forEach(n => n.classList.remove('selected'));
+      const activeNode = document.querySelector(`[onclick="clickRegion('${key}')"]`);
+      if (activeNode) activeNode.classList.add('selected');
+      playTone(587.33, 'sine', 0.15); // 클릭 피드백음
     }
 
     function setMethod(method) {
       selectedMethod = method;
       document.getElementById('btn-direct').classList.toggle('selected', method === '직접전파');
       document.getElementById('btn-long').classList.toggle('selected', method === '장거리');
+      playTone(440, 'sine', 0.1);
     }
 
     function sendAction() {
-      if (!selectedRegion) return;
-      socket.emit('spreadReligion', { regionName: selectedRegion, method: selectedMethod });
+      if (!selectedRegionKey) return;
+      socket.emit('spreadReligion', { regionKey: selectedRegionKey, method: selectedMethod });
       document.getElementById('execBtn').disabled = true;
-      selectedRegion = null;
-      document.getElementById('targetLabel').innerText = '지도에서 권역을 선택하세요';
-      document.querySelectorAll('.region-zone').forEach(z => z.classList.remove('selected'));
+      selectedRegionKey = null;
+      document.getElementById('targetLabel').innerText = '국가를 선택하세요';
+      document.querySelectorAll('.nation-node').forEach(n => n.classList.remove('selected'));
     }
 
-    // 결과 모달 팝업 표시
+    // 결과 모달 팝업
     socket.on('turnResultModal', (data) => {
+      playReligionSound(data.actorReligion);
+
       const modal = document.getElementById('result-modal');
       document.getElementById('modalImg').src = data.imgUrl;
+      document.getElementById('modalCharBadge').innerText = RELIGION_META[data.actorReligion].char;
       document.getElementById('modalTitle').innerText = `${data.actorReligion} ➔ ${data.regionName} 전파`;
       document.getElementById('modalDesc').innerText = data.regionDesc;
       
       const badge = document.getElementById('modalRegionBadge');
-      badge.innerText = data.isMatched ? '🌟 역사적 주류 분포 일치 (+35)' : '⚠️ 비주류 권역 전파 (+10)';
-      badge.style.background = data.isMatched ? '#10b981' : '#f59e0b';
+      if (data.isHybrid) {
+        badge.innerText = '🤝 다종교 종합 화합 국가 (+30)';
+        badge.style.background = '#38bdf8';
+      } else if (data.isMatched) {
+        badge.innerText = '🌟 역사적 주류 일치 (+35)';
+        badge.style.background = '#10b981';
+      } else {
+        badge.innerText = '🌍 특별 문화 교류 (+15)';
+        badge.style.background = '#f59e0b';
+      }
       badge.style.color = '#070b14';
 
-      document.getElementById('modalMethodBadge').innerText = `방식: ${data.method} (+${data.methodBonus})`;
+      document.getElementById('modalMethodBadge').innerText = `방식: ${data.method}`;
       document.getElementById('modalEventText').innerText = data.eventText;
       
       const scoreTag = document.getElementById('modalEventScore');
@@ -387,6 +450,7 @@
 
     socket.on('nextTurn', ({ currentReligion }) => {
       setActiveTurn(currentReligion);
+      playReligionSound(currentReligion);
     });
 
     function setActiveTurn(religion) {
@@ -408,15 +472,15 @@
       });
 
       const myTurn = isSolo || (myAssignedReligion === religion);
-      document.getElementById('execBtn').disabled = !myTurn || !selectedRegion;
+      document.getElementById('execBtn').disabled = !myTurn || !selectedRegionKey;
     }
 
     function updateBoard(mapOwnership, religionStates) {
-      Object.keys(mapOwnership).forEach(region => {
-        const owner = mapOwnership[region];
-        const node = document.getElementById(`node-${region}`);
+      Object.keys(mapOwnership).forEach(key => {
+        const owner = mapOwnership[key];
+        const node = document.getElementById(`node-${key}`);
         if (node) {
-          node.setAttribute('fill', owner ? RELIGION_META[owner].color : '#172033');
+          node.setAttribute('fill', owner ? RELIGION_META[owner].color : '#131b2e');
           node.setAttribute('stroke', owner ? '#ffffff' : '#334155');
         }
       });
