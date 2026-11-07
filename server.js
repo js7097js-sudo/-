@@ -9,155 +9,152 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 const RELIGIONS = [
-  { id: 'christianity', name: '크리스트교', color: '#8b5cf6', origin: '유럽' },
-  { id: 'islam', name: '이슬람교', color: '#10b981', origin: '서남아시아' },
-  { id: 'buddhism', name: '불교', color: '#f59e0b', origin: '동아시아' },
-  { id: 'hinduism', name: '힌두교', color: '#ea580c', origin: '남아시아' }
+  { id: 'christianity', name: '크리스트교', symbol: '✝️', color: '#8b5cf6', origin: '이탈리아(로마)' },
+  { id: 'islam', name: '이슬람교', symbol: '☪️', color: '#10b981', origin: '사우디아라비아(메카)' },
+  { id: 'buddhism', name: '불교', symbol: '☸️', color: '#f59e0b', origin: '인도 북동부' },
+  { id: 'hinduism', name: '힌두교', symbol: '🕉️', color: '#ea580c', origin: '인도(남아시아)' }
 ];
 
-// 세계 10대 권역 데이터: 역사적 사실과 고화질 교육용 이미지, 대표 건축물/축제 및 돌발 재난
+// 교과서 기반 대표 국가 + 종합 국가 데이터 (위키미디어 고화질 실사 및 교육용 검증 이미지)
 const REGIONS = {
-  '유럽': {
-    name: '유럽',
+  '이탈리아(로마)': {
+    name: '이탈리아(바티칸)',
+    type: 'pure',
     preferred: '크리스트교',
-    img: 'https://images.unsplash.com/photo-1548625361-195fe5795df5?w=600&auto=format&fit=crop&q=80',
-    description: '로마 가톨릭과 개신교, 정교회가 형성된 크리스트교의 중심 권역입니다.',
-    events: [
-      { type: 'good', text: '🏛️ 바티칸 성 베드로 대성당 완공! 전 유럽에서 성지 순례 행렬이 이어집니다.', score: 25 },
-      { type: 'good', text: '⛪ 고딕 양식의 대성당들이 세워지며 종교 예술과 신앙이 꽃을 피웁니다.', score: 20 },
-      { type: 'bad', text: '⚔️ 십자군 전쟁 발발! 오랜 원정과 전쟁으로 인한 혼란이 발생합니다.', score: -15 },
-      { type: 'bad', text: '🌊 대서양 선교선이 거센 폭풍우를 만나 항로를 이탈하고 피해를 입었습니다.', score: -10 }
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/800px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg',
+    desc: '로마 가톨릭의 본산인 바티칸 성 베드로 대성당이 위치한 크리스트교의 역사적 중심지입니다.',
+    goodEvents: [
+      { text: '🏛️ 바티칸 성 베드로 대성당 완공! 전 세계에서 순례 행렬이 모여듭니다.', score: 25 },
+      { text: '📜 로마 황제의 기독교 공인(밀라노 칙령)으로 교세가 급격히 확장됩니다.', score: 25 }
     ]
   },
-  '서남아시아': {
-    name: '서남아시아',
+  '사우디아라비아(메카)': {
+    name: '사우디아라비아(메카)',
+    type: 'pure',
     preferred: '이슬람교',
-    img: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=600&auto=format&fit=crop&q=80',
-    description: '메카와 메디나를 중심으로 사막 무역로를 통해 이슬람 공동체가 확산된 발상지입니다.',
-    events: [
-      { type: 'good', text: '🕌 성지 메카 카바 신전의 성지순례(하즈) 대성황! 전 세계 무슬림이 결집합니다.', score: 25 },
-      { type: 'good', text: '🐪 사막 대상(카라반) 무역로를 따라 오아시스 도시마다 모스크가 건립됩니다.', score: 20 },
-      { type: 'bad', text: '🌪️ 사막의 거대한 모래폭풍(하둡)을 만나 교역 상단이 고립되었습니다.', score: -15 },
-      { type: 'bad', text: '⚔️ 유목 세력과의 오아시스 쟁탈전으로 전파 거점이 일시 차단됩니다.', score: -10 }
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Kaaba_Masjid_Haraam_Makkah.jpg/800px-Kaaba_Masjid_Haraam_Makkah.jpg',
+    desc: '무함마드가 창시하고 성지 카바 신전이 위치한 이슬람교의 발상지입니다.',
+    goodEvents: [
+      { text: '🕌 정기 순례(하즈) 기간을 맞아 전 세계 수백만 무슬림이 메카 카바 신전에 집결합니다!', score: 30 },
+      { text: '🐪 사막 대상(카라반) 무역로를 따라 오아시스 도시마다 모스크가 세워집니다.', score: 20 }
     ]
   },
-  '남아시아': {
-    name: '남아시아',
+  '인도': {
+    name: '인도(갠지스강)',
+    type: 'pure',
     preferred: '힌두교',
-    img: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=600&auto=format&fit=crop&q=80',
-    description: '갠지스강을 어머니의 강으로 여기며 카스트 제도와 독특한 사원 문화를 지닌 힌두 문화권입니다.',
-    events: [
-      { type: 'good', text: '🎆 바라나시 갠지스강 쿰브 멜라 대축제! 수천만 명의 순례자가 정화 의식을 치릅니다.', score: 30 },
-      { type: 'good', text: '🛕 웅장한 힌두 석조 사원과 카일라사 사원이 완공되어 신앙의 중심지가 됩니다.', score: 25 },
-      { type: 'bad', text: '⛈️ 몬순 폭우와 강 범람으로 순례길이 끊어지고 마을이 고립되었습니다.', score: -15 },
-      { type: 'bad', text: '⚔️ 외세 침공군에 의해 전통 사원이 일부 훼손되었습니다.', score: -10 }
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Varanasi_Ghats_River_Ganga.jpg/800px-Varanasi_Ghats_River_Ganga.jpg',
+    desc: '갠지스강 유역을 중심으로 카스트와 환생, 사원 의례가 발달한 힌두교의 모태입니다.',
+    goodEvents: [
+      { text: '🎆 바라나시 갠지스강 쿰브 멜라 축제 대성황! 수많은 신자가 성스러운 강물로 정화합니다.', score: 30 },
+      { text: '🛕 정교한 석조 힌두 사원들이 대거 건립되어 찬란한 신앙 문화를 뽐냅니다.', score: 25 }
     ]
   },
-  '동아시아': {
-    name: '동아시아',
+  '태국·캄보디아': {
+    name: '태국·캄보디아(동남아)',
+    type: 'pure',
     preferred: '불교',
-    img: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&auto=format&fit=crop&q=80',
-    description: '실크로드를 거쳐 전래된 대승불교가 유교, 도교와 어우러지며 찬란한 문화재를 남겼습니다.',
-    events: [
-      { type: 'good', text: '📜 팔만대장경 판각과 불국사 석가탑 건립! 국가를 수호하는 호국불교가 번영합니다.', score: 25 },
-      { type: 'good', text: '🧘 혜초 등 구법승들이 인도에서 경전을 가져와 사찰마다 불경 연구가 활발해집니다.', score: 20 },
-      { type: 'bad', text: '📜 조선 왕조의 숭유억불 정책과 유생들의 반발로 승려의 도성 출입이 금지됩니다.', score: -15 },
-      { type: 'bad', text: '🔥 험난한 겨울 산맥을 넘다 눈보라(조난)를 만나 불경 서적 일부가 유실되었습니다.', score: -10 }
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Angkor_Wat_from_North.jpg/800px-Angkor_Wat_from_North.jpg',
+    desc: '상좌부 불교가 깊게 뿌리내려 국민 대다수가 불교를 믿으며 거대한 사원(앙코르 등)이 번성한 권역입니다.',
+    goodEvents: [
+      { text: '🏯 앙코르와트와 황금 불교 사원 건립! 왕실과 백성이 한마음으로 불심을 기립니다.', score: 25 },
+      { text: '🧘 청년들이 단기 출가하여 승려 생활을 체험하는 불교 전통이 활발합니다.', score: 20 }
     ]
   },
-  '동남아시아': {
-    name: '동남아시아',
-    preferred: '불교', // 인도네시아 해상 이슬람, 인도차이나 불교
-    img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80',
-    description: '해상 실크로드의 요충지로, 앙코르와트 같은 불교 유적과 말라카 해역의 무역이 공존합니다.',
-    events: [
-      { type: 'good', text: '🏯 정글 속 거대한 사원 앙코르와트와 불교 탑들이 번영을 누립니다.', score: 25 },
-      { type: 'good', text: '⛵ 인도양 향신료 무역선을 타고 온 평화로운 상인들이 현지 왕족을 감화시킵니다.', score: 20 },
-      { type: 'bad', text: '🏴‍☠️ 말라카 해협 해적들의 약탈로 전파 무역선이 피해를 입었습니다.', score: -15 },
-      { type: 'bad', text: '🌊 열대 몬순 태풍으로 인해 선박이 좌초되었습니다.', score: -10 }
+  '한국': {
+    name: '한국(동아시아 종합)',
+    type: 'hybrid', // 종합 다종교 국가
+    preferred: null,
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Bulguksa_Dabotap.jpg/800px-Bulguksa_Dabotap.jpg',
+    desc: '불교, 개신교, 가톨릭 및 유교 전통이 공존하며 서로를 존중하는 대표적인 다종교 화합 국가입니다.',
+    goodEvents: [
+      { text: '🤝 종교 간 평화 대화 포럼 개최! 모든 종교가 화합하며 전파 지지도가 상승합니다.', score: 25 },
+      { text: '📜 팔만대장경과 유서 깊은 전통 산사(사찰)가 유네스코 세계유산으로 찬사를 받습니다.', score: 20 },
+      { text: '⛪ 도심 곳곳의 교회와 성당이 사회 봉사 활동을 펼치며 큰 신뢰를 얻습니다.', score: 20 }
     ]
   },
-  '북부아프리카': {
-    name: '북부아프리카',
+  '미국': {
+    name: '미국(북아메리카)',
+    type: 'pure',
+    preferred: '크리스트교',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Washington_National_Cathedral_exterior.jpg/800px-Washington_National_Cathedral_exterior.jpg',
+    desc: '청교도 개척 이주 이후 다양한 기독교 종파가 사회의 근간을 형성한 권역입니다.',
+    goodEvents: [
+      { text: '🚢 메이플라워호 이주민들이 자유로운 신앙 공동체와 교회를 마을마다 세웁니다.', score: 25 },
+      { text: '🔔 대규모 부흥 전도 대회가 열려 수많은 시민들이 신앙을 고백합니다.', score: 20 }
+    ]
+  },
+  '브라질': {
+    name: '브라질(라틴아메리카)',
+    type: 'pure',
+    preferred: '크리스트교',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Christ_the_Redeemer_-_Cristo_Redentor.jpg/800px-Christ_the_Redeemer_-_Cristo_Redentor.jpg',
+    desc: '세계 최대 가톨릭 신자 수를 자랑하며 코르코바두 산의 구속주 예수상으로 유명합니다.',
+    goodEvents: [
+      { text: '🗽 리우데자네이루 거대 구속주 예수상 아래 수많은 순례자가 모여 미사를 드립니다.', score: 30 },
+      { text: '🎶 삼바 리듬과 결합한 감동적인 종교 축제가 대륙 전체를 뜨겁게 달굽니다.', score: 20 }
+    ]
+  },
+  '인도네시아': {
+    name: '인도네시아(동남아 해상)',
+    type: 'pure',
     preferred: '이슬람교',
-    img: 'https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=600&auto=format&fit=crop&q=80',
-    description: '사하라 사막 이북 지중해 연안으로, 일찍부터 이슬람 아랍 문화권에 편입되었습니다.',
-    events: [
-      { type: 'good', text: '🕌 카이로 알아즈하르 대학교 완공! 이슬람 학문과 법학의 메카로 성장합니다.', score: 25 },
-      { type: 'good', text: '🏜️ 사하라 사막 소금-금 무역로를 통해 대상들이 이슬람 교리를 널리 전파합니다.', score: 20 },
-      { type: 'bad', text: '⚔️ 지중해 패권을 둘러싼 해상 분쟁으로 무역로가 차단되었습니다.', score: -10 }
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Istiqlal_Mosque_Jakarta_Indonesia.jpg/800px-Istiqlal_Mosque_Jakarta_Indonesia.jpg',
+    desc: '인도양 해상 향신료 무역을 통해 이슬람교를 수용하여 현재 세계 최대 무슬림 인구를 가진 국가입니다.',
+    goodEvents: [
+      { text: '⛵ 인도양 해상 상인들이 공정하고 성실한 교역으로 현지 술탄과 주민들을 감화시킵니다.', score: 25 },
+      { text: '🕌 자카르타 이스티클랄 대모스크에 신도들이 운집하여 성대한 축제를 엽니다.', score: 25 }
     ]
   },
-  '북아메리카': {
-    name: '북아메리카',
-    preferred: '크리스트교',
-    img: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=600&auto=format&fit=crop&q=80',
-    description: '유럽에서 건너온 이주민(청교도 등)들에 의해 개신교와 가톨릭이 주류로 자리 잡았습니다.',
-    events: [
-      { type: 'good', text: '🚢 메이플라워호 청교도 정착 성공! 신대륙 전역에 자유로운 교회 공동체가 확산됩니다.', score: 25 },
-      { type: 'good', text: '🔔 개척지마다 마을 중심에 교회가 세워지고 대부흥 전도 집회가 열립니다.', score: 20 },
-      { type: 'bad', text: '❄️ 혹독한 신대륙의 첫 겨울 추위와 식량 부족으로 초기 정착민들이 고난을 겪습니다.', score: -15 }
-    ]
-  },
-  '라틴아메리카': {
-    name: '라틴아메리카',
-    preferred: '크리스트교',
-    img: 'https://images.unsplash.com/photo-1516306580123-e6e52b1b7b5f?w=600&auto=format&fit=crop&q=80',
-    description: '대항해시대 스페인과 포르투갈의 선교로 현재 세계 최대의 가톨릭 신도 인구를 보유하고 있습니다.',
-    events: [
-      { type: 'good', text: '🗽 리우데자네이루의 거대 구속주 예수상처럼 가톨릭 신앙이 대륙 전체에 확고히 뿌리내립니다.', score: 25 },
-      { type: 'good', text: '⛪ 과달루페 성모 발현 신앙이 원주민 사회와 융합되어 대규모 개종이 일어납니다.', score: 20 },
-      { type: 'bad', text: '⛈️ 안데스 고산 지대의 험준한 지형과 열대 우림 풍토병으로 전도 활동이 지연됩니다.', score: -10 }
-    ]
-  },
-  '사하라남부아프리카': {
-    name: '사하라 이남 아프리카',
-    preferred: '크리스트교', // 실제 지도상 남부는 크리스트교 우세
-    img: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=600&auto=format&fit=crop&q=80',
-    description: '전통 토착 신앙과 함께 해안 선교를 통한 크리스트교와 북부의 이슬람이 교차하는 지역입니다.',
-    events: [
-      { type: 'good', text: '🎶 아프리카 토착 음악과 결합한 활기찬 복음 성가 예배가 대중의 열렬한 호응을 얻습니다.', score: 25 },
-      { type: 'good', text: '🏥 의료 선교단과 학교 설립을 통해 지역 주민들의 자발적 개종이 급증합니다.', score: 20 },
-      { type: 'bad', text: '🦟 말라리아 등 열대 풍토병으로 선교단 캠프가 일시 철수합니다.', score: -15 }
-    ]
-  },
-  '오세아니아': {
-    name: '오세아니아',
-    preferred: '크리스트교',
-    img: 'https://images.unsplash.com/photo-1506973035172-1b74107b3992?w=600&auto=format&fit=crop&q=80',
-    description: '유럽 이주민의 정착과 남태평양 섬 선교를 통해 크리스트교가 자리 잡은 권역입니다.',
-    events: [
-      { type: 'good', text: '⛪ 시드니 세인트 메리 대성당 등 도시 중심가에 거대한 종교 랜드마크가 들어섭니다.', score: 25 },
-      { type: 'bad', text: '🌊 남태평양 산호초 군도 해역에서 암초에 부딪혀 선박 수리가 필요해졌습니다.', score: -10 }
+  '이집트·북아프리카': {
+    name: '이집트·북아프리카',
+    type: 'pure',
+    preferred: '이슬람교',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Al-Azhar_Mosque_Cairo_Egypt.jpg/800px-Al-Azhar_Mosque_Cairo_Egypt.jpg',
+    desc: '지중해와 사하라 사막을 잇는 통로로, 카이로 알아즈하르 등 이슬람 학문이 꽃핀 지역입니다.',
+    goodEvents: [
+      { text: '🏛️ 카이로 알아즈하르 이슬람 대학에서 명망 높은 학자들이 배출되어 교리를 넓힙니다.', score: 25 },
+      { text: '🏜️ 사하라 사막 소금-비단 무역로를 따라 상인들이 교리를 안전하게 확산시킵니다.', score: 20 }
     ]
   }
 };
+
+// 공통 재난 및 특별 상호작용 사건 풀
+const BAD_DISASTERS = [
+  { text: '🌊 대양을 건너던 전파선이 거센 폭풍우를 만나 암초에 부딪혔습니다! 선교 물자 손실', score: -15 },
+  { text: '🌪️ 사막을 횡단하던 교역 대상이 거대한 모래폭풍에 갇혀 일시 고립되었습니다.', score: -15 },
+  { text: '⚔️ 인접 세력 간의 영토 분쟁 및 전쟁 발발로 교역로와 국경이 봉쇄되었습니다.', score: -10 },
+  { text: '📜 보수적 현지 관료들의 외국 종교 배척령으로 포교 활동이 일시 중단됩니다.', score: -10 }
+];
+
+const SPECIAL_INTERACTION_EVENTS = [
+  { text: '🌍 [특별 상호작용!] 현대 K-컬처와 글로벌 문화 교류로 현지 청년들의 종교적 호기심 폭발!', score: 25 },
+  { text: '🤝 [특별 상호작용!] 국제 평화 박람회에서 현지인들과 감동적인 문화 대화를 나누었습니다.', score: 20 },
+  { text: '📖 [특별 상호작용!] 번역된 종교 서적이 현지 지식인들에게 큰 영감을 주었습니다.', score: 15 }
+];
 
 let players = [];
 let currentTurnIndex = 0;
 let gameStarted = false;
 let soloMode = false;
 
-// 10대 권역 초기 점유 (발상지 점유)
 let mapOwnership = {
-  '유럽': '크리스트교',
-  '서남아시아': '이슬람교',
-  '남아시아': '힌두교',
-  '동아시아': '불교',
-  '동남아시아': null,
-  '북부아프리카': null,
-  '북아메리카': null,
-  '라틴아메리카': null,
-  '사하라남부아프리카': null,
-  '오세아니아': null
+  '이탈리아(로마)': '크리스트교',
+  '사우디아라비아(메카)': '이슬람교',
+  '인도': '힌두교',
+  '태국·캄보디아': '불교',
+  '한국': null,
+  '미국': null,
+  '브라질': null,
+  '인도네시아': null,
+  '이집트·북아프리카': null
 };
 
-// 4개 종교 기본 점수 (초기 점수 60점으로 균등 분배)
 let religionStates = {
-  '크리스트교': { score: 60, regions: ['유럽'], color: '#8b5cf6', ownerId: null },
-  '이슬람교': { score: 60, regions: ['서남아시아'], color: '#10b981', ownerId: null },
-  '불교': { score: 60, regions: ['동아시아'], color: '#f59e0b', ownerId: null },
-  '힌두교': { score: 60, regions: ['남아시아'], color: '#ea580c', ownerId: null }
+  '크리스트교': { score: 60, regions: ['이탈리아(로마)'], ownerId: null },
+  '이슬람교': { score: 60, regions: ['사우디아라비아(메카)'], ownerId: null },
+  '불교': { score: 60, regions: ['태국·캄보디아'], ownerId: null },
+  '힌두교': { score: 60, regions: ['인도'], ownerId: null }
 };
 
 const turnOrder = ['크리스트교', '이슬람교', '불교', '힌두교'];
@@ -175,7 +172,7 @@ io.on('connection', (socket) => {
 
   socket.on('joinGame', (name) => {
     if (players.length >= 4 || gameStarted) {
-      socket.emit('errorMsg', '이미 정원(4명)이 찼거나 게임이 시작되었습니다.');
+      socket.emit('errorMsg', '이미 정원이 찼거나 게임이 진행 중입니다.');
       return;
     }
     const pName = (name && name.trim()) ? name.trim() : `참가자 ${players.length + 1}`;
@@ -214,74 +211,80 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('spreadReligion', ({ regionName, method }) => {
+  socket.on('spreadReligion', ({ regionKey, method }) => {
     if (!gameStarted) return;
     const activeReligion = turnOrder[currentTurnIndex];
     const rState = religionStates[activeReligion];
 
     if (!soloMode && rState.ownerId !== socket.id) {
-      socket.emit('errorMsg', '지금은 본인의 종교 턴이 아닙니다.');
+      socket.emit('errorMsg', '지금은 본인 종교의 턴이 아닙니다.');
       return;
     }
 
-    const region = REGIONS[regionName];
+    const region = REGIONS[regionKey];
     if (!region) return;
 
-    // 실제 지리 분포와 일치 여부
-    const isMatched = (region.preferred === activeReligion);
-
-    // 기본 점수: 역사적 일치 시 35점, 타종교 권역 무리한 전파 시 10점
-    let baseScore = isMatched ? 35 : 10;
+    let isMatched = false;
+    let baseScore = 15;
     let methodBonus = (method === '장거리') ? 15 : 10;
+    let chosenEvent = null;
 
-    // 운 요소: 일치할 경우 긍정 이벤트 80% / 부정 20%, 불일치할 경우 부정 이벤트 70% / 긍정 30%
-    const pool = region.events;
-    const goodEvents = pool.filter(e => e.type === 'good');
-    const badEvents = pool.filter(e => e.type === 'bad');
-
-    let selectedEvent;
-    const roll = Math.random();
-    if (isMatched) {
-      selectedEvent = (roll < 0.8 && goodEvents.length > 0) 
-        ? goodEvents[Math.floor(Math.random() * goodEvents.length)]
-        : badEvents[Math.floor(Math.random() * badEvents.length)];
+    if (region.type === 'hybrid') {
+      // 한국 등 다종교 종합 국가: 누구에게나 열려 있음
+      isMatched = true;
+      baseScore = 30;
+      chosenEvent = region.goodEvents[Math.floor(Math.random() * region.goodEvents.length)];
+    } else if (region.preferred === activeReligion) {
+      // 역사적 주류 일치
+      isMatched = true;
+      baseScore = 35;
+      // 80% 확률로 대표 건축물/축제 호재, 20% 확률로 폭풍우 등 재난
+      if (Math.random() < 0.8) {
+        chosenEvent = region.goodEvents[Math.floor(Math.random() * region.goodEvents.length)];
+      } else {
+        chosenEvent = BAD_DISASTERS[Math.floor(Math.random() * BAD_DISASTERS.length)];
+      }
     } else {
-      selectedEvent = (roll < 0.7 && badEvents.length > 0)
-        ? badEvents[Math.floor(Math.random() * badEvents.length)]
-        : goodEvents[Math.floor(Math.random() * goodEvents.length)];
+      // 비주류 권역 전파 (편견 방지용 특별 상호작용 40% / 돌발재해 60%)
+      isMatched = false;
+      baseScore = 15;
+      if (Math.random() < 0.4) {
+        chosenEvent = SPECIAL_INTERACTION_EVENTS[Math.floor(Math.random() * SPECIAL_INTERACTION_EVENTS.length)];
+      } else {
+        chosenEvent = BAD_DISASTERS[Math.floor(Math.random() * BAD_DISASTERS.length)];
+      }
     }
 
-    const totalGain = Math.max(0, baseScore + methodBonus + selectedEvent.score);
+    const totalGain = Math.max(0, baseScore + methodBonus + chosenEvent.score);
     rState.score += totalGain;
 
-    // 점유권 갱신
-    const prevOwner = mapOwnership[regionName];
+    // 영토 점유 갱신
+    const prevOwner = mapOwnership[regionKey];
     if (prevOwner && prevOwner !== activeReligion) {
-      religionStates[prevOwner].regions = religionStates[prevOwner].regions.filter(r => r !== regionName);
+      religionStates[prevOwner].regions = religionStates[prevOwner].regions.filter(r => r !== regionKey);
     }
-    mapOwnership[regionName] = activeReligion;
-    if (!rState.regions.includes(regionName)) {
-      rState.regions.push(regionName);
+    mapOwnership[regionKey] = activeReligion;
+    if (!rState.regions.includes(regionKey)) {
+      rState.regions.push(regionKey);
     }
 
-    // 결과 브로드캐스트 (사진 및 스토리 포함)
+    // 결과 전송
     io.emit('turnResultModal', {
       actorReligion: activeReligion,
+      regionKey,
       regionName: region.name,
       method,
       isMatched,
-      baseScore,
-      methodBonus,
-      eventText: selectedEvent.text,
-      eventScore: selectedEvent.score,
+      isHybrid: (region.type === 'hybrid'),
+      eventText: chosenEvent.text,
+      eventScore: chosenEvent.score,
       totalGain,
       imgUrl: region.img,
-      regionDesc: region.description,
+      regionDesc: region.desc,
       mapOwnership,
       religionStates
     });
 
-    // 다음 턴 전환
     currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
     io.emit('nextTurn', { currentReligion: turnOrder[currentTurnIndex] });
   });
@@ -293,12 +296,12 @@ io.on('connection', (socket) => {
       soloMode = false;
       currentTurnIndex = 0;
       mapOwnership = {
-        '유럽': '크리스트교', '서남아시아': '이슬람교', '남아시아': '힌두교', '동아시아': '불교',
-        '동남아시아': null, '북부아프리카': null, '북아메리카': null, '라틴아메리카': null, '사하라남부아프리카': null, '오세아니아': null
+        '이탈리아(로마)': '크리스트교', '사우디아라비아(메카)': '이슬람교', '인도': '힌두교', '태국·캄보디아': '불교',
+        '한국': null, '미국': null, '브라질': null, '인도네시아': null, '이집트·북아프리카': null
       };
       turnOrder.forEach(r => {
         religionStates[r].score = 60;
-        religionStates[r].regions = [RELIGIONS.find(item => item.name === r).origin];
+        religionStates[r].regions = [RELIGIONS.find(i => i.name === r).origin];
         religionStates[r].ownerId = null;
       });
     }
