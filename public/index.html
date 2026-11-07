@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>세계 4대 종교 전파 시뮬레이션</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #f4f6f8; padding: 20px; }
+    .card { background: white; padding: 15px; border-radius: 8px; margin: 10px auto; max-width: 500px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    button { padding: 10px 15px; margin: 5px; cursor: pointer; border: none; border-radius: 4px; background: #2563eb; color: white; }
+    button:disabled { background: #9ca3af; }
+    .log-box { text-align: left; background: #e5e7eb; padding: 10px; border-radius: 5px; max-height: 150px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+
+  <h1>🌍 세계 종교 전파 보드게임</h1>
+
+  <div id="lobby-view" class="card">
+    <h3>대기실</h3>
+    <input id="playerName" placeholder="이름을 입력하세요" />
+    <button onclick="joinGame()">입장</button>
+    <ul id="playerList"></ul>
+    <button id="startBtn" onclick="startGame()" style="display:none;">게임 시작 (방장 전용)</button>
+  </div>
+
+  <div id="game-view" class="card" style="display:none;">
+    <h3 id="myRole"></h3>
+    <h4 id="turnIndicator"></h4>
+    
+    <div style="margin: 15px 0;">
+      <p><strong>1. 목표 지역 선택:</strong></p>
+      <button class="region-btn" onclick="selectRegion('유럽')">유럽</button>
+      <button class="region-btn" onclick="selectRegion('서남아시아')">서남아시아</button>
+      <button class="region-btn" onclick="selectRegion('동아시아')">동아시아</button>
+      <button class="region-btn" onclick="selectRegion('남아시아')">남아시아</button>
+    </div>
+
+    <div style="margin: 15px 0;">
+      <p><strong>2. 전파 방식:</strong></p>
+      <button class="method-btn" onclick="selectMethod('직접전파')">직접전파(인접로)</button>
+      <button class="method-btn" onclick="selectMethod('장거리')">장거리 특수항로</button>
+    </div>
+
+    <button id="actionBtn" onclick="sendAction()" style="background:#059669; width:100%;" disabled>전파 실행하기</button>
+
+    <h4>📜 역사적 사건 및 득점 로그</h4>
+    <div id="logs" class="log-box"></div>
+
+    <h4>🏆 실시간 명성 순위</h4>
+    <div id="scoreboard"></div>
+  </div>
+
+  <script>
+    const socket = io();
+    let selectedRegion = null;
+    let selectedMethod = null;
+    let myReligion = '';
+
+    function joinGame() {
+      const name = document.getElementById('playerName').value;
+      socket.emit('joinGame', name);
+    }
+
+    function startGame() {
+      socket.emit('startGame');
+    }
+
+    socket.on('updateLobby', ({ players, isHost }) => {
+      const list = document.getElementById('playerList');
+      list.innerHTML = players.map(p => `<li>${p.name} ${p.id === isHost ? '(방장)' : ''}</li>`).join('');
+      if (socket.id === isHost && players.length === 4) {
+        document.getElementById('startBtn').style.display = 'inline-block';
+      }
+    });
+
+    socket.on('gameStarted', ({ players, currentTurn }) => {
+      document.getElementById('lobby-view').style.display = 'none';
+      document.getElementById('game-view').style.display = 'block';
+
+      const me = players.find(p => p.id === socket.id);
+      myReligion = me.religion;
+      document.getElementById('myRole').innerText = `당신의 배정 종교: ${myReligion}`;
+      updateTurnStatus(currentTurn);
+    });
+
+    function selectRegion(r) { selectedRegion = r; checkReady(); }
+    function selectMethod(m) { selectedMethod = m; checkReady(); }
+
+    function checkReady() {
+      if (selectedRegion && selectedMethod) {
+        document.getElementById('actionBtn').disabled = false;
+      }
+    }
+
+    function sendAction() {
+      socket.emit('spreadReligion', { regionName: selectedRegion, method: selectedMethod });
+      document.getElementById('actionBtn').disabled = true;
+      selectedRegion = null;
+      selectedMethod = null;
+    }
+
+    socket.on('turnResult', (data) => {
+      const logs = document.getElementById('logs');
+      logs.innerHTML = `<div>[${data.player.name}(${data.player.religion})] ${data.regionName}에 전파!<br>
+        ⚡사건: ${data.eventText} (${data.scoreGained >= 0 ? '+' : ''}${data.scoreGained}점)</div><hr>` + logs.innerHTML;
+      
+      const sb = document.getElementById('scoreboard');
+      sb.innerHTML = data.players.map(p => `<div>${p.name} (${p.religion}): <strong>${p.score}점</strong></div>`).join('');
+    });
+
+    socket.on('nextTurn', ({ currentTurn }) => {
+      updateTurnStatus(currentTurn);
+    });
+
+    function updateTurnStatus(turnPlayer) {
+      const isMyTurn = (turnPlayer.id === socket.id);
+      document.getElementById('turnIndicator').innerText = isMyTurn ? "👉 지금 당신의 턴입니다!" : `현재 턴: ${turnPlayer.name}`;
+      document.querySelectorAll('.region-btn, .method-btn').forEach(b => b.disabled = !isMyTurn);
+    }
+  </script>
+</body>
+</html>
