@@ -622,4 +622,316 @@ const REGIONS = {
   },
 
   '나이지리아(혼합)': {
-    name: '나이지리아(아프리카 남북 종교 교차지
+    name: '나이지리아(아프리카 남북 종교 교차지)',
+    type: 'hybrid',
+    desc: '사하라 사막 무역로로 전파된 북부의 이슬람교(약 50%)와 대서양 해안 선교로 전파된 남부의 크리스트교(약 48%)가 맞닿은 국가입니다.',
+    learnPoint: '나이지리아는 북부 이슬람교와 남부 크리스트교가 팽팽히 맞서는 아프리카의 대표적인 종교 점이지대입니다.',
+    byReligion: {
+      '이슬람교': {
+        landmarkImg: buildImgPath('en:Abuja_National_Mosque', 'Abuja National Mosque Nigeria golden dome', '나이지리아 아부자 국립 모스크'),
+        landmarkName: '나이지리아 아부자 국립 모스크',
+        good: {
+          img: buildImgPath('en:Sokoto_Caliphate', 'Kano Emirate Nigeria durbar horsemen', '북부 사하라 종단 교역과 소코토 이슬람 왕국 성립'),
+          title: '북부 사하라 종단 교역과 소코토 이슬람 왕국 성립',
+          desc: '사하라 무역로를 통해 이슬람을 받아들인 북부 하우사·풀라니족이 이슬람 왕국을 세우며 서아프리카 최대 교세를 이룹니다.',
+          score: 10
+        },
+        bad: {
+          img: buildImgPath('en:Zuma_Rock', 'Zuma Rock Nigeria landscape', '북부(이슬람)와 남부(크리스트교) 경계선 충돌'),
+          title: '북부(이슬람)와 남부(크리스트교) 경계선 충돌',
+          desc: '북부 이슬람권과 남부 크리스트교권이 맞닿는 중부 경계 지역에서 관습법(샤리아) 갈등으로 점수가 감소합니다.',
+          score: -5
+        }
+      },
+      '크리스트교': {
+        landmarkImg: buildImgPath('en:National_Christian_Centre', 'National Christian Centre Abuja Nigeria', '나이지리아 아부자 국립 기독교 센터'),
+        landmarkName: '나이지리아 아부자 국립 기독교 센터',
+        good: {
+          img: buildImgPath('en:Samuel_Ajayi_Crowther', 'Samuel Ajayi Crowther bishop Nigeria', '남부 대서양 해안 선교와 아프리카 교회 대부흥'),
+          title: '남부 대서양 해안 선교와 아프리카 교회 대부흥',
+          desc: '대서양 해안으로 들어온 선교사들과 아프리카 현지 성직자(크라우더 주교 등)가 남부에 학교와 교회를 세워 부흥을 이룹니다.',
+          score: 10
+        },
+        bad: {
+          img: buildImgPath('en:Niger_River', 'Niger River tropical forest Africa', '남북 종교 경계선 충돌과 열대 말라리아 풍토병'),
+          title: '남북 종교 경계선 충돌과 열대 말라리아 풍토병',
+          desc: '내륙 열대 우림의 말라리아 풍토병과 북부 이슬람 세력과의 경계선 갈등으로 인해 북상이 저지됩니다.',
+          score: -5
+        }
+      },
+      '불교': {
+        landmarkImg: buildImgPath('en:Wat_Phra_Kaew', 'Buddhist temple golden statue meditation', '서아프리카 국제 평화 명상 센터'),
+        landmarkName: '서아프리카 국제 평화 명상 센터',
+        good: {
+          img: buildImgPath('en:Ashoka', 'Ashoka pillar peace Buddhism', '종파 갈등 지역에서의 비폭력 평화 명상 운동'),
+          title: '종파 갈등 지역에서의 비폭력 평화 명상 운동',
+          desc: '종교 갈등에 지친 현지 청년들과 지식인들이 불교의 평화·명상 철학에 공감하며 도심 명상 센터가 문을 엽니다.',
+          score: 10
+        },
+        bad: {
+          img: buildImgPath('en:Lagos', 'Lagos Nigeria city skyline', '역사적 교류 부재와 기독교·이슬람 양강 구도 장벽'),
+          title: '역사적 교류 부재와 기독교·이슬람 양강 구도 장벽',
+          desc: '역사적으로 아시아 불교권과 지리적 교류가 없었으며, 이미 인구의 98%가 양대 종교를 믿고 있어 전파가 어렵습니다.',
+          score: -5
+        }
+      },
+      '힌두교': {
+        landmarkImg: buildImgPath('en:Varanasi', 'Hindu temple festival India lights', '라고스 인도계 무역상 사원'),
+        landmarkName: '라고스 인도계 무역상 사원',
+        good: {
+          img: buildImgPath('en:Spice_trade', 'Indian Ocean trade ship', '영연방 인도계 상인의 서아프리카 진출과 문화 교류'),
+          title: '영연방 인도계 상인의 서아프리카 진출과 문화 교류',
+          desc: '해상 무역과 기업 활동으로 정착한 인도계 주민들이 사원을 세우고 인도 영화(볼리우드) 인기로 축제가 알려집니다.',
+          score: 10
+        },
+        bad: {
+          img: buildImgPath('en:Lagos', 'Lagos harbor Africa', '민족 종교의 비포교 전통과 지리적 거리감'),
+          title: '민족 종교의 비포교 전통과 지리적 거리감',
+          desc: '외부 민족에게 개종을 적극 권유하지 않는 힌두교의 특성과 먼 거리로 인해 아프리카 현지인 전파에 한계를 겪습니다.',
+          score: -5
+        }
+      }
+    }
+  }
+};
+
+const WALL_FAIL_IMG = buildImgPath('en:Citadel_of_Aleppo', 'Citadel of Aleppo fortress wall gate', '기존 주류 종교의 강력한 문화 장벽');
+
+let players = [];
+let currentTurnIndex = 0;
+let gameStarted = false;
+let soloMode = false;
+
+let mapOwnership = {};
+function resetMapOwnership() {
+  mapOwnership = {
+    '유럽(바티칸)': '크리스트교',
+    '미국·캐나다': null,
+    '브라질·남미': null,
+    '서남아(메카)': '이슬람교',
+    '북아프리카': null,
+    '중앙아시아': null,
+    '태국·미얀마': '불교',
+    '중국·티베트': null,
+    '스리랑카': null,
+    '북인도(갠지스)': '힌두교',
+    '남인도(마두라이)': null,
+    '네팔': null,
+    '한국(혼합)': null,
+    '인도네시아(혼합)': null,
+    '싱가포르(혼합)': null,
+    '나이지리아(혼합)': null
+  };
+}
+resetMapOwnership();
+
+let religionStates = {};
+function resetReligionStates() {
+  religionStates = {
+    '크리스트교': { score: 60, regions: ['유럽(바티칸)'], ownerId: null },
+    '이슬람교': { score: 60, regions: ['서남아(메카)'], ownerId: null },
+    '불교': { score: 60, regions: ['태국·미얀마'], ownerId: null },
+    '힌두교': { score: 60, regions: ['북인도(갠지스)'], ownerId: null }
+  };
+}
+resetReligionStates();
+
+const turnOrder = ['크리스트교', '이슬람교', '불교', '힌두교'];
+
+io.on('connection', (socket) => {
+  socket.emit('initSync', {
+    players,
+    hostId: players.length > 0 ? players[0].id : null,
+    gameStarted,
+    mapOwnership,
+    religionStates,
+    currentReligion: turnOrder[currentTurnIndex],
+    soloMode
+  });
+
+  socket.on('joinGame', (name) => {
+    if (players.length >= 4 || gameStarted) {
+      socket.emit('errorMsg', '이미 정원이 찼거나 게임이 진행 중입니다.');
+      return;
+    }
+    const pName = (name && name.trim()) ? name.trim() : `참가자 ${players.length + 1}`;
+    players.push({ id: socket.id, name: pName, religion: null });
+
+    io.emit('updateLobby', {
+      players,
+      hostId: players[0].id,
+      gameStarted
+    });
+  });
+
+  socket.on('startGame', () => {
+    if (players.length === 0 || socket.id !== players[0].id) return;
+    gameStarted = true;
+    soloMode = (players.length === 1);
+
+    if (soloMode) {
+      players[0].religion = 'ALL';
+      turnOrder.forEach(r => religionStates[r].ownerId = players[0].id);
+    } else {
+      const shuffled = [...turnOrder].sort(() => Math.random() - 0.5);
+      players.forEach((p, idx) => {
+        p.religion = shuffled[idx];
+        religionStates[p.religion].ownerId = p.id;
+      });
+    }
+
+    currentTurnIndex = 0;
+    io.emit('gameStarted', {
+      players,
+      soloMode,
+      mapOwnership,
+      religionStates,
+      currentReligion: turnOrder[currentTurnIndex]
+    });
+  });
+
+  socket.on('spreadReligion', ({ regionKey, method }) => {
+    if (!gameStarted) return;
+    const activeReligion = turnOrder[currentTurnIndex];
+    const rState = religionStates[activeReligion];
+
+    if (!soloMode && rState.ownerId !== socket.id) {
+      socket.emit('errorMsg', '지금은 본인 종교의 턴이 아닙니다.');
+      return;
+    }
+
+    const region = REGIONS[regionKey];
+    if (!region) return;
+
+    const relSymbol = RELIGIONS.find(r => r.name === activeReligion).symbol;
+    let step1Card = null;
+    let step2Event = null;
+    let territorialSuccess = false;
+
+    if (region.type === 'hybrid') {
+      territorialSuccess = true;
+      const relInfo = region.byReligion[activeReligion];
+      const baseGain = 40;
+
+      step1Card = {
+        headerTitle: '⚜ 종교 전파 결과 ⚜',
+        badgeText: '🤝 다종교 혼합·공존 권역 (+40점)',
+        img: relInfo.landmarkImg,
+        landmarkName: relInfo.landmarkName,
+        title: `${activeReligion} ➔ ${region.name}`,
+        desc: region.desc,
+        baseGain: baseGain,
+        methodNote: `전파 방식 [${method}] 완료! 이어서 ${region.name}에서 [${activeReligion}]가 겪은 실제 역사적 사건을 확인하세요.`
+      };
+
+      const ev = (Math.random() < 0.5) ? relInfo.good : relInfo.bad;
+      step2Event = {
+        headerTitle: '⚜ 특수 이벤트 ⚜',
+        tag: `${relSymbol} ${region.name} · ${activeReligion}`,
+        title: ev.title,
+        desc: ev.desc,
+        img: ev.img,
+        score: ev.score,
+        learnPoint: region.learnPoint
+      };
+    } else if (region.preferred === activeReligion) {
+      territorialSuccess = true;
+      const isMethodRight = (region.correctMethod === method);
+      const baseGain = isMethodRight ? 55 : 30;
+
+      step1Card = {
+        headerTitle: '⚜ 종교 전파 결과 ⚜',
+        badgeText: isMethodRight
+          ? '🌟 주류 종교 + 전파 방식 완벽 일치! (+55점)'
+          : '⚠️ 주류 종교 일치 / 전파 방식 착오 (+30점)',
+        img: region.landmarkImg,
+        landmarkName: region.landmarkName,
+        title: `${activeReligion} ➔ ${region.name}`,
+        desc: region.desc,
+        baseGain: baseGain,
+        methodNote: isMethodRight
+          ? `정답! 실제 역사적 전파 경로인 [${region.correctMethod}]를 정확히 선택하여 +15점 보너스를 획득했습니다!`
+          : `이 지역의 주류 종교는 맞았으나, 실제 역사적 전파 방식은 [${region.correctMethod}]여서 점수가 일부 차감되었습니다.`
+      };
+
+      const ev = (Math.random() < 0.5) ? region.goodEvent : region.badEvent;
+      step2Event = {
+        headerTitle: '⚜ 특수 이벤트 ⚜',
+        tag: `${relSymbol} ${region.name} · ${activeReligion}`,
+        title: ev.title,
+        desc: ev.desc,
+        img: ev.img,
+        score: ev.score,
+        learnPoint: region.learnPoint
+      };
+    } else {
+      territorialSuccess = false;
+      step1Card = {
+        headerTitle: '⚜ 전파 실패 ⚜',
+        badgeText: `❌ 타 종교 강세 권역 (실제 주류: ${region.preferred})`,
+        img: WALL_FAIL_IMG,
+        landmarkName: `전파 실패: 기존 주류 종교(${region.preferred})의 강력한 문화 장벽`,
+        title: `${activeReligion} ➔ ${region.name} 전파 좌절`,
+        desc: `오답입니다! [${region.name}] 지역은 역사적으로 [${region.preferred}]의 전통과 교세가 압도적으로 강한 곳이어서 전파에 실패했습니다.`,
+        baseGain: -20,
+        methodNote: `기존 주류 종교(${region.preferred})의 강력한 문화 장벽에 부딪혀 명성이 20점 감소합니다.`
+      };
+
+      step2Event = {
+        headerTitle: '⚜ 오답 분석 및 역사 배경 ⚜',
+        tag: `📖 ${region.name}의 실제 역사 (주류: ${region.preferred})`,
+        title: `왜 이 지역은 [${region.preferred}]가 강할까?`,
+        desc: `${region.desc} (${region.goodEvent.title}: ${region.goodEvent.desc})`,
+        img: region.landmarkImg,
+        score: 0,
+        learnPoint: region.learnPoint
+      };
+    }
+
+    const totalTurnDelta = step1Card.baseGain + step2Event.score;
+    rState.score = Math.max(0, rState.score + totalTurnDelta);
+
+    if (territorialSuccess) {
+      const prevOwner = mapOwnership[regionKey];
+      if (prevOwner && prevOwner !== activeReligion) {
+        religionStates[prevOwner].regions = religionStates[prevOwner].regions.filter(r => r !== regionKey);
+      }
+      mapOwnership[regionKey] = activeReligion;
+      if (!rState.regions.includes(regionKey)) {
+        rState.regions.push(regionKey);
+      }
+    }
+
+    io.emit('turnResultTwoStep', {
+      actorReligion: activeReligion,
+      regionKey,
+      method,
+      step1Card,
+      step2Event,
+      mapOwnership,
+      religionStates
+    });
+
+    currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
+    io.emit('nextTurn', { currentReligion: turnOrder[currentTurnIndex] });
+  });
+
+  socket.on('disconnect', () => {
+    players = players.filter(p => p.id !== socket.id);
+    if (players.length === 0) {
+      gameStarted = false;
+      soloMode = false;
+      currentTurnIndex = 0;
+      resetMapOwnership();
+      resetReligionStates();
+    }
+    io.emit('updateLobby', {
+      players,
+      hostId: players[0]?.id || null,
+      gameStarted
+    });
+  });
+});
+
+const PORT = process.env.PORT || 10000;
+server.listen(PORT, () => console.log(`서버 정상 가동: 포트 ${PORT}`));
