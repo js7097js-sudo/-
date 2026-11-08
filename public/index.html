@@ -22,71 +22,53 @@
       overflow-x: hidden;
     }
 
-    /* 엔틱 골드 대기실 */
+    /* 대기실 */
     #lobby-view {
-      width: 92%;
-      max-width: 520px;
+      width: 92%; max-width: 520px;
       background: linear-gradient(180deg, #16202e 0%, #0d131c 100%);
       border: 3px solid #c5a059;
-      box-shadow: 0 0 0 2px #090d14, 0 20px 50px rgba(0,0,0,0.9), inset 0 0 30px rgba(197, 160, 89, 0.15);
-      border-radius: 12px;
-      padding: 30px;
-      text-align: center;
+      box-shadow: 0 0 0 2px #090d14, 0 20px 50px rgba(0,0,0,0.9);
+      border-radius: 12px; padding: 30px; text-align: center;
     }
-    .lobby-title { font-size: 25px; font-weight: 900; color: #f5d78e; text-shadow: 0 2px 6px rgba(0,0,0,0.8); margin-bottom: 10px; }
+    .lobby-title { font-size: 25px; font-weight: 900; color: #f5d78e; margin-bottom: 10px; }
     .lobby-desc { font-size: 13.5px; color: #cbd5e1; margin-bottom: 22px; line-height: 1.6; }
     .input-row { display: flex; gap: 8px; margin-bottom: 15px; }
-    input {
-      flex: 1; padding: 12px 14px; border-radius: 6px;
-      border: 1.5px solid #8a6d3b; background: #090d14; color: #f5d78e; font-size: 15px; outline: none;
-    }
+    input { flex: 1; padding: 12px 14px; border-radius: 6px; border: 1.5px solid #8a6d3b; background: #090d14; color: #f5d78e; font-size: 15px; outline: none; }
     button { cursor: pointer; font-weight: 700; border-radius: 6px; transition: 0.25s; }
     .btn-join { background: linear-gradient(180deg, #d4af37 0%, #9a7b2c 100%); color: #090d14; border: 1px solid #f5d78e; padding: 12px 22px; font-size: 15px; }
-    .btn-start { width: 100%; background: linear-gradient(180deg, #10b981 0%, #047857 100%); color: white; border: 1.5px solid #6ee7b7; padding: 14px; font-size: 16px; margin-top: 15px; box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
+    .btn-start { width: 100%; background: linear-gradient(180deg, #10b981 0%, #047857 100%); color: white; border: 1.5px solid #6ee7b7; padding: 14px; font-size: 16px; margin-top: 15px; }
 
     .player-list { list-style: none; margin: 15px 0; background: rgba(0,0,0,0.45); border: 1px solid #4a3b22; border-radius: 8px; padding: 10px; text-align: left; }
     .player-item { padding: 9px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
     .tag-host { background: #d4af37; color: #090d14; font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: 900; }
 
-    /* 인게임 보드 레이아웃 (레퍼런스 사진 완벽 재현) */
+    /* 인게임 레이아웃 */
     #game-view {
-      display: none;
-      width: 100vw;
-      height: 100vh;
-      max-width: 1600px;
+      display: none; width: 100vw; height: 100vh; max-width: 1600px;
       grid-template-rows: 96px 1fr 104px;
       grid-template-columns: 265px 1fr 265px;
-      gap: 10px;
-      padding: 12px;
+      gap: 10px; padding: 12px;
     }
 
     @media (max-width: 1024px) {
       #game-view { display: none; height: auto; grid-template-rows: auto; grid-template-columns: 1fr; }
     }
 
-    /* 엔틱 골드 프레임 종교 카드 */
+    /* 4방향 엔틱 종교 카드 */
     .religion-card {
-      border: 2.5px solid #b38f48;
-      border-radius: 8px;
-      padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
+      border: 2.5px solid #b38f48; border-radius: 8px; padding: 12px 16px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      position: relative; overflow: hidden;
       box-shadow: inset 0 0 25px rgba(0,0,0,0.85), 0 6px 16px rgba(0,0,0,0.7);
       transition: 0.3s;
     }
-    .religion-card::before {
-      content: ''; position: absolute; inset: 3px; border: 1px solid rgba(245, 215, 142, 0.35); border-radius: 5px; pointer-events: none; z-index: 2;
-    }
+    .religion-card::before { content: ''; position: absolute; inset: 3px; border: 1px solid rgba(245, 215, 142, 0.35); border-radius: 5px; pointer-events: none; z-index: 2; }
     .religion-card.active-turn {
       border-color: #fde047 !important;
       box-shadow: 0 0 25px rgba(253, 224, 71, 0.65), inset 0 0 20px rgba(253, 224, 71, 0.25) !important;
       transform: scale(1.015);
     }
 
-    /* 각 종교 패널 배경 일러스트 (레퍼런스 이미지 스타일) */
     .panel-north {
       grid-column: 2; grid-row: 1;
       background: linear-gradient(90deg, rgba(38, 22, 68, 0.92) 0%, rgba(58, 35, 100, 0.78) 50%, rgba(30, 18, 56, 0.92) 100%),
@@ -113,10 +95,8 @@
     .gold-emblem {
       width: 40px; height: 40px; border-radius: 50%;
       background: radial-gradient(circle, #3b2d15 0%, #171107 100%);
-      border: 2px solid #e5c158;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; color: #f5d78e;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      border: 2px solid #e5c158; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: #f5d78e; box-shadow: 0 2px 8px rgba(0,0,0,0.8);
     }
     .religion-name { font-size: 18px; font-weight: 900; color: #f8fafc; text-shadow: 0 2px 4px rgba(0,0,0,0.9); }
     .turn-badge { font-size: 11px; background: linear-gradient(180deg, #fde047 0%, #ca8a04 100%); color: #090d14; padding: 2px 7px; border-radius: 4px; font-weight: 900; margin-left: 6px; }
@@ -125,100 +105,182 @@
     .region-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; z-index: 3; }
     .region-tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: rgba(9, 13, 20, 0.8); border: 1px solid rgba(212, 175, 55, 0.45); color: #f5d78e; }
 
-    /* 중앙 엔틱 양피지 세계지도 보드 */
+    /* 중앙 양피지 세계지도 */
     .board-center {
       grid-column: 2; grid-row: 2;
       background: radial-gradient(circle at center, #16364d 0%, #0b1d2c 100%);
-      border: 3px solid #c5a059;
-      border-radius: 8px;
-      position: relative;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      overflow: hidden;
-      box-shadow: inset 0 0 40px rgba(0,0,0,0.85), 0 10px 30px rgba(0,0,0,0.8);
+      border: 3px solid #c5a059; border-radius: 8px;
+      position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      overflow: hidden; box-shadow: inset 0 0 40px rgba(0,0,0,0.85), 0 10px 30px rgba(0,0,0,0.8);
     }
     .map-svg { width: 100%; height: 100%; }
-
-    /* 양피지 고지도 대륙 스타일 */
-    .country-path {
-      fill: #d4be96;
-      stroke: #8c734b;
-      stroke-width: 0.7;
-      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45));
-    }
+    .country-path { fill: #d4be96; stroke: #8c734b; stroke-width: 0.7; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45)); }
     .graticule-line { fill: none; stroke: rgba(212, 190, 150, 0.14); stroke-width: 0.6; }
-    .equator-line { stroke: rgba(245, 215, 142, 0.4); stroke-width: 1.1; stroke-dasharray: 5, 4; }
-
-    /* 금빛 점선 전파 항로 */
     .spread-route { fill: none; stroke: #fde047; stroke-width: 1.8; stroke-dasharray: 4, 4; opacity: 0.8; }
 
-    /* 국가 선택 버튼 (레퍼런스 사진의 캡슐형 배지) */
     .nation-pin { cursor: pointer; transition: 0.2s; }
     .nation-pin:hover rect { stroke: #fde047; stroke-width: 2.5; filter: brightness(1.15); }
     .nation-pin.selected rect { stroke: #ffffff; stroke-width: 3.5; filter: drop-shadow(0 0 12px #fde047); }
 
-    /* 하단 엔틱 컨트롤 바 */
+    /* 하단 조작 바 */
     .action-panel {
       position: absolute; bottom: 12px;
       background: linear-gradient(180deg, rgba(22, 32, 46, 0.96) 0%, rgba(11, 17, 26, 0.98) 100%);
-      border: 2px solid #b38f48;
-      border-radius: 8px;
-      padding: 8px 14px;
-      display: flex; gap: 10px; align-items: center;
-      z-index: 10;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.85);
+      border: 2px solid #b38f48; border-radius: 8px; padding: 8px 14px;
+      display: flex; gap: 10px; align-items: center; z-index: 10; box-shadow: 0 8px 25px rgba(0,0,0,0.85);
     }
-    .target-box {
-      background: #090d14; border: 1px solid #64512d; padding: 8px 14px; border-radius: 5px;
-      font-size: 13px; color: #f5d78e; font-weight: 700; min-width: 150px; text-align: center;
-    }
-    .method-btn {
-      background: linear-gradient(180deg, #263345 0%, #151d28 100%);
-      color: #cbd5e1; padding: 8px 15px; border-radius: 5px; font-size: 13px;
-      border: 1.5px solid #64748b;
-    }
-    .method-btn.selected {
-      background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
-      color: #ffffff; font-weight: 900; border-color: #bae6fd;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
-    }
-    .btn-spread {
-      background: linear-gradient(180deg, #991b1b 0%, #5c0f0f 100%);
-      color: #fecaca; padding: 8px 20px; font-size: 13.5px; border-radius: 5px;
-      border: 1.5px solid #f87171; font-weight: 900;
-    }
-    .btn-spread:not(:disabled):hover { filter: brightness(1.2); }
+    .target-box { background: #090d14; border: 1px solid #64512d; padding: 8px 14px; border-radius: 5px; font-size: 13px; color: #f5d78e; font-weight: 700; min-width: 150px; text-align: center; }
+    .method-btn { background: linear-gradient(180deg, #263345 0%, #151d28 100%); color: #cbd5e1; padding: 8px 15px; border-radius: 5px; font-size: 13px; border: 1.5px solid #64748b; }
+    .method-btn.selected { background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%); color: #ffffff; font-weight: 900; border-color: #bae6fd; box-shadow: 0 0 12px rgba(56, 189, 248, 0.5); }
+    .btn-spread { background: linear-gradient(180deg, #991b1b 0%, #5c0f0f 100%); color: #fecaca; padding: 8px 20px; font-size: 13.5px; border-radius: 5px; border: 1.5px solid #f87171; font-weight: 900; }
     .btn-spread:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* 결과 모달 카드 (엔틱 골드 액자 팝업) */
-    #result-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 999; align-items: center; justify-content: center; }
-    .modal-card {
-      width: 92%; max-width: 580px;
-      background: linear-gradient(180deg, #16202e 0%, #0b1017 100%);
-      border: 3px solid #d4af37;
-      border-radius: 12px; overflow: hidden;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.95);
-      animation: popUp 0.28s ease-out;
+    /* =========================================================================
+       5번째 사진 디자인을 그대로 이식한 가로형 2분할 엔틱 모달 창 (1단계 & 2단계 공통 프레임)
+       ========================================================================= */
+    .antique-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.84); backdrop-filter: blur(5px);
+      z-index: 999; align-items: center; justify-content: center; padding: 15px;
     }
-    .modal-img-wrap { width: 100%; height: 270px; position: relative; background: #050811; border-bottom: 2px solid #b38f48; }
-    .modal-img { width: 100%; height: 100%; object-fit: cover; }
-    .modal-badge-overlay {
-      position: absolute; bottom: 10px; left: 12px;
-      background: rgba(9, 13, 20, 0.9); border: 1px solid #d4af37;
-      padding: 5px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; color: #f5d78e;
+    .antique-modal-box {
+      width: 95%; max-width: 860px;
+      background: #101722;
+      border: 3px solid #c5a059;
+      box-shadow: 0 0 0 2px #070a0f, 0 25px 70px rgba(0,0,0,0.95);
+      border-radius: 6px; overflow: hidden;
+      animation: popUp 0.25s ease-out;
+      position: relative;
+    }
+    .antique-modal-box::before {
+      content: ''; position: absolute; inset: 4px;
+      border: 1px solid rgba(212, 175, 55, 0.45); pointer-events: none; z-index: 10;
     }
 
-    .modal-content { padding: 18px 22px; text-align: left; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .modal-badge { padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 900; }
-    .modal-title { font-size: 20px; font-weight: 900; color: #f5d78e; }
-    .modal-desc { font-size: 13px; color: #cbd5e1; line-height: 1.5; margin: 6px 0 14px 0; }
-    
-    .modal-event-box { background: rgba(0,0,0,0.45); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; border: 1px solid #4a3b22; border-left: 4px solid #d4af37; }
-    .event-score-tag { font-size: 20px; font-weight: 900; float: right; }
-    .btn-close-modal { width: 100%; background: linear-gradient(180deg, #d4af37 0%, #9a7b2c 100%); color: #090d14; padding: 12px; font-size: 15px; font-weight: 900; border: 1px solid #f5d78e; border-radius: 6px; }
+    /* 상단 헤더 바 (── ⚜ 특수 이벤트 ⚜ ──) */
+    .antique-header {
+      height: 64px;
+      background: linear-gradient(90deg, #0d131d 0%, #1a2639 50%, #0d131d 100%);
+      border-bottom: 2.5px solid #c5a059;
+      display: flex; align-items: center; justify-content: center; gap: 18px;
+      position: relative;
+    }
+    .header-line { width: 120px; height: 1.5px; background: linear-gradient(90deg, transparent, #c5a059, transparent); }
+    .header-title { font-size: 24px; font-weight: 900; color: #f5d78e; letter-spacing: 2px; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
+
+    /* 중앙 본문: 좌측 이미지(55%) + 우측 양피지 설명창(45%) */
+    .antique-body {
+      display: grid; grid-template-columns: 1.25fr 1fr;
+      min-height: 360px;
+      border-bottom: 2.5px solid #c5a059;
+    }
+    @media (max-width: 760px) {
+      .antique-body { grid-template-columns: 1fr; }
+    }
+
+    .antique-left-img-wrap {
+      position: relative; background: #070a0f; overflow: hidden;
+      border-right: 2.5px solid #c5a059;
+    }
+    .antique-left-img {
+      width: 100%; height: 100%; min-height: 340px; object-fit: cover; display: block;
+    }
+    .img-caption-tag {
+      position: absolute; bottom: 12px; left: 12px;
+      background: rgba(11, 16, 24, 0.9); border: 1px solid #c5a059;
+      color: #f5d78e; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 4px;
+    }
+
+    /* 우측 양피지 패널 (5번째 사진 우측 디자인 완벽 재현) */
+    .antique-right-parchment {
+      background: linear-gradient(135deg, #f3e9d2 0%, #e4d3b2 50%, #d8c39c 100%);
+      color: #2c1e12;
+      padding: 24px 22px;
+      display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+      text-align: center;
+      box-shadow: inset 0 0 30px rgba(107, 76, 38, 0.25);
+    }
+
+    /* 상단 검은색 캡슐 배지 (☸ 태국 · 불교) */
+    .parchment-pill {
+      background: linear-gradient(180deg, #2b2623 0%, #171311 100%);
+      border: 1.5px solid #b38f48;
+      color: #f5d78e;
+      padding: 5px 18px; border-radius: 20px;
+      font-size: 13.5px; font-weight: 900;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+      margin-bottom: 10px;
+    }
+
+    .parchment-main-title {
+      font-size: 21px; font-weight: 900; color: #1e130a;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    .parchment-desc {
+      font-size: 13.5px; color: #3d2b1c; line-height: 1.55; font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    /* [이벤트 효과] 점수 박스 */
+    .effect-box {
+      width: 100%;
+      background: rgba(255, 250, 240, 0.65);
+      border: 1.5px solid #bda075;
+      border-radius: 6px;
+      padding: 14px 10px 10px 10px;
+      position: relative;
+      margin: 8px 0 14px 0;
+    }
+    .effect-label {
+      position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+      background: #6b5335; color: #f8efe0;
+      font-size: 11px; font-weight: 900; padding: 2px 12px; border-radius: 10px;
+      border: 1px solid #c5a059;
+    }
+    .effect-score {
+      font-size: 28px; font-weight: 900;
+    }
+    .score-plus { color: #047857; }
+    .score-minus { color: #991b1b; }
+
+    /* [📖 학습 포인트] 하단 박스 */
+    .learn-box {
+      width: 100%; text-align: left;
+      background: rgba(215, 195, 160, 0.55);
+      border-top: 1.5px solid #b5986b;
+      padding: 10px 12px; border-radius: 4px;
+    }
+    .learn-badge {
+      display: inline-block; background: #2b2623; color: #f5d78e;
+      font-size: 11px; font-weight: 900; padding: 3px 9px; border-radius: 4px;
+      margin-bottom: 5px;
+    }
+    .learn-text {
+      font-size: 12.5px; color: #2c1e12; font-weight: 700; line-height: 1.45;
+    }
+
+    /* 하단 푸터 바 (좌측 안내 문구 + 우측 확인 버튼) */
+    .antique-footer {
+      height: 60px;
+      background: linear-gradient(90deg, #0d131d 0%, #162030 50%, #0d131d 100%);
+      padding: 0 22px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-info { font-size: 12px; color: #94a3b8; }
+    .antique-confirm-btn {
+      background: linear-gradient(180deg, #27374d 0%, #16202e 100%);
+      border: 2px solid #c5a059;
+      color: #f5d78e;
+      padding: 9px 36px; font-size: 15px; font-weight: 900; border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+    .antique-confirm-btn:hover {
+      background: linear-gradient(180deg, #d4af37 0%, #9a7b2c 100%);
+      color: #090d14;
+    }
 
     @keyframes popUp {
-      from { transform: scale(0.88); opacity: 0; }
+      from { transform: scale(0.9); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
   </style>
@@ -245,7 +307,7 @@
     <button id="startBtn" class="btn-start" onclick="startGame()" style="display:none;">게임 시작</button>
   </div>
 
-  <!-- 인게임 메인 화면 (레퍼런스 사진 레이아웃) -->
+  <!-- 인게임 메인 화면 -->
   <div id="game-view">
     
     <!-- 상단(북): 크리스트교 -->
@@ -287,7 +349,7 @@
         <g id="pinLayer"></g>
       </svg>
 
-      <!-- 하단 조작 바 (레퍼런스 사진 버튼 구도 반영) -->
+      <!-- 하단 조작 바 -->
       <div class="action-panel">
         <div id="targetLabel" class="target-box">지역을 선택하세요</div>
         <button class="method-btn selected" id="btn-direct" onclick="setMethod('직접전파')">인접 지역으로 확장</button>
@@ -328,28 +390,82 @@
 
   </div>
 
-  <!-- 결과 모달 카드 -->
-  <div id="result-modal">
-    <div class="modal-card">
-      <div class="modal-img-wrap">
-        <img id="modalImg" class="modal-img" src="" alt="전파 결과 이미지" onerror="this.src='https://commons.wikimedia.org/wiki/Special:FilePath/St_Peter%27s_Square,_Vatican_City_-_April_2007.jpg?width=800'">
-        <div id="modalBadgeOverlay" class="modal-badge-overlay">랜드마크</div>
+  <!-- =========================================================================
+       1단계 모달: [전파 결과 카드] (적합도 & 실제 대표 랜드마크 확인)
+       ========================================================================= -->
+  <div id="step1-modal" class="antique-modal-overlay">
+    <div class="antique-modal-box">
+      <div class="antique-header">
+        <div class="header-line"></div>
+        <div class="header-title">⚜ 종교 전파 결과 ⚜</div>
+        <div class="header-line"></div>
       </div>
-      <div class="modal-content">
-        <div class="modal-header">
-          <div id="modalRegionBadge" class="modal-badge"></div>
-          <div id="modalMethodBadge" style="font-size:12px; color:#f5d78e;"></div>
+      <div class="antique-body">
+        <div class="antique-left-img-wrap">
+          <img id="s1-img" class="antique-left-img" src="" alt="랜드마크 이미지">
+          <div id="s1-caption" class="img-caption-tag">대표 랜드마크</div>
         </div>
-        <div id="modalTitle" class="modal-title"></div>
-        <div id="modalDesc" class="modal-desc"></div>
+        <div class="antique-right-parchment">
+          <div>
+            <div id="s1-pill" class="parchment-pill">역사적 주류 일치</div>
+            <div id="s1-title" class="parchment-main-title">불교 ➔ 태국 전파</div>
+            <div id="s1-desc" class="parchment-desc">설명</div>
+          </div>
 
-        <div class="modal-event-box">
-          <div id="modalEventScore" class="event-score-tag"></div>
-          <div style="font-size:11.5px; color:#fde047; font-weight:bold; margin-bottom:4px;">⚡ 역사적 사건 및 현지 반응</div>
-          <div id="modalEventText" style="font-size:14px; color:#ffffff; font-weight:600; line-height:1.45;"></div>
+          <div class="effect-box">
+            <div class="effect-label">전파 기본 획득 점수</div>
+            <div id="s1-score" class="effect-score score-plus">⬆ +45점</div>
+          </div>
+
+          <div class="learn-box">
+            <div class="learn-badge">📍 전파 경로 분석</div>
+            <div id="s1-method" class="learn-text">선택한 전파 방식 보너스가 반영되었습니다. 이제 현지에서 발생한 특수 이벤트를 확인하세요!</div>
+          </div>
         </div>
+      </div>
+      <div class="antique-footer">
+        <div class="footer-info">ⓘ 1단계: 실제 세계 종교 분포와의 일치 여부를 먼저 판정합니다.</div>
+        <button class="antique-confirm-btn" onclick="openStep2Event()">다음: 특수 이벤트 확인 ▶</button>
+      </div>
+    </div>
+  </div>
 
-        <button class="btn-close-modal" onclick="closeModal()">확인 및 다음 턴으로</button>
+  <!-- =========================================================================
+       2단계 모달: [특수 이벤트 카드] (5번째 사진 디자인 100% 재현)
+       ========================================================================= -->
+  <div id="step2-modal" class="antique-modal-overlay">
+    <div class="antique-modal-box">
+      <div class="antique-header">
+        <div class="header-line"></div>
+        <div class="header-title">⚜ 특수 이벤트 ⚜</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="antique-body">
+        <div class="antique-left-img-wrap">
+          <img id="s2-img" class="antique-left-img" src="" alt="특수 이벤트 이미지">
+          <div class="img-caption-tag">⚡ 역사·현지 상황 기록화</div>
+        </div>
+        <div class="antique-right-parchment">
+          <div>
+            <div id="s2-pill" class="parchment-pill">☸ 태국 · 불교</div>
+            <div id="s2-title" class="parchment-main-title">전쟁으로 인한 문화유산 피해</div>
+            <div id="s2-desc" class="parchment-desc">전쟁으로 사원과 문화유산이 피해를 입었습니다.</div>
+          </div>
+
+          <div class="effect-box">
+            <div class="effect-label">이벤트 효과</div>
+            <div id="s2-score" class="effect-score score-minus">⬇ -10점</div>
+          </div>
+
+          <div class="learn-box">
+            <div class="learn-badge">📖 학습 포인트</div>
+            <div id="s2-learn" class="learn-text">종교 분포와 문화 경관은 전쟁과 정책 변화 등 역사적 상황의 영향을 받습니다.</div>
+          </div>
+        </div>
+      </div>
+      <div class="antique-footer">
+        <div class="footer-info">ⓘ 역사적 상황을 단순화한 게임용 이벤트입니다.</div>
+        <button class="antique-confirm-btn" onclick="closeStep2Modal()">확인</button>
       </div>
     </div>
   </div>
@@ -362,6 +478,7 @@
     let currentActiveReligion = '크리스트교';
     let myAssignedReligion = null;
     let isSolo = false;
+    let pendingStep2Data = null;
 
     const RELIGION_META = {
       '크리스트교': { id: 'christianity', color: '#7c3aed' },
@@ -370,7 +487,6 @@
       '힌두교': { id: 'hinduism', color: '#ea580c' }
     };
 
-    // 우리가 설정한 11개 핵심 국가/권역 핀 좌표
     const PIN_NODES = [
       { key: '미국·캐나다', label: '북아메리카(미국)', lon: -100.0, lat: 40.0, hybrid: false },
       { key: '브라질·남미', label: '라틴아메리카(브라질)', lon: -56.0, lat: -15.0, hybrid: false },
@@ -386,7 +502,6 @@
       { key: '호주·오세아니아', label: '오세아니아(호주)', lon: 135.0, lat: -27.0, hybrid: false }
     ];
 
-    // 레퍼런스 이미지 스타일의 세계지도 투영법
     const projection = d3.geoNaturalEarth1()
       .scale(178)
       .translate([490, 275]);
@@ -399,14 +514,12 @@
       const routeLayer = d3.select('#routeLayer');
       const pinLayer = d3.select('#pinLayer');
 
-      // 고지도 경위도 그리드
       const graticule = d3.geoGraticule();
       mapLayer.append('path')
         .datum(graticule())
         .attr('class', 'graticule-line')
         .attr('d', pathGen);
 
-      // 실제 대륙 및 국가 해안선 로드
       try {
         const worldData = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
         const countries = topojson.feature(worldData, worldData.objects.countries).features;
@@ -421,7 +534,6 @@
         console.error('지도 로드 오류:', err);
       }
 
-      // 엔틱 나침반(Compass Rose) 장식 추가 (좌하단 대양)
       decorLayer.html(`
         <g transform="translate(180, 415)" opacity="0.45">
           <circle cx="0" cy="0" r="38" fill="none" stroke="#d4be96" stroke-width="1.5"/>
@@ -434,7 +546,6 @@
         </g>
       `);
 
-      // 주요 역사 전파 점선 루트
       const routes = [
         { from: [12.5, 46], to: [-100, 40] },
         { from: [12.5, 46], to: [-56, -15] },
@@ -459,7 +570,6 @@
           .attr('class', 'spread-route');
       });
 
-      // 국가 선택 핀 배치
       PIN_NODES.forEach(node => {
         const [x, y] = projection([node.lon, node.lat]);
         const g = pinLayer.append('g')
@@ -492,7 +602,6 @@
 
     initVintageWorldMap();
 
-    // Web Audio 신시사이저 (종교별 효과음)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playTone(freq, type, duration, delay = 0) {
@@ -613,54 +722,63 @@
       document.querySelectorAll('.nation-pin').forEach(n => n.classList.remove('selected'));
     }
 
-    socket.on('turnResultModal', (data) => {
-      if (data.eventScore < 0) {
+    // 1단계(전파 기본 결과) -> 2단계(특수 이벤트) 순차 오픈
+    socket.on('turnResultTwoStep', (data) => {
+      playReligionSound(data.actorReligion);
+      pendingStep2Data = data;
+
+      const s1 = data.step1Card;
+      document.getElementById('s1-img').src = s1.img;
+      document.getElementById('s1-caption').innerText = `🏛️ ${s1.landmarkName}`;
+      document.getElementById('s1-pill').innerText = s1.badgeText;
+      document.getElementById('s1-title').innerText = s1.title;
+      document.getElementById('s1-desc').innerText = s1.desc;
+      document.getElementById('s1-score').innerText = `⬆ +${s1.baseGain}점`;
+      document.getElementById('s1-method').innerText = `전파 방식: [${data.method}] (+${data.methodBonus}점 보너스 포함). 이어서 현지 특수 이벤트를 확인하세요!`;
+
+      document.getElementById('step1-modal').style.display = 'flex';
+    });
+
+    function openStep2Event() {
+      document.getElementById('step1-modal').style.display = 'none';
+      if (!pendingStep2Data) return;
+
+      const s2 = pendingStep2Data.step2Event;
+      if (s2.score < 0) {
         playTone(180, 'sawtooth', 0.5, 0);
         playTone(140, 'sawtooth', 0.8, 200);
       } else {
-        playReligionSound(data.actorReligion);
+        playTone(659.25, 'sine', 0.4, 0);
+        playTone(880, 'sine', 0.7, 150);
       }
 
-      const modal = document.getElementById('result-modal');
-      const modalImg = document.getElementById('modalImg');
-      modalImg.src = data.imgUrl;
-      document.getElementById('modalBadgeOverlay').innerText = data.imgLabel;
+      document.getElementById('s2-img').src = s2.img;
+      document.getElementById('s2-pill').innerText = s2.tag;
+      document.getElementById('s2-title').innerText = s2.title;
+      document.getElementById('s2-desc').innerText = s2.desc;
 
-      document.getElementById('modalTitle').innerText = `${data.actorReligion} ➔ ${data.regionName}`;
-      document.getElementById('modalDesc').innerText = data.regionDesc;
-      
-      const badge = document.getElementById('modalRegionBadge');
-      if (data.isHybrid) {
-        badge.innerText = '🤝 다종교 종합 국가 (+30)';
-        badge.style.background = '#38bdf8';
-      } else if (data.isMatched) {
-        badge.innerText = '🌟 역사적 주류 일치 (+35)';
-        badge.style.background = '#10b981';
+      const scoreElem = document.getElementById('s2-score');
+      if (s2.score >= 0) {
+        scoreElem.className = 'effect-score score-plus';
+        scoreElem.innerText = `⬆ +${s2.score}점`;
       } else {
-        badge.innerText = '🌍 비주류 개척 도전 (+15)';
-        badge.style.background = '#f59e0b';
+        scoreElem.className = 'effect-score score-minus';
+        scoreElem.innerText = `⬇ ${s2.score}점`;
       }
-      badge.style.color = '#090d14';
 
-      document.getElementById('modalMethodBadge').innerText = `전파 방식: ${data.method}`;
-      document.getElementById('modalEventText').innerText = data.eventText;
-      
-      const scoreTag = document.getElementById('modalEventScore');
-      const sign = data.eventScore >= 0 ? '+' : '';
-      scoreTag.innerText = `${sign}${data.eventScore}점`;
-      scoreTag.style.color = data.eventScore >= 0 ? '#34d399' : '#f87171';
+      document.getElementById('s2-learn').innerText = s2.learnPoint;
+      document.getElementById('step2-modal').style.display = 'flex';
 
-      modal.style.display = 'flex';
-      updateBoard(data.mapOwnership, data.religionStates);
-    });
+      updateBoard(pendingStep2Data.mapOwnership, pendingStep2Data.religionStates);
+    }
 
-    function closeModal() {
-      document.getElementById('result-modal').style.display = 'none';
+    function closeStep2Modal() {
+      document.getElementById('step2-modal').style.display = 'none';
+      pendingStep2Data = null;
     }
 
     socket.on('nextTurn', ({ currentReligion }) => {
       setActiveTurn(currentReligion);
-      playReligionSound(currentReligion);
     });
 
     function setActiveTurn(religion) {
