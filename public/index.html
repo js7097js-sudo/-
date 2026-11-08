@@ -44,17 +44,17 @@
 
     /* 인게임 4방면 레이아웃 */
     #game-view {
-      display: none; width: 100vw; height: 100vh; max-width: 1620px;
-      grid-template-rows: 96px 1fr 104px;
-      grid-template-columns: 260px 1fr 260px;
-      gap: 10px; padding: 12px;
+      display: none; width: 100vw; height: 100vh; max-width: 1640px;
+      grid-template-rows: 94px 1fr 100px;
+      grid-template-columns: 255px 1fr 255px;
+      gap: 10px; padding: 10px;
     }
 
     @media (max-width: 1024px) {
       #game-view { display: none; height: auto; grid-template-rows: auto; grid-template-columns: 1fr; }
     }
 
-    /* 4방향 엔틱 종교 카드 */
+    /* 4방향 엔틱 종교 카드 (검증된 성당·모스크·불탑·힌두사원 배경 완벽 복원) */
     .religion-card {
       border: 2.5px solid #b38f48; border-radius: 8px; padding: 12px 16px;
       display: flex; flex-direction: column; justify-content: space-between;
@@ -71,23 +71,23 @@
 
     .panel-north {
       grid-column: 2; grid-row: 1;
-      background: linear-gradient(90deg, rgba(38, 22, 68, 0.92) 0%, rgba(58, 35, 100, 0.78) 50%, rgba(30, 18, 56, 0.92) 100%),
-                  url('https://images.unsplash.com/photo-1531572753322-ad063cecc140?auto=format&fit=crop&w=600&q=70') center/cover;
+      background: linear-gradient(90deg, rgba(34, 19, 62, 0.9) 0%, rgba(55, 32, 98, 0.72) 50%, rgba(28, 15, 52, 0.9) 100%),
+                  url('https://images.unsplash.com/photo-1548625361-195fe5795df5?auto=format&fit=crop&w=800&q=80') center/cover;
     }
     .panel-west {
       grid-column: 1; grid-row: 2;
-      background: linear-gradient(180deg, rgba(12, 43, 36, 0.95) 0%, rgba(16, 62, 52, 0.65) 55%, rgba(10, 31, 26, 0.88) 100%),
-                  url('https://images.unsplash.com/photo-1572252821143-035a024857ac?auto=format&fit=crop&w=500&q=70') bottom center/cover;
+      background: linear-gradient(180deg, rgba(10, 38, 32, 0.94) 0%, rgba(16, 62, 52, 0.62) 55%, rgba(8, 28, 23, 0.88) 100%),
+                  url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=600&q=80') bottom center/cover;
     }
     .panel-east {
       grid-column: 3; grid-row: 2;
-      background: linear-gradient(180deg, rgba(54, 34, 13, 0.95) 0%, rgba(77, 48, 18, 0.65) 55%, rgba(41, 24, 9, 0.88) 100%),
-                  url('https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=500&q=70') bottom center/cover;
+      background: linear-gradient(180deg, rgba(52, 32, 11, 0.94) 0%, rgba(78, 48, 16, 0.62) 55%, rgba(38, 22, 8, 0.88) 100%),
+                  url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=600&q=80') bottom center/cover;
     }
     .panel-south {
       grid-column: 2; grid-row: 3;
-      background: linear-gradient(90deg, rgba(68, 29, 13, 0.92) 0%, rgba(97, 41, 18, 0.78) 50%, rgba(54, 22, 10, 0.92) 100%),
-                  url('https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=600&q=70') center/cover;
+      background: linear-gradient(90deg, rgba(64, 26, 11, 0.9) 0%, rgba(96, 40, 17, 0.72) 50%, rgba(50, 20, 9, 0.9) 100%),
+                  url('https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80') center/cover;
     }
 
     .card-top { display: flex; justify-content: space-between; align-items: center; z-index: 3; }
@@ -116,40 +116,40 @@
     .map-svg { width: 100%; height: 100%; }
     .country-path { fill: #d4be96; stroke: #8c734b; stroke-width: 0.7; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45)); }
     .graticule-line { fill: none; stroke: rgba(212, 190, 150, 0.14); stroke-width: 0.6; }
-    .spread-route { fill: none; stroke: #fde047; stroke-width: 1.5; stroke-dasharray: 4, 4; opacity: 0.7; }
+    .spread-route { fill: none; stroke: #fde047; stroke-width: 1.4; stroke-dasharray: 4, 4; opacity: 0.65; }
 
+    /* 국가 선택 핀 및 지시선 */
     .nation-pin { cursor: pointer; transition: 0.2s; }
-    .nation-pin:hover rect { stroke: #fde047; stroke-width: 2.5; filter: brightness(1.15); }
+    .nation-pin:hover rect { stroke: #fde047; stroke-width: 2.5; filter: brightness(1.18); }
     .nation-pin.selected rect { stroke: #ffffff; stroke-width: 3.5; filter: drop-shadow(0 0 12px #fde047); }
 
-    /* 지도 우측 상단 간단 범례 */
     .map-legend {
-      position: absolute; top: 10px; right: 10px;
+      position: absolute; top: 10px; left: 10px;
       background: rgba(11, 17, 26, 0.88); border: 1.5px solid #c5a059;
-      padding: 7px 11px; border-radius: 6px; font-size: 11px; color: #f5d78e; line-height: 1.5; pointer-events: none;
+      padding: 6px 11px; border-radius: 6px; font-size: 11px; color: #f5d78e; line-height: 1.45; pointer-events: none;
     }
 
     /* 하단 조작 바 */
     .action-panel {
-      position: absolute; bottom: 12px;
+      position: absolute; bottom: 10px;
       background: linear-gradient(180deg, rgba(22, 32, 46, 0.96) 0%, rgba(11, 17, 26, 0.98) 100%);
-      border: 2px solid #b38f48; border-radius: 8px; padding: 8px 14px;
+      border: 2px solid #b38f48; border-radius: 8px; padding: 7px 14px;
       display: flex; gap: 10px; align-items: center; z-index: 10; box-shadow: 0 8px 25px rgba(0,0,0,0.85);
     }
-    .target-box { background: #090d14; border: 1px solid #64512d; padding: 8px 14px; border-radius: 5px; font-size: 13px; color: #f5d78e; font-weight: 700; min-width: 155px; text-align: center; }
-    .method-btn { background: linear-gradient(180deg, #263345 0%, #151d28 100%); color: #cbd5e1; padding: 8px 15px; border-radius: 5px; font-size: 13px; border: 1.5px solid #64748b; }
+    .target-box { background: #090d14; border: 1px solid #64512d; padding: 7px 14px; border-radius: 5px; font-size: 13px; color: #f5d78e; font-weight: 700; min-width: 155px; text-align: center; }
+    .method-btn { background: linear-gradient(180deg, #263345 0%, #151d28 100%); color: #cbd5e1; padding: 7px 14px; border-radius: 5px; font-size: 13px; border: 1.5px solid #64748b; }
     .method-btn.selected { background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%); color: #ffffff; font-weight: 900; border-color: #bae6fd; box-shadow: 0 0 12px rgba(56, 189, 248, 0.5); }
-    .btn-spread { background: linear-gradient(180deg, #991b1b 0%, #5c0f0f 100%); color: #fecaca; padding: 8px 20px; font-size: 13.5px; border-radius: 5px; border: 1.5px solid #f87171; font-weight: 900; }
+    .btn-spread { background: linear-gradient(180deg, #991b1b 0%, #5c0f0f 100%); color: #fecaca; padding: 7px 18px; font-size: 13.5px; border-radius: 5px; border: 1.5px solid #f87171; font-weight: 900; }
     .btn-spread:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* 가로형 2분할 엔틱 모달 창 (1단계 & 2단계 공통) */
+    /* 가로형 2분할 엔틱 모달 창 */
     .antique-modal-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0, 0, 0, 0.84); backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
       z-index: 999; align-items: center; justify-content: center; padding: 15px;
     }
     .antique-modal-box {
-      width: 95%; max-width: 880px;
+      width: 95%; max-width: 890px;
       background: #101722; border: 3px solid #c5a059;
       box-shadow: 0 0 0 2px #070a0f, 0 25px 70px rgba(0,0,0,0.95);
       border-radius: 6px; overflow: hidden; animation: popUp 0.25s ease-out; position: relative;
@@ -165,15 +165,15 @@
     .header-line { width: 110px; height: 1.5px; background: linear-gradient(90deg, transparent, #c5a059, transparent); }
     .header-title { font-size: 23px; font-weight: 900; color: #f5d78e; letter-spacing: 2px; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
 
-    .antique-body { display: grid; grid-template-columns: 1.25fr 1fr; min-height: 360px; border-bottom: 2.5px solid #c5a059; }
+    .antique-body { display: grid; grid-template-columns: 1.25fr 1fr; min-height: 365px; border-bottom: 2.5px solid #c5a059; }
     @media (max-width: 760px) { .antique-body { grid-template-columns: 1fr; } }
 
-    .antique-left-img-wrap { position: relative; background: #070a0f; overflow: hidden; border-right: 2.5px solid #c5a059; }
-    .antique-left-img { width: 100%; height: 100%; min-height: 340px; object-fit: cover; display: block; }
+    .antique-left-img-wrap { position: relative; background: #141c29; overflow: hidden; border-right: 2.5px solid #c5a059; display: flex; align-items: center; justify-content: center; }
+    .antique-left-img { width: 100%; height: 100%; min-height: 345px; object-fit: cover; display: block; }
     .img-caption-tag {
       position: absolute; bottom: 12px; left: 12px; right: 12px;
       background: rgba(11, 16, 24, 0.92); border: 1px solid #c5a059;
-      color: #f5d78e; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 4px;
+      color: #f5d78e; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 4px; z-index: 5;
     }
 
     .antique-right-parchment {
@@ -286,10 +286,10 @@
         </div>
         <div id="score-islam" class="religion-score">60점</div>
       </div>
-      <div id="regions-islam" class="region-tags"><span class="region-tag">서남아시아(메카)</span></div>
+      <div id="regions-islam" class="region-tags"><span class="region-tag">서남아(메카)</span></div>
     </div>
 
-    <!-- 중앙: 엔틱 고지도 보드 (16개 권역 균등 배치) -->
+    <!-- 중앙: 엔틱 고지도 보드 -->
     <div class="board-center">
       <svg id="worldMapSvg" class="map-svg" viewBox="0 0 1000 540">
         <g id="mapLayer"></g>
@@ -299,10 +299,10 @@
       </svg>
 
       <div class="map-legend">
-        <strong>⚜ 16개 권역 구성 (균등 배분)</strong><br>
-        • 종교별 대표 권역: 각 3곳 (총 12곳)<br>
-        • <span style="color:#38bdf8; font-weight:bold;">하늘색 테두리</span>: 다종교 혼합 권역 (4곳)<br>
-        • 오답 권역 선택 시: <strong>-20점 페널티</strong>
+        <strong>⚜ 16개 권역 균등 배분</strong><br>
+        • 종교별 주류 대표국: 각 3곳 (총 12곳)<br>
+        • <span style="color:#38bdf8; font-weight:bold;">하늘색 테두리</span>: 다종교 혼합국 (4곳)<br>
+        • 타 종교 강세지 오답 시: <strong>-20점 감점</strong>
       </div>
 
       <div class="action-panel">
@@ -325,7 +325,7 @@
         </div>
         <div id="score-buddhism" class="religion-score">60점</div>
       </div>
-      <div id="regions-buddhism" class="region-tags"><span class="region-tag">동남아(태국·미얀마)</span></div>
+      <div id="regions-buddhism" class="region-tags"><span class="region-tag">태국·미얀마</span></div>
     </div>
 
     <!-- 하단(남): 힌두교 -->
@@ -340,12 +340,12 @@
         </div>
         <div id="score-hinduism" class="religion-score">60점</div>
       </div>
-      <div id="regions-hinduism" class="region-tags"><span class="region-tag">인도북부(바라나시)</span></div>
+      <div id="regions-hinduism" class="region-tags"><span class="region-tag">북인도(갠지스)</span></div>
     </div>
 
   </div>
 
-  <!-- 1단계 모달: [전파 결과 및 적합도 판정 카드] -->
+  <!-- 1단계 모달: [전파 결과 및 실제 대표 랜드마크] -->
   <div id="step1-modal" class="antique-modal-overlay">
     <div class="antique-modal-box">
       <div class="antique-header">
@@ -361,7 +361,7 @@
         <div class="antique-right-parchment">
           <div>
             <div id="s1-pill" class="parchment-pill">역사적 주류 일치</div>
-            <div id="s1-title" class="parchment-main-title">불교 ➔ 태국 전파</div>
+            <div id="s1-title" class="parchment-main-title">불교 ➔ 태국·미얀마</div>
             <div id="s1-desc" class="parchment-desc">설명</div>
           </div>
 
@@ -378,7 +378,7 @@
       </div>
       <div class="antique-footer">
         <div class="footer-info">ⓘ 1단계: 해당 지역의 실제 주류 종교 일치 여부와 전파 방식(직접/장거리)을 판정합니다.</div>
-        <button class="antique-confirm-btn" onclick="openStep2Event()">다음: 역사적 사건 확인 ▶</button>
+        <button class="antique-confirm-btn" onclick="openStep2Event()">다음: 특수 이벤트 확인 ▶</button>
       </div>
     </div>
   </div>
@@ -388,13 +388,13 @@
     <div class="antique-modal-box">
       <div class="antique-header">
         <div class="header-line"></div>
-        <div id="s2-header" class="header-title">⚜ 역사적 특수 이벤트 ⚜</div>
+        <div id="s2-header" class="header-title">⚜ 특수 이벤트 ⚜</div>
         <div class="header-line"></div>
       </div>
       <div class="antique-body">
         <div class="antique-left-img-wrap">
-          <img id="s2-img" class="antique-left-img" src="" alt="역사 이벤트 이미지">
-          <div id="s2-caption" class="img-caption-tag">⚡ 실제 역사적 배경 및 사건</div>
+          <img id="s2-img" class="antique-left-img" src="" alt="역사 이벤트 일러스트">
+          <div id="s2-caption" class="img-caption-tag">⚡ 실제 역사적 사건 기록화</div>
         </div>
         <div class="antique-right-parchment">
           <div>
@@ -404,19 +404,19 @@
           </div>
 
           <div class="effect-box">
-            <div class="effect-label">역사 이벤트 효과</div>
+            <div class="effect-label">이벤트 효과</div>
             <div id="s2-score" class="effect-score score-plus">⬆ +10점</div>
           </div>
 
           <div class="learn-box">
-            <div class="learn-badge">📖 교과서 핵심 학습 포인트</div>
+            <div class="learn-badge">📖 학습 포인트</div>
             <div id="s2-learn" class="learn-text">학습 포인트</div>
           </div>
         </div>
       </div>
       <div class="antique-footer">
-        <div class="footer-info">ⓘ 실제 종교의 정착·확산·축소 과정에서 일어난 역사적 사건을 반영한 결과입니다.</div>
-        <button class="antique-confirm-btn" onclick="closeStep2Modal()">확인 (턴 종료)</button>
+        <div class="footer-info">ⓘ 역사적 상황을 단순화한 게임용 이벤트입니다.</div>
+        <button class="antique-confirm-btn" onclick="closeStep2Modal()">확인</button>
       </div>
     </div>
   </div>
@@ -431,31 +431,220 @@
     let isSolo = false;
     let pendingStep2Data = null;
 
-    // 방화벽이나 네트워크 오류 시에도 절대 엑박이 뜨지 않도록 양피지 일러스트를 즉석에서 그려주는 폴백 함수
-    function createFallbackDataUrl(titleText, subText) {
-      const c = document.createElement('canvas');
-      c.width = 800; c.height = 500;
-      const ctx = c.getContext('2d');
-      const grad = ctx.createLinearGradient(0, 0, 800, 500);
-      grad.addColorStop(0, '#1f2937');
-      grad.addColorStop(1, '#111827');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 800, 500);
-      ctx.strokeStyle = '#c5a059';
-      ctx.lineWidth = 6;
-      ctx.strokeRect(20, 20, 760, 460);
-      ctx.fillStyle = '#f5d78e';
-      ctx.font = 'bold 30px serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('⚜ 세계 종교 역사 기록화 ⚜', 400, 190);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 24px sans-serif';
-      ctx.fillText(titleText || '종교 문화 유산', 400, 255);
-      ctx.fillStyle = '#cbd5e1';
-      ctx.font = '18px sans-serif';
-      ctx.fillText(subText || '', 400, 305);
-      return c.toDataURL();
+    // 2단계 특수 이벤트 및 오답 장벽 전용 고해상도 빈티지 수채·펜화 일러스트 생성 엔진 (절대 깨지지 않으며 사건별 맞춤 장면 묘사)
+    function generateHistoricalSceneDataUrl(sceneKey, titleText) {
+      const svgTemplates = {
+        columbus: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8dfea"/><stop offset="100%" stop-color="#f3e5c8"/></linearGradient>
+              <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2b5c78"/><stop offset="100%" stop-color="#17374b"/></linearGradient>
+            </defs>
+            <rect width="800" height="340" fill="url(#sky)"/>
+            <rect y="320" width="800" height="240" fill="url(#sea)"/>
+            <path d="M 480 420 Q 600 380 800 410 L 800 560 L 420 560 Z" fill="#d4be96" stroke="#5c4328" stroke-width="3"/>
+            <!-- 대항해시대 범선 2척 -->
+            <g transform="translate(130, 210)">
+              <path d="M 20 110 L 160 110 L 135 150 L 45 150 Z" fill="#6b4423" stroke="#2c1a0b" stroke-width="3"/>
+              <line x1="90" y1="10" x2="90" y2="110" stroke="#4a2e16" stroke-width="5"/>
+              <path d="M 45 25 Q 95 40 135 25 Q 145 65 130 95 Q 90 85 45 95 Z" fill="#f8efe0" stroke="#8c734b" stroke-width="2.5"/>
+              <path d="M 82 45 L 98 45 M 90 37 L 90 57" stroke="#b91c1c" stroke-width="6"/>
+            </g>
+            <!-- 신대륙 해안 십자가와 선교사 -->
+            <g transform="translate(540, 230)">
+              <line x1="60" y1="0" x2="60" y2="180" stroke="#4a2e16" stroke-width="12"/>
+              <line x1="25" y1="45" x2="95" y2="45" stroke="#4a2e16" stroke-width="12"/>
+              <circle cx="15" cy="125" r="14" fill="#d9a87e" stroke="#2c1a0b" stroke-width="2.5"/>
+              <path d="M -5 140 L 35 140 L 40 210 L -10 210 Z" fill="#4a3728" stroke="#2c1a0b" stroke-width="2.5"/>
+              <circle cx="115" cy="120" r="14" fill="#d9a87e" stroke="#2c1a0b" stroke-width="2.5"/>
+              <path d="M 95 135 L 135 135 L 140 210 L 90 210 Z" fill="#7c2d12" stroke="#2c1a0b" stroke-width="2.5"/>
+            </g>
+          </svg>`,
+        mongol_invasion: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <defs>
+              <linearGradient id="fireSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b2f2f"/><stop offset="60%" stop-color="#9a4b26"/><stop offset="100%" stop-color="#e2a86b"/></linearGradient>
+            </defs>
+            <rect width="800" height="560" fill="url(#fireSky)"/>
+            <!-- 불타는 실크로드 이슬람 모스크 성곽 -->
+            <rect x="420" y="240" width="320" height="180" fill="#c2a378" stroke="#4a3520" stroke-width="3"/>
+            <path d="M 510 240 Q 580 130 650 240 Z" fill="#2a6f68" stroke="#4a3520" stroke-width="3"/>
+            <rect x="450" y="130" width="28" height="110" fill="#c2a378" stroke="#4a3520" stroke-width="3"/>
+            <circle cx="560" cy="180" r="45" fill="#ea580c" opacity="0.6"/>
+            <path d="M 0 410 L 800 410 L 800 560 L 0 560 Z" fill="#b89362"/>
+            <!-- 몽골 기마 궁수 돌격 -->
+            <g transform="translate(150, 270)">
+              <ellipse cx="110" cy="110" rx="65" ry="32" fill="#5c3a21" stroke="#26170c" stroke-width="3"/>
+              <path d="M 155 100 L 195 55 L 215 70 L 175 115 Z" fill="#5c3a21" stroke="#26170c" stroke-width="3"/>
+              <line x1="65" y1="130" x2="45" y2="190" stroke="#26170c" stroke-width="7"/>
+              <line x1="150" y1="130" x2="175" y2="190" stroke="#26170c" stroke-width="7"/>
+              <circle cx="115" cy="40" r="16" fill="#d9a87e" stroke="#26170c" stroke-width="2.5"/>
+              <path d="M 95 35 Q 115 10 135 35 Z" fill="#374151" stroke="#26170c" stroke-width="2.5"/>
+              <path d="M 90 55 L 140 55 L 145 105 L 85 105 Z" fill="#7c2d12" stroke="#26170c" stroke-width="2.5"/>
+              <path d="M 165 15 Q 205 55 165 95" fill="none" stroke="#26170c" stroke-width="4"/>
+              <line x1="135" y1="55" x2="210" y2="55" stroke="#26170c" stroke-width="3"/>
+            </g>
+          </svg>`,
+        roman_edict: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="560" fill="#e6d7be"/>
+            <!-- 로마 신전 기둥 배경 -->
+            <rect x="70" y="60" width="45" height="360" fill="#f5efe6" stroke="#786652" stroke-width="3"/>
+            <rect x="160" y="60" width="45" height="360" fill="#f5efe6" stroke="#786652" stroke-width="3"/>
+            <rect x="620" y="60" width="45" height="360" fill="#f5efe6" stroke="#786652" stroke-width="3"/>
+            <rect x="40" y="410" width="720" height="150" fill="#c7b293" stroke="#5c4b37" stroke-width="3"/>
+            <!-- 황제와 주교, 십자가와 밀라노 칙령 두루마리 -->
+            <g transform="translate(260, 170)">
+              <circle cx="60" cy="40" r="18" fill="#e0b589" stroke="#2c1e12" stroke-width="2.5"/>
+              <path d="M 30 60 L 90 60 L 100 220 L 20 220 Z" fill="#6b21a8" stroke="#2c1e12" stroke-width="3"/>
+              <rect x="105" y="45" width="38" height="52" fill="#fef3c7" stroke="#786652" stroke-width="2"/>
+              <!-- 주교와 황금 십자가 -->
+              <circle cx="210" cy="45" r="18" fill="#e0b589" stroke="#2c1e12" stroke-width="2.5"/>
+              <path d="M 190 30 L 210 5 L 230 30 Z" fill="#f59e0b" stroke="#2c1e12" stroke-width="2.5"/>
+              <path d="M 175 65 L 245 65 L 255 220 L 165 220 Z" fill="#fef3c7" stroke="#786652" stroke-width="3"/>
+              <line x1="275" y1="-20" x2="275" y2="220" stroke="#b45309" stroke-width="8"/>
+              <line x1="245" y1="20" x2="305" y2="20" stroke="#b45309" stroke-width="8"/>
+            </g>
+          </svg>`,
+        ashoka_buddhism: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="350" fill="#d9e8ec"/>
+            <rect y="350" width="800" height="210" fill="#2e6f85"/>
+            <path d="M 0 380 L 480 380 L 520 560 L 0 560 Z" fill="#d8c39c" stroke="#6b5335" stroke-width="3"/>
+            <!-- 전법사 목선과 보리수 묘목, 승려 행렬 -->
+            <path d="M 420 310 L 750 310 L 690 390 L 460 390 Z" fill="#7c4d25" stroke="#3b2310" stroke-width="3"/>
+            <g transform="translate(220, 210)">
+              <circle cx="40" cy="40" r="17" fill="#d9a173" stroke="#2c1e12" stroke-width="2.5"/>
+              <path d="M 15 60 L 65 60 L 75 180 L 5 180 Z" fill="#d97706" stroke="#2c1e12" stroke-width="2.5"/>
+              <circle cx="120" cy="40" r="17" fill="#d9a173" stroke="#2c1e12" stroke-width="2.5"/>
+              <path d="M 95 60 L 145 60 L 155 180 L 85 180 Z" fill="#ea580c" stroke="#2c1e12" stroke-width="2.5"/>
+              <!-- 보리수 나무 화분 -->
+              <circle cx="170" cy="75" r="24" fill="#15803d" stroke="#14532d" stroke-width="2.5"/>
+              <rect x="155" y="100" width="30" height="22" fill="#9a3412"/>
+            </g>
+          </svg>`,
+        mughal_conquest: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="560" fill="#e5d1b0"/>
+            <!-- 배경 힌두 시카라 사원 탑 -->
+            <path d="M 520 400 L 570 130 L 620 130 L 670 400 Z" fill="#c29b68" stroke="#5c4328" stroke-width="3"/>
+            <path d="M 430 400 L 465 200 L 500 200 L 535 400 Z" fill="#b38b59" stroke="#5c4328" stroke-width="3"/>
+            <rect y="400" width="800" height="160" fill="#c7a97b"/>
+            <!-- 무굴 제국 코끼리 부대와 기마병 -->
+            <g transform="translate(140, 210)">
+              <ellipse cx="130" cy="120" rx="85" ry="60" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
+              <circle cx="215" cy="95" r="42" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
+              <path d="M 245 105 Q 270 160 235 180" fill="none" stroke="#64748b" stroke-width="18" stroke-linecap="round"/>
+              <rect x="75" y="155" width="24" height="65" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
+              <rect x="160" y="155" width="24" height="65" fill="#64748b" stroke="#1e293b" stroke-width="3"/>
+              <rect x="90" y="25" width="75" height="45" fill="#b45309" stroke="#f5d78e" stroke-width="3"/>
+              <polygon points="180,20 180,-40 230,-20" fill="#15803d"/>
+            </g>
+          </svg>`,
+        joseon_persecution: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="560" fill="#dfd3be"/>
+            <!-- 한국 전통 기와 사찰/관아 지붕 -->
+            <path d="M 60 220 Q 220 150 380 220 L 350 250 L 90 250 Z" fill="#374151" stroke="#1f2937" stroke-width="3"/>
+            <rect x="110" y="250" width="220" height="150" fill="#d6c29f" stroke="#5c4328" stroke-width="3"/>
+            <rect y="400" width="800" height="160" fill="#c4b08b"/>
+            <!-- 조선 관리(갓과 도포)와 어명 교지, 승려/신도 -->
+            <g transform="translate(380, 230)">
+              <ellipse cx="90" cy="20" rx="42" ry="10" fill="#111827"/>
+              <rect x="72" y="-5" width="36" height="25" rx="5" fill="#111827"/>
+              <circle cx="90" cy="40" r="16" fill="#e0b589" stroke="#2c1e12" stroke-width="2.5"/>
+              <path d="M 55 60 L 125 60 L 140 190 L 40 190 Z" fill="#1e3a8a" stroke="#172554" stroke-width="3"/>
+              <rect x="15" y="85" width="55" height="45" fill="#fef3c7" stroke="#786652" stroke-width="2"/>
+            </g>
+          </svg>`,
+        korea_harmony: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="560" fill="#e8dec8"/>
+            <line x1="400" y1="0" x2="400" y2="560" stroke="#5c4328" stroke-width="4"/>
+            <!-- 좌측: 고려 팔만대장경 경판과 승려 -->
+            <rect x="40" y="70" width="320" height="260" fill="#8c6239" stroke="#4a3016" stroke-width="3"/>
+            <line x1="40" y1="130" x2="360" y2="130" stroke="#4a3016" stroke-width="4"/>
+            <line x1="40" y1="190" x2="360" y2="190" stroke="#4a3016" stroke-width="4"/>
+            <circle cx="200" cy="360" r="20" fill="#e0b589" stroke="#2c1e12" stroke-width="2.5"/>
+            <path d="M 160 385 L 240 385 L 260 520 L 140 520 Z" fill="#9ca3af" stroke="#374151" stroke-width="3"/>
+            <!-- 우측: 근대 붉은 벽돌 성당·학교와 한복 학생들 -->
+            <path d="M 530 350 L 530 160 L 580 70 L 630 160 L 630 350 Z" fill="#b45309" stroke="#451a03" stroke-width="3"/>
+            <line x1="580" y1="30" x2="580" y2="70" stroke="#2c1e12" stroke-width="5"/>
+            <line x1="565" y1="45" x2="595" y2="45" stroke="#2c1e12" stroke-width="5"/>
+          </svg>`,
+        voc_ships: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="330" fill="#cbd5e1"/>
+            <rect y="330" width="800" height="230" fill="#1e40af"/>
+            <!-- 포르투갈·네덜란드 군함과 포연 -->
+            <g transform="translate(140, 140)">
+              <path d="M 20 160 L 220 160 L 190 210 L 50 210 Z" fill="#5c3a21" stroke="#26170c" stroke-width="3"/>
+              <line x1="120" y1="20" x2="120" y2="160" stroke="#26170c" stroke-width="5"/>
+              <rect x="65" y="45" width="110" height="85" fill="#f8fafc" stroke="#64748b" stroke-width="2.5"/>
+              <circle cx="230" cy="175" r="28" fill="#ef4444" opacity="0.8"/>
+              <circle cx="255" cy="155" r="35" fill="#64748b" opacity="0.7"/>
+            </g>
+            <path d="M 450 390 L 800 390 L 800 560 L 420 560 Z" fill="#c2a378" stroke="#5c4328" stroke-width="3"/>
+          </svg>`,
+        singapore_port: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="320" fill="#d8ecf2"/>
+            <rect y="320" width="800" height="240" fill="#2b6cb0"/>
+            <path d="M 0 360 L 800 340 L 800 560 L 0 560 Z" fill="#dec8a4" stroke="#6b5335" stroke-width="3"/>
+            <!-- 중국식 사찰, 황금 돔 술탄 모스크, 힌두 고푸람이 나란히 선 항구 -->
+            <path d="M 60 260 Q 150 210 240 260 L 220 360 L 80 360 Z" fill="#991b1b" stroke="#450a0a" stroke-width="2.5"/>
+            <path d="M 330 270 Q 400 180 470 270 L 470 360 L 330 360 Z" fill="#eab308" stroke="#713f12" stroke-width="2.5"/>
+            <path d="M 550 360 L 585 170 L 645 170 L 680 360 Z" fill="#c2410c" stroke="#431407" stroke-width="2.5"/>
+          </svg>`,
+        singapore_law: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="560" fill="#dbe4eb"/>
+            <!-- 싱가포르 다종교 거리와 법 집행관 -->
+            <rect x="80" y="140" width="160" height="260" fill="#cbd5e1" stroke="#475569" stroke-width="2.5"/>
+            <path d="M 320 260 Q 390 170 460 260 L 460 400 L 320 400 Z" fill="#eab308" stroke="#713f12" stroke-width="2.5"/>
+            <rect y="400" width="800" height="160" fill="#94a3b8"/>
+            <g transform="translate(220, 260)">
+              <circle cx="60" cy="40" r="18" fill="#e0b589" stroke="#1e293b" stroke-width="2.5"/>
+              <path d="M 30 60 L 90 60 L 95 200 L 25 200 Z" fill="#1e3a8a" stroke="#0f172a" stroke-width="3"/>
+              <rect x="95" y="75" width="35" height="45" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+            </g>
+          </svg>`,
+        nigeria_split: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <!-- 상단: 북부 사하라 사막 낙타 교역과 진흙 모스크 -->
+            <rect width="800" height="275" fill="#eed9b3"/>
+            <path d="M 480 250 L 500 100 L 550 150 L 600 90 L 650 150 L 680 250 Z" fill="#c29b61" stroke="#6b4c24" stroke-width="3"/>
+            <line x1="0" y1="280" x2="800" y2="280" stroke="#2c1e12" stroke-width="6"/>
+            <!-- 하단: 남부 대서양 해안 열대림과 붉은 벽돌 교회 -->
+            <rect y="285" width="800" height="275" fill="#cce3de"/>
+            <path d="M 350 520 L 350 380 L 410 310 L 470 380 L 470 520 Z" fill="#9a3412" stroke="#431407" stroke-width="3"/>
+            <line x1="410" y1="290" x2="410" y2="315" stroke="#2c1e12" stroke-width="4"/>
+          </svg>`,
+        wall_block: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+            <rect width="800" height="560" fill="#d6c5a9"/>
+            <!-- 굳게 닫힌 거대한 성벽과 수비병 (전파 실패 장벽) -->
+            <rect x="40" y="80" width="420" height="360" fill="#a89476" stroke="#4a3b28" stroke-width="4"/>
+            <rect x="170" y="190" width="160" height="250" rx="70" fill="#5c3a21" stroke="#26170c" stroke-width="4"/>
+            <rect y="440" width="800" height="120" fill="#b8a382"/>
+            <circle cx="600" cy="310" r="20" fill="#b91c1c"/>
+            <line x1="588" y1="298" x2="612" y2="322" stroke="#ffffff" stroke-width="5"/>
+            <line x1="612" y1="298" x2="588" y2="322" stroke="#ffffff" stroke-width="5"/>
+          </svg>`
+      };
+
+      const defaultSvg = svgTemplates[sceneKey] || svgTemplates.roman_edict;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(defaultSvg.trim());
     }
+
+    // 1단계 랜드마크 이미지가 혹시라도 방화벽에 막힐 때 작동하는 종교별 실사 백업 URL
+    const SAFE_BACKUP_LANDMARK = {
+      christianity_landmark: 'https://images.unsplash.com/photo-1548625361-195fe5795df5?auto=format&fit=crop&w=900&q=80',
+      islam_landmark: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=900&q=80',
+      buddhism_landmark: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=900&q=80',
+      hinduism_landmark: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=900&q=80',
+      wall_block: generateHistoricalSceneDataUrl('wall_block', '전파 실패')
+    };
 
     const RELIGION_META = {
       '크리스트교': { id: 'christianity', color: '#7c3aed' },
@@ -464,34 +653,36 @@
       '힌두교': { id: 'hinduism', color: '#ea580c' }
     };
 
-    // 16개 권역 지도 핀 좌표 (겹치지 않도록 시인성 최적화 배치)
+    // 16개 권역 지도 핀 좌표 + 겹침 방지 오프셋(dx, dy) 및 지시선(Leader Line) 설계
     const PIN_NODES = [
       // 크리스트교 대표 3곳
-      { key: '유럽(바티칸)', label: '유럽(바티칸)', lon: 12.5, lat: 46.0, hybrid: false },
-      { key: '미국·캐나다', label: '미국·캐나다', lon: -100.0, lat: 42.0, hybrid: false },
-      { key: '브라질·남미', label: '브라질·남미', lon: -56.0, lat: -15.0, hybrid: false },
+      { key: '유럽(바티칸)', label: '유럽(바티칸)', lon: 12.5, lat: 43.0, dx: 0, dy: -22, hybrid: false },
+      { key: '미국·캐나다', label: '미국·캐나다', lon: -100.0, lat: 40.0, dx: 0, dy: 0, hybrid: false },
+      { key: '브라질·남미', label: '브라질·남미', lon: -55.0, lat: -15.0, dx: 0, dy: 0, hybrid: false },
       // 이슬람교 대표 3곳
-      { key: '서남아시아(메카)', label: '서남아(메카)', lon: 42.0, lat: 23.0, hybrid: false },
-      { key: '북아프리카(이집트)', label: '북아프리카(이집트)', lon: 17.0, lat: 27.0, hybrid: false },
-      { key: '중앙아시아(우즈베크)', label: '중앙아시아(우즈베크)', lon: 64.0, lat: 43.0, hybrid: false },
+      { key: '서남아(메카)', label: '서남아(메카)', lon: 43.0, lat: 23.0, dx: -5, dy: 24, hybrid: false },
+      { key: '북아프리카', label: '북아프리카', lon: 17.0, lat: 27.0, dx: -35, dy: -4, hybrid: false },
+      { key: '중앙아시아', label: '중앙아시아', lon: 64.0, lat: 43.0, dx: -15, dy: -24, hybrid: false },
       // 불교 대표 3곳
-      { key: '동남아(태국·미얀마)', label: '동남아(태국·미얀마)', lon: 101.0, lat: 17.0, hybrid: false },
-      { key: '동아시아(중국·티베트)', label: '동아시아(중국·티베트)', lon: 103.0, lat: 34.0, hybrid: false },
-      { key: '스리랑카', label: '스리랑카', lon: 79.5, lat: 4.0, hybrid: false },
+      { key: '태국·미얀마', label: '태국·미얀마', lon: 100.5, lat: 16.0, dx: 48, dy: -6, hybrid: false },
+      { key: '중국·티베트', label: '중국·티베트', lon: 104.0, lat: 34.0, dx: 0, dy: -22, hybrid: false },
+      { key: '스리랑카', label: '스리랑카', lon: 80.5, lat: 7.0, dx: -15, dy: 34, hybrid: false },
       // 힌두교 대표 3곳
-      { key: '인도북부(바라나시)', label: '인도북부(갠지스)', lon: 75.0, lat: 24.0, hybrid: false },
-      { key: '인도남부(마두라이)', label: '인도남부(마두라이)', lon: 74.0, lat: 13.0, hybrid: false },
-      { key: '네팔(카트만두)', label: '네팔(카트만두)', lon: 86.0, lat: 30.0, hybrid: false },
+      { key: '북인도(갠지스)', label: '북인도(갠지스)', lon: 78.0, lat: 25.0, dx: -48, dy: -4, hybrid: false },
+      { key: '남인도(마두라이)', label: '남인도(마두라이)', lon: 77.0, lat: 12.0, dx: -58, dy: 12, hybrid: false },
+      { key: '네팔', label: '네팔', lon: 85.0, lat: 28.5, dx: -2, dy: -28, hybrid: false },
       // 다종교 혼합 4곳
-      { key: '한국(종합)', label: '한국(혼합)', lon: 129.0, lat: 38.0, hybrid: true },
-      { key: '인도네시아(종합)', label: '인도네시아(혼합)', lon: 118.0, lat: -8.0, hybrid: true },
-      { key: '싱가포르(종합)', label: '싱가포르(혼합)', lon: 104.0, lat: 2.0, hybrid: true },
-      { key: '나이지리아(종합)', label: '나이지리아(혼합)', lon: 12.0, lat: 5.0, hybrid: true }
+      { key: '한국(혼합)', label: '한국(혼합)', lon: 127.5, lat: 37.5, dx: 46, dy: -8, hybrid: true },
+      { key: '싱가포르(혼합)', label: '싱가포르(혼합)', lon: 103.8, lat: 1.3, dx: 56, dy: 8, hybrid: true },
+      { key: '인도네시아(혼합)', label: '인도네시아(혼합)', lon: 116.0, lat: -5.0, dx: 42, dy: 28, hybrid: true },
+      { key: '나이지리아(혼합)', label: '나이지리아(혼합)', lon: 8.0, lat: 9.0, dx: -25, dy: 22, hybrid: true }
     ];
 
+    // 유라시아와 아시아가 시원하게 보이도록 지도 중심과 스케일 최적화
     const projection = d3.geoNaturalEarth1()
-      .scale(178)
-      .translate([490, 275]);
+      .rotate([-12, 0])
+      .scale(190)
+      .translate([470, 280]);
 
     const pathGen = d3.geoPath().projection(projection);
 
@@ -522,38 +713,39 @@
       }
 
       decorLayer.html(`
-        <g transform="translate(175, 415)" opacity="0.45">
-          <circle cx="0" cy="0" r="38" fill="none" stroke="#d4be96" stroke-width="1.5"/>
-          <circle cx="0" cy="0" r="32" fill="none" stroke="#d4be96" stroke-width="0.8" stroke-dasharray="3,3"/>
-          <polygon points="0,-45 6,-8 0,0 -6,-8" fill="#f5d78e"/>
-          <polygon points="0,45 6,8 0,0 -6,8" fill="#d4be96"/>
-          <polygon points="-45,0 -8,6 0,0 -8,-6" fill="#d4be96"/>
-          <polygon points="45,0 8,6 0,0 8,-6" fill="#d4be96"/>
-          <text x="0" y="-50" fill="#f5d78e" font-size="11" font-weight="bold" text-anchor="middle">N</text>
+        <g transform="translate(155, 420)" opacity="0.45">
+          <circle cx="0" cy="0" r="36" fill="none" stroke="#d4be96" stroke-width="1.5"/>
+          <circle cx="0" cy="0" r="30" fill="none" stroke="#d4be96" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <polygon points="0,-42 6,-8 0,0 -6,-8" fill="#f5d78e"/>
+          <polygon points="0,42 6,8 0,0 -6,8" fill="#d4be96"/>
+          <polygon points="-42,0 -8,6 0,0 -8,-6" fill="#d4be96"/>
+          <polygon points="42,0 8,6 0,0 8,-6" fill="#d4be96"/>
+          <text x="0" y="-47" fill="#f5d78e" font-size="11" font-weight="bold" text-anchor="middle">N</text>
         </g>
       `);
 
       const routes = [
-        { from: [12.5, 46], to: [-100, 42] },
-        { from: [12.5, 46], to: [-56, -15] },
-        { from: [42, 23], to: [17, 27] },
-        { from: [42, 23], to: [64, 43] },
-        { from: [42, 23], to: [118, -8] },
-        { from: [75, 24], to: [101, 17] },
-        { from: [75, 24], to: [103, 34] },
-        { from: [103, 34], to: [129, 38] }
+        { from: [12.5, 43], to: [-100, 40] },
+        { from: [12.5, 43], to: [-55, -15] },
+        { from: [43, 23], to: [17, 27] },
+        { from: [43, 23], to: [64, 43] },
+        { from: [43, 23], to: [116, -5] },
+        { from: [78, 25], to: [100.5, 16] },
+        { from: [78, 25], to: [104, 34] },
+        { from: [104, 34], to: [127.5, 37.5] }
       ];
 
       routes.forEach(r => {
         const p1 = projection(r.from);
         const p2 = projection(r.to);
         const midX = (p1[0] + p2[0]) / 2;
-        const midY = (p1[1] + p2[1]) / 2 - 20;
+        const midY = (p1[1] + p2[1]) / 2 - 18;
         routeLayer.append('path')
           .attr('d', `M ${p1[0]} ${p1[1]} Q ${midX} ${midY} ${p2[0]} ${p2[1]}`)
           .attr('class', 'spread-route');
       });
 
+      // 지시선(Leader Line) + 오프셋 이름표 배치로 아시아 밀집 지역 겹침 0% 구현
       PIN_NODES.forEach(node => {
         const [x, y] = projection([node.lon, node.lat]);
         const g = pinLayer.append('g')
@@ -562,22 +754,39 @@
           .attr('transform', `translate(${x}, ${y})`)
           .on('click', () => clickRegion(node.key));
 
-        const boxW = node.label.length * 8.2 + 16;
+        // 오프셋이 있는 경우 지리적 원점과 이름표를 잇는 지시선 표시
+        if (node.dx !== 0 || node.dy !== 0) {
+          g.append('line')
+            .attr('x1', 0).attr('y1', 0)
+            .attr('x2', node.dx).attr('y2', node.dy)
+            .attr('stroke', node.hybrid ? '#38bdf8' : '#f5d78e')
+            .attr('stroke-width', 1.3);
+
+          g.append('circle')
+            .attr('cx', 0).attr('cy', 0)
+            .attr('r', 3.5)
+            .attr('fill', node.hybrid ? '#38bdf8' : '#fde047')
+            .attr('stroke', '#090d14')
+            .attr('stroke-width', 1);
+        }
+
+        const boxW = node.label.length * 7.8 + 14;
         g.append('rect')
           .attr('id', `node-${node.key}`)
-          .attr('x', -boxW / 2)
-          .attr('y', -13)
+          .attr('x', node.dx - boxW / 2)
+          .attr('y', node.dy - 12)
           .attr('width', boxW)
-          .attr('height', 26)
+          .attr('height', 24)
           .attr('rx', 5)
-          .attr('fill', '#1e293b')
+          .attr('fill', '#16202e')
           .attr('stroke', node.hybrid ? '#38bdf8' : '#c5a059')
           .attr('stroke-width', node.hybrid ? 2.2 : 1.5);
 
         g.append('text')
-          .attr('y', 4)
+          .attr('x', node.dx)
+          .attr('y', node.dy + 4)
           .attr('fill', '#f8fafc')
-          .attr('font-size', '10.5px')
+          .attr('font-size', '10px')
           .attr('font-weight', 'bold')
           .attr('text-anchor', 'middle')
           .text(node.label);
@@ -706,6 +915,7 @@
       document.querySelectorAll('.nation-pin').forEach(n => n.classList.remove('selected'));
     }
 
+    // 1단계(실제 대표 랜드마크 또는 전파 실패 장벽) 표시
     socket.on('turnResultTwoStep', (data) => {
       pendingStep2Data = data;
       const s1 = data.step1Card;
@@ -719,8 +929,11 @@
 
       document.getElementById('s1-header').innerText = s1.headerTitle;
       const img1 = document.getElementById('s1-img');
-      img1.onerror = () => { img1.src = createFallbackDataUrl(s1.landmarkName, s1.title); };
-      img1.src = s1.img;
+      img1.onerror = () => {
+        img1.onerror = null;
+        img1.src = SAFE_BACKUP_LANDMARK[s1.fallbackTheme] || SAFE_BACKUP_LANDMARK.christianity_landmark;
+      };
+      img1.src = s1.img || SAFE_BACKUP_LANDMARK[s1.fallbackTheme];
 
       document.getElementById('s1-caption').innerText = `🏛️ ${s1.landmarkName}`;
       document.getElementById('s1-pill').innerText = s1.badgeText;
@@ -740,6 +953,7 @@
       document.getElementById('step1-modal').style.display = 'flex';
     });
 
+    // 2단계(역사적 특수 이벤트 일러스트 카드) 표시
     function openStep2Event() {
       document.getElementById('step1-modal').style.display = 'none';
       if (!pendingStep2Data) return;
@@ -755,8 +969,7 @@
 
       document.getElementById('s2-header').innerText = s2.headerTitle;
       const img2 = document.getElementById('s2-img');
-      img2.onerror = () => { img2.src = createFallbackDataUrl(s2.title, s2.tag); };
-      img2.src = s2.img;
+      img2.src = generateHistoricalSceneDataUrl(s2.sceneKey, s2.title);
 
       document.getElementById('s2-pill').innerText = s2.tag;
       document.getElementById('s2-title').innerText = s2.title;
@@ -816,7 +1029,7 @@
         const owner = mapOwnership[key];
         const node = document.getElementById(`node-${key}`);
         if (node) {
-          node.setAttribute('fill', owner ? RELIGION_META[owner].color : '#1e293b');
+          node.setAttribute('fill', owner ? RELIGION_META[owner].color : '#16202e');
         }
       });
 
