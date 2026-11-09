@@ -15,7 +15,7 @@ const RELIGIONS = [
   { id: 'hinduism', name: '힌두교', symbol: '🕉', color: '#ea580c', origin: '북인도(갠지스)' }
 ];
 
-// 검증 완료된 16개 권역 대표 실사 랜드마크 사진 URL (브라우저 직접 로드용)
+// 검증 완료된 16개 권역 대표 실사 랜드마크 사진 URL (브라우저 직접 로드)
 const LANDMARKS = {
   vatican: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/800px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg',
   nyCathedral: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Washington_National_Cathedral_exterior.jpg/800px-Washington_National_Cathedral_exterior.jpg',
@@ -29,7 +29,7 @@ const LANDMARKS = {
   varanasi: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Varanasi_Ghats_River_Ganga.jpg/800px-Varanasi_Ghats_River_Ganga.jpg',
   madurai: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Meenakshi_Amman_Temple_East_Gopuram.jpg/800px-Meenakshi_Amman_Temple_East_Gopuram.jpg',
   nepal: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Pashupatinath_Temple_Kathmandu.jpg/800px-Pashupatinath_Temple_Kathmandu.jpg',
-  // 혼합 4개국
+  // 혼합 4개국 종교별 랜드마크
   bulguksa: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Bulguksa_Dabotap.jpg/800px-Bulguksa_Dabotap.jpg',
   myeongdong: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Myeongdong_Cathedral_2019.jpg/800px-Myeongdong_Cathedral_2019.jpg',
   seoulMosque: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Seoul_Central_Mosque_2014.jpg/800px-Seoul_Central_Mosque_2014.jpg',
@@ -44,10 +44,11 @@ const LANDMARKS = {
   sgCath: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/St_Andrews_Cathedral_Singapore.jpg/800px-St_Andrews_Cathedral_Singapore.jpg',
   abujaMosque: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Abuja_National_Mosque_Nigeria.jpg/800px-Abuja_National_Mosque_Nigeria.jpg',
   abujaChurch: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/National_Church_of_Nigeria_Abuja.jpg/800px-National_Church_of_Nigeria_Abuja.jpg',
+  // 오답 시 굳게 닫힌 요새 성벽
   citadelGate: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Aleppo_Citadel_Entrance.jpg/800px-Aleppo_Citadel_Entrance.jpg'
 };
 
-// 교과서·박물관 소장 실제 컬러 역사 명화 및 고전 기록화 원본 URL
+// 2단계 특수 이벤트 실제 컬러 역사 명화·기록화 고정 URL
 const HISTORICAL_ART = {
   romanEdict: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/The_Baptism_of_Constantine_%28Raphael%29.jpg/800px-The_Baptism_of_Constantine_%28Raphael%29.jpg',
   reformation: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Luther_at_the_Diet_of_Worms.jpg/800px-Luther_at_the_Diet_of_Worms.jpg',
@@ -75,7 +76,7 @@ const HISTORICAL_ART = {
   nigeriaLagosHistoric: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Cathedral_Church_of_Christ_Lagos.jpg/800px-Cathedral_Church_of_Christ_Lagos.jpg'
 };
 
-// 16개 권역 데이터 (종교별 대표 3곳씩 12곳 + 다종교 혼합 4곳)
+// 16개 권역 상세 데이터
 const REGIONS = {
   // ==================== 1. 크리스트교 대표 권역 (3곳) ====================
   '유럽(바티칸)': {
