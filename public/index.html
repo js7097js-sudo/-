@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>세계 4대 종교 전파 시뮬레이션</title>
   <script src="/socket.io/socket.io.js"></script>
@@ -438,23 +439,18 @@
     };
 
     const PIN_NODES = [
-      // 크리스트교 대표 3곳
       { key: '유럽(바티칸)', label: '유럽(바티칸)', lon: 12.5, lat: 43.0, dx: 0, dy: -22, hybrid: false },
       { key: '미국·캐나다', label: '미국·캐나다', lon: -100.0, lat: 40.0, dx: 0, dy: 0, hybrid: false },
       { key: '브라질·남미', label: '브라질·남미', lon: -55.0, lat: -15.0, dx: 0, dy: 0, hybrid: false },
-      // 이슬람교 대표 3곳
       { key: '서남아(메카)', label: '서남아(메카)', lon: 43.0, lat: 23.0, dx: -5, dy: 24, hybrid: false },
       { key: '북아프리카', label: '북아프리카', lon: 17.0, lat: 27.0, dx: -35, dy: -4, hybrid: false },
       { key: '중앙아시아', label: '중앙아시아', lon: 64.0, lat: 43.0, dx: -15, dy: -24, hybrid: false },
-      // 불교 대표 3곳
       { key: '태국·미얀마', label: '태국·미얀마', lon: 100.5, lat: 16.0, dx: 48, dy: -6, hybrid: false },
       { key: '중국·티베트', label: '중국·티베트', lon: 104.0, lat: 34.0, dx: 0, dy: -22, hybrid: false },
       { key: '스리랑카', label: '스리랑카', lon: 80.5, lat: 7.0, dx: -15, dy: 34, hybrid: false },
-      // 힌두교 대표 3곳
       { key: '북인도(갠지스)', label: '북인도(갠지스)', lon: 78.0, lat: 25.0, dx: -48, dy: -4, hybrid: false },
       { key: '남인도(마두라이)', label: '남인도(마두라이)', lon: 77.0, lat: 12.0, dx: -58, dy: 12, hybrid: false },
       { key: '네팔', label: '네팔', lon: 85.0, lat: 28.5, dx: -2, dy: -28, hybrid: false },
-      // 다종교 혼합 4곳
       { key: '한국(혼합)', label: '한국(혼합)', lon: 127.5, lat: 37.5, dx: 46, dy: -8, hybrid: true },
       { key: '싱가포르(혼합)', label: '싱가포르(혼합)', lon: 103.8, lat: 1.3, dx: 56, dy: 8, hybrid: true },
       { key: '인도네시아(혼합)', label: '인도네시아(혼합)', lon: 116.0, lat: -5.0, dx: 42, dy: 28, hybrid: true },
