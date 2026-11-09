@@ -54,7 +54,7 @@
       #game-view { display: none; height: auto; grid-template-rows: auto; grid-template-columns: 1fr; }
     }
 
-    /* 4방향 엔틱 종교 카드 (서버 프록시를 통한 실제 건축물 배경 완벽 복원) */
+    /* 4방향 엔틱 종교 카드 */
     .religion-card {
       border: 2.5px solid #b38f48; border-radius: 8px; padding: 12px 16px;
       display: flex; flex-direction: column; justify-content: space-between;
@@ -72,22 +72,22 @@
     .panel-north {
       grid-column: 2; grid-row: 1;
       background: linear-gradient(90deg, rgba(34, 19, 62, 0.88) 0%, rgba(55, 32, 98, 0.68) 50%, rgba(28, 15, 52, 0.88) 100%),
-                  url('/api/image?wiki=en%3ASt._Peter%27s_Basilica&q=St.+Peter+Basilica+Vatican') center/cover;
+                  url('/api/image?url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fd%2Fd6%2FSt_Peter%2527s_Square%252C_Vatican_City_-_April_2007.jpg%2F800px-St_Peter%2527s_Square%252C_Vatican_City_-_April_2007.jpg') center/cover;
     }
     .panel-west {
       grid-column: 1; grid-row: 2;
       background: linear-gradient(180deg, rgba(10, 38, 32, 0.92) 0%, rgba(16, 62, 52, 0.58) 55%, rgba(8, 28, 23, 0.86) 100%),
-                  url('/api/image?wiki=en%3AMosque_of_Muhammad_Ali&q=Mosque+of+Muhammad+Ali+Cairo') bottom center/cover;
+                  url('/api/image?url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F2%2F22%2FAl-Azhar_Mosque_Cairo_Egypt.jpg%2F800px-Al-Azhar_Mosque_Cairo_Egypt.jpg') bottom center/cover;
     }
     .panel-east {
       grid-column: 3; grid-row: 2;
       background: linear-gradient(180deg, rgba(52, 32, 11, 0.92) 0%, rgba(78, 48, 16, 0.58) 55%, rgba(38, 22, 8, 0.86) 100%),
-                  url('/api/image?wiki=en%3AWat_Phra_Kaew&q=Wat+Phra+Kaew+Bangkok') bottom center/cover;
+                  url('/api/image?url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fd%2Fd4%2FAngkor_Wat_from_North.jpg%2F800px-Angkor_Wat_from_North.jpg') bottom center/cover;
     }
     .panel-south {
       grid-column: 2; grid-row: 3;
       background: linear-gradient(90deg, rgba(64, 26, 11, 0.88) 0%, rgba(96, 40, 17, 0.68) 50%, rgba(50, 20, 9, 0.88) 100%),
-                  url('/api/image?wiki=en%3AVaranasi&q=Varanasi+Ghats+Ganga') center/cover;
+                  url('/api/image?url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F0%2F04%2FVaranasi_Ghats_River_Ganga.jpg%2F800px-Varanasi_Ghats_River_Ganga.jpg') center/cover;
     }
 
     .card-top { display: flex; justify-content: space-between; align-items: center; z-index: 3; }
@@ -354,7 +354,7 @@
       </div>
       <div class="antique-body">
         <div class="antique-left-img-wrap">
-          <img id="s1-img" class="antique-left-img" src="" alt="랜드마크 이미지">
+          <img id="s1-img" class="antique-left-img" referrerpolicy="no-referrer" src="" alt="랜드마크 이미지">
           <div id="s1-caption" class="img-caption-tag">대표 랜드마크</div>
         </div>
         <div class="antique-right-parchment">
@@ -392,7 +392,7 @@
       </div>
       <div class="antique-body">
         <div class="antique-left-img-wrap">
-          <img id="s2-img" class="antique-left-img" src="" alt="역사 이벤트 이미지">
+          <img id="s2-img" class="antique-left-img" referrerpolicy="no-referrer" src="" alt="역사 이벤트 이미지">
           <div id="s2-caption" class="img-caption-tag">⚡ 실제 역사적 사건 기록화</div>
         </div>
         <div class="antique-right-parchment">
@@ -695,7 +695,6 @@
       document.querySelectorAll('.nation-pin').forEach(n => n.classList.remove('selected'));
     }
 
-    // 1단계 모달 오픈 (서버 프록시 이미지 즉시 연결 + 2단계 이미지 프리로드)
     socket.on('turnResultTwoStep', (data) => {
       pendingStep2Data = data;
       const s1 = data.step1Card;
@@ -710,10 +709,10 @@
       document.getElementById('s1-header').innerText = s1.headerTitle;
       document.getElementById('s1-img').src = s1.img;
 
-      // 2단계 이벤트 이미지도 미리 백그라운드에서 프리로드
+      // 2단계 이미지 백그라운드 프리로드
       if (data.step2Event && data.step2Event.img) {
-        const preloadImg = new Image();
-        preloadImg.src = data.step2Event.img;
+        const pre = new Image();
+        pre.src = data.step2Event.img;
       }
 
       document.getElementById('s1-caption').innerText = `🏛️ ${s1.landmarkName}`;
