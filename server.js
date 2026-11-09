@@ -8,125 +8,72 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
-// ============================================================================
-// 서버 사이드 이미지 프록시 & 메모리 캐시 (어떤 기기에서도 엑박 0% 보장)
-// ============================================================================
-const imageCache = new Map();
-const USER_AGENT = 'WorldReligionEduGame/4.0 (https://religion-gam.onrender.com; educational classroom game)';
-
-app.get('/api/image', async (req, res) => {
-  const { url = '' } = req.query;
-  if (!url) return res.status(404).end();
-
-  if (imageCache.has(url)) {
-    const cached = imageCache.get(url);
-    res.setHeader('Content-Type', cached.contentType);
-    res.setHeader('Cache-Control', 'public, max-age=86400');
-    return res.send(cached.buffer);
-  }
-
-  try {
-    const imgRes = await fetch(url, { headers: { 'User-Agent': USER_AGENT } });
-    if (imgRes.ok) {
-      const contentType = imgRes.headers.get('content-type') || 'image/jpeg';
-      const arrayBuffer = await imgRes.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-
-      imageCache.set(url, { buffer, contentType });
-      res.setHeader('Content-Type', contentType);
-      res.setHeader('Cache-Control', 'public, max-age=86400');
-      return res.send(buffer);
-    }
-  } catch (err) {
-    console.warn('Image fetch error:', err.message);
-  }
-
-  res.status(404).end();
-});
-
-function p(url) {
-  return `/api/image?url=${encodeURIComponent(url)}`;
-}
-
-// ============================================================================
-// 교과서·박물관 소장 실제 컬러 역사 명화 및 고전 기록화 원본 모음
-// ============================================================================
-const HISTORICAL_ART = {
-  // 크리스트교
-  romanEdict: p('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/The_Baptism_of_Constantine_%28Raphael%29.jpg/800px-The_Baptism_of_Constantine_%28Raphael%29.jpg'), // 라파엘로 콘스탄티누스 기독교 공인화
-  reformation: p('https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Luther_at_the_Diet_of_Worms.jpg/800px-Luther_at_the_Diet_of_Worms.jpg'), // 안톤 폰 베르너 루터 종교개혁화
-  columbus: p('https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Landing_of_Columbus_%282%29.jpg/800px-Landing_of_Columbus_%282%29.jpg'), // 존 반델린 콜럼버스 신대륙 상륙 명화
-  stormShip: p('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Ivan_Aivazovsky_-_The_Ninth_Wave.jpg/800px-Ivan_Aivazovsky_-_The_Ninth_Wave.jpg'), // 아이바조프스키 아홉 번째 파도 (폭풍우 난파선 명화)
-  conquestAztec: p('https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Retirada_de_los_espanoles_de_Tenochtitlan.jpg/800px-Retirada_de_los_espanoles_de_Tenochtitlan.jpg'), // 스페인-아메리카 원주민 저항 기록화
-
-  // 이슬람교
-  meccaPilgrims: p('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Pilgrims_around_the_Kaaba_in_Mecca.jpg/800px-Pilgrims_around_the_Kaaba_in_Mecca.jpg'), // 메카 성지 순례 역사 기록화
-  mongolBaghdad: p('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Hulagu_khan_conquests_Baghdad_1258.jpg/800px-Hulagu_khan_conquests_Baghdad_1258.jpg'), // 몽골 훌라구의 바그다드 함락 세밀화
-  saharaCaravan: p('https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Mansa_Musa_Catalan_Atlas.jpg/800px-Mansa_Musa_Catalan_Atlas.jpg'), // 카탈루냐 지도첩 사하라 황금 무역 캐러밴
-  crusades: p('https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Eug%C3%A8ne_Delacroix_-_Entr%C3%A9e_des_Crois%C3%A9s_%C3%A0_Constantinople_%281840%29.jpg/800px-Eug%C3%A8ne_Delacroix_-_Entr%C3%A9e_des_Crois%C3%A9s_%C3%A0_Constantinople_%281840%29.jpg'), // 들라크루아 십자군 원정 명화
-
-  // 불교
-  ashokaMission: p('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Ashoka_on_his_chariot.jpg/800px-Ashoka_on_his_chariot.jpg'), // 아소카왕의 불교 전법 부조 명화
-  xuanzangSilkRoad: p('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Xuanzang_Dunhuang.jpg/800px-Xuanzang_Dunhuang.jpg'), // 둔황 석굴 실크로드 현장 구법승 행도도
-  ayutthayaRuins: p('https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Ayutthaya_ruins.jpg/800px-Ayutthaya_ruins.jpg'), // 아유타야 사원 유적
-
-  // 힌두교
-  kumbhMelaGanges: p('https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Varanasi_Ghats_River_Ganga.jpg/800px-Varanasi_Ghats_River_Ganga.jpg'), // 바라나시 갠지스강 쿰브 멜라 의식
-  mughalBattle: p('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Battle_of_Panipat_1526.jpg/800px-Battle_of_Panipat_1526.jpg'), // 무굴 제국의 코끼리 부대 인도 정복 세밀화
-  cholaGopuram: p('https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Brihadeeswarar_Temple_Entrance.jpg/800px-Brihadeeswarar_Temple_Entrance.jpg'), // 촐라 왕조 대사원 고푸람
-
-  // 다종교 혼합국
-  tripitakaKorea: p('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Haeinsa_Tripitaka_Koreana_woodblocks.jpg/800px-Haeinsa_Tripitaka_Koreana_woodblocks.jpg'), // 고려 팔만대장경판
-  koreaMartyrs: p('https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Martyrs_Shrine_Seoul.jpg/800px-Martyrs_Shrine_Seoul.jpg'), // 조선 후기 천주교 순교 기록화
-  sungkyunkwanJoseon: p('https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Myeongnyundang_in_Seoul.jpg/800px-Myeongnyundang_in_Seoul.jpg'), // 조선 성균관 명륜당 (성리학 유교)
-  vocSpiceFleet: p('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Return_of_the_Amsterdam_to_Texel_in_1599.jpg/800px-Return_of_the_Amsterdam_to_Texel_in_1599.jpg'), // 동인도회사 향신료 함대 명화
-  krakatoaVolcano: p('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Krakatoa_eruption_lithograph.jpg/800px-Krakatoa_eruption_lithograph.jpg'), // 1883 크라카토아 화산 폭발 석판화
-  singaporeRiver1865: p('https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Singapore_River_in_1865.jpg/800px-Singapore_River_in_1865.jpg'), // 1865년 싱가포르 무역항 개항도
-  singaporeCourtDome: p('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Old_Supreme_Court_Building_15%2C_Singapore%2C_Jan_06.JPG/800px-Old_Supreme_Court_Building_15%2C_Singapore%2C_Jan_06.JPG'), // 싱가포르 대법원 법정 돔
-  westAfricaTrade: p('https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Great_Mosque_of_Djenne_1.jpg/800px-Great_Mosque_of_Djenne_1.jpg'), // 서아프리카 대모스크
-  nigeriaLagosHistoric: p('https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Cathedral_Church_of_Christ_Lagos.jpg/800px-Cathedral_Church_of_Christ_Lagos.jpg'), // 나이지리아 라고스 역사 대성당
-
-  // 오답 전파 실패 문화 장벽
-  citadelGate: p('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Aleppo_Citadel_Entrance.jpg/800px-Aleppo_Citadel_Entrance.jpg') // 굳게 닫힌 거대 성벽과 문
-};
-
-// 16개 권역 검증된 실사 랜드마크 사진
-const LANDMARKS = {
-  vatican: p('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/800px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg'),
-  nyCathedral: p('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Washington_National_Cathedral_exterior.jpg/800px-Washington_National_Cathedral_exterior.jpg'),
-  rioChrist: p('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Christ_the_Redeemer_-_Cristo_Redentor.jpg/800px-Christ_the_Redeemer_-_Cristo_Redentor.jpg'),
-  mecca: p('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Kaaba_Masjid_Haraam_Makkah.jpg/800px-Kaaba_Masjid_Haraam_Makkah.jpg'),
-  cairo: p('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Al-Azhar_Mosque_Cairo_Egypt.jpg/800px-Al-Azhar_Mosque_Cairo_Egypt.jpg'),
-  samarkand: p('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Samarkand_Registan_2019.jpg/800px-Samarkand_Registan_2019.jpg'),
-  thaiWat: p('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Angkor_Wat_from_North.jpg/800px-Angkor_Wat_from_North.jpg'),
-  chinaBud: p('https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Longmen_Grottoes_Fengxian_Cave.jpg/800px-Longmen_Grottoes_Fengxian_Cave.jpg'),
-  sriLanka: p('https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Temple_of_the_Tooth_Kandy.jpg/800px-Temple_of_the_Tooth_Kandy.jpg'),
-  varanasi: p('https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Varanasi_Ghats_River_Ganga.jpg/800px-Varanasi_Ghats_River_Ganga.jpg'),
-  madurai: p('https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Meenakshi_Amman_Temple_East_Gopuram.jpg/800px-Meenakshi_Amman_Temple_East_Gopuram.jpg'),
-  nepal: p('https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Pashupatinath_Temple_Kathmandu.jpg/800px-Pashupatinath_Temple_Kathmandu.jpg'),
-  // 혼합 4개국
-  bulguksa: p('https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Bulguksa_Dabotap.jpg/800px-Bulguksa_Dabotap.jpg'),
-  myeongdong: p('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Myeongdong_Cathedral_2019.jpg/800px-Myeongdong_Cathedral_2019.jpg'),
-  seoulMosque: p('https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Seoul_Central_Mosque_2014.jpg/800px-Seoul_Central_Mosque_2014.jpg'),
-  akshardham: p('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akshardham_Temple_Delhi.jpg/800px-Akshardham_Temple_Delhi.jpg'),
-  istiqlal: p('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Istiqlal_Mosque_Jakarta_Indonesia.jpg/800px-Istiqlal_Mosque_Jakarta_Indonesia.jpg'),
-  borobudur: p('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Borobudur_Temple_Java.jpg/800px-Borobudur_Temple_Java.jpg'),
-  baliTemple: p('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Pura_Ulun_Danu_Bratan_Bali.jpg/800px-Pura_Ulun_Danu_Bratan_Bali.jpg'),
-  jakartaCath: p('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Jakarta_Cathedral_Church.jpg/800px-Jakarta_Cathedral_Church.jpg'),
-  sgBuddha: p('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Buddha_Tooth_Relic_Temple_Singapore.jpg/800px-Buddha_Tooth_Relic_Temple_Singapore.jpg'),
-  sgSultan: p('https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sultan_Mosque_Kampong_Glam.jpg/800px-Sultan_Mosque_Kampong_Glam.jpg'),
-  sgHindu: p('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Sri_Mariamman_Temple_Singapore.jpg/800px-Sri_Mariamman_Temple_Singapore.jpg'),
-  sgCath: p('https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/St_Andrews_Cathedral_Singapore.jpg/800px-St_Andrews_Cathedral_Singapore.jpg'),
-  abujaMosque: p('https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Abuja_National_Mosque_Nigeria.jpg/800px-Abuja_National_Mosque_Nigeria.jpg'),
-  abujaChurch: p('https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/National_Church_of_Nigeria_Abuja.jpg/800px-National_Church_of_Nigeria_Abuja.jpg')
-};
-
 const RELIGIONS = [
   { id: 'christianity', name: '크리스트교', symbol: '✝', color: '#7c3aed', origin: '유럽(바티칸)' },
   { id: 'islam', name: '이슬람교', symbol: '☪', color: '#059669', origin: '서남아(메카)' },
   { id: 'buddhism', name: '불교', symbol: '☸', color: '#d97706', origin: '태국·미얀마' },
   { id: 'hinduism', name: '힌두교', symbol: '🕉', color: '#ea580c', origin: '북인도(갠지스)' }
 ];
+
+// 검증 완료된 16개 권역 대표 실사 랜드마크 사진 URL (브라우저 직접 로드용)
+const LANDMARKS = {
+  vatican: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/800px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg',
+  nyCathedral: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Washington_National_Cathedral_exterior.jpg/800px-Washington_National_Cathedral_exterior.jpg',
+  rioChrist: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Christ_the_Redeemer_-_Cristo_Redentor.jpg/800px-Christ_the_Redeemer_-_Cristo_Redentor.jpg',
+  mecca: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Kaaba_Masjid_Haraam_Makkah.jpg/800px-Kaaba_Masjid_Haraam_Makkah.jpg',
+  cairo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Al-Azhar_Mosque_Cairo_Egypt.jpg/800px-Al-Azhar_Mosque_Cairo_Egypt.jpg',
+  samarkand: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Samarkand_Registan_2019.jpg/800px-Samarkand_Registan_2019.jpg',
+  thaiWat: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Angkor_Wat_from_North.jpg/800px-Angkor_Wat_from_North.jpg',
+  chinaBud: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Longmen_Grottoes_Fengxian_Cave.jpg/800px-Longmen_Grottoes_Fengxian_Cave.jpg',
+  sriLanka: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Temple_of_the_Tooth_Kandy.jpg/800px-Temple_of_the_Tooth_Kandy.jpg',
+  varanasi: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Varanasi_Ghats_River_Ganga.jpg/800px-Varanasi_Ghats_River_Ganga.jpg',
+  madurai: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Meenakshi_Amman_Temple_East_Gopuram.jpg/800px-Meenakshi_Amman_Temple_East_Gopuram.jpg',
+  nepal: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Pashupatinath_Temple_Kathmandu.jpg/800px-Pashupatinath_Temple_Kathmandu.jpg',
+  // 혼합 4개국
+  bulguksa: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Bulguksa_Dabotap.jpg/800px-Bulguksa_Dabotap.jpg',
+  myeongdong: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Myeongdong_Cathedral_2019.jpg/800px-Myeongdong_Cathedral_2019.jpg',
+  seoulMosque: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Seoul_Central_Mosque_2014.jpg/800px-Seoul_Central_Mosque_2014.jpg',
+  akshardham: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akshardham_Temple_Delhi.jpg/800px-Akshardham_Temple_Delhi.jpg',
+  istiqlal: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Istiqlal_Mosque_Jakarta_Indonesia.jpg/800px-Istiqlal_Mosque_Jakarta_Indonesia.jpg',
+  borobudur: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Borobudur_Temple_Java.jpg/800px-Borobudur_Temple_Java.jpg',
+  baliTemple: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Pura_Ulun_Danu_Bratan_Bali.jpg/800px-Pura_Ulun_Danu_Bratan_Bali.jpg',
+  jakartaCath: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Jakarta_Cathedral_Church.jpg/800px-Jakarta_Cathedral_Church.jpg',
+  sgBuddha: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Buddha_Tooth_Relic_Temple_Singapore.jpg/800px-Buddha_Tooth_Relic_Temple_Singapore.jpg',
+  sgSultan: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sultan_Mosque_Kampong_Glam.jpg/800px-Sultan_Mosque_Kampong_Glam.jpg',
+  sgHindu: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Sri_Mariamman_Temple_Singapore.jpg/800px-Sri_Mariamman_Temple_Singapore.jpg',
+  sgCath: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/St_Andrews_Cathedral_Singapore.jpg/800px-St_Andrews_Cathedral_Singapore.jpg',
+  abujaMosque: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Abuja_National_Mosque_Nigeria.jpg/800px-Abuja_National_Mosque_Nigeria.jpg',
+  abujaChurch: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/National_Church_of_Nigeria_Abuja.jpg/800px-National_Church_of_Nigeria_Abuja.jpg',
+  citadelGate: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Aleppo_Citadel_Entrance.jpg/800px-Aleppo_Citadel_Entrance.jpg'
+};
+
+// 교과서·박물관 소장 실제 컬러 역사 명화 및 고전 기록화 원본 URL
+const HISTORICAL_ART = {
+  romanEdict: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/The_Baptism_of_Constantine_%28Raphael%29.jpg/800px-The_Baptism_of_Constantine_%28Raphael%29.jpg',
+  reformation: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Luther_at_the_Diet_of_Worms.jpg/800px-Luther_at_the_Diet_of_Worms.jpg',
+  columbus: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Landing_of_Columbus_%282%29.jpg/800px-Landing_of_Columbus_%282%29.jpg',
+  stormShip: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Ivan_Aivazovsky_-_The_Ninth_Wave.jpg/800px-Ivan_Aivazovsky_-_The_Ninth_Wave.jpg',
+  conquestAztec: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Retirada_de_los_espanoles_de_Tenochtitlan.jpg/800px-Retirada_de_los_espanoles_de_Tenochtitlan.jpg',
+  meccaPilgrims: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Pilgrims_around_the_Kaaba_in_Mecca.jpg/800px-Pilgrims_around_the_Kaaba_in_Mecca.jpg',
+  mongolBaghdad: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Hulagu_khan_conquests_Baghdad_1258.jpg/800px-Hulagu_khan_conquests_Baghdad_1258.jpg',
+  saharaCaravan: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Mansa_Musa_Catalan_Atlas.jpg/800px-Mansa_Musa_Catalan_Atlas.jpg',
+  crusades: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Eug%C3%A8ne_Delacroix_-_Entr%C3%A9e_des_Crois%C3%A9s_%C3%A0_Constantinople_%281840%29.jpg/800px-Eug%C3%A8ne_Delacroix_-_Entr%C3%A9e_des_Crois%C3%A9s_%C3%A0_Constantinople_%281840%29.jpg',
+  ashokaMission: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Ashoka_on_his_chariot.jpg/800px-Ashoka_on_his_chariot.jpg',
+  xuanzangSilkRoad: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Xuanzang_Dunhuang.jpg/800px-Xuanzang_Dunhuang.jpg',
+  ayutthayaRuins: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Ayutthaya_ruins.jpg/800px-Ayutthaya_ruins.jpg',
+  kumbhMelaGanges: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Varanasi_Ghats_River_Ganga.jpg/800px-Varanasi_Ghats_River_Ganga.jpg',
+  mughalBattle: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Battle_of_Panipat_1526.jpg/800px-Battle_of_Panipat_1526.jpg',
+  cholaGopuram: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Brihadeeswarar_Temple_Entrance.jpg/800px-Brihadeeswarar_Temple_Entrance.jpg',
+  tripitakaKorea: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Haeinsa_Tripitaka_Koreana_woodblocks.jpg/800px-Haeinsa_Tripitaka_Koreana_woodblocks.jpg',
+  koreaMartyrs: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Martyrs_Shrine_Seoul.jpg/800px-Martyrs_Shrine_Seoul.jpg',
+  sungkyunkwanJoseon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Myeongnyundang_in_Seoul.jpg/800px-Myeongnyundang_in_Seoul.jpg',
+  vocSpiceFleet: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Return_of_the_Amsterdam_to_Texel_in_1599.jpg/800px-Return_of_the_Amsterdam_to_Texel_in_1599.jpg',
+  krakatoaVolcano: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Krakatoa_eruption_lithograph.jpg/800px-Krakatoa_eruption_lithograph.jpg',
+  singaporeRiver1865: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Singapore_River_in_1865.jpg/800px-Singapore_River_in_1865.jpg',
+  singaporeCourtDome: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Old_Supreme_Court_Building_15%2C_Singapore%2C_Jan_06.JPG/800px-Old_Supreme_Court_Building_15%2C_Singapore%2C_Jan_06.JPG',
+  westAfricaTrade: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Great_Mosque_of_Djenne_1.jpg/800px-Great_Mosque_of_Djenne_1.jpg',
+  nigeriaLagosHistoric: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Cathedral_Church_of_Christ_Lagos.jpg/800px-Cathedral_Church_of_Christ_Lagos.jpg'
+};
 
 // 16개 권역 데이터 (종교별 대표 3곳씩 12곳 + 다종교 혼합 4곳)
 const REGIONS = {
@@ -670,7 +617,7 @@ const REGIONS = {
           score: 10
         },
         bad: {
-          img: HISTORICAL_ART.citadelGate,
+          img: LANDMARKS.citadelGate,
           title: '역사적 교류 부재와 기독교·이슬람 양강 구도 장벽',
           desc: '역사적으로 아시아 불교권과 지리적 교류가 없었으며, 이미 인구의 98%가 양대 종교를 믿고 있어 전파가 어렵습니다.',
           score: -5
@@ -686,7 +633,7 @@ const REGIONS = {
           score: 10
         },
         bad: {
-          img: HISTORICAL_ART.citadelGate,
+          img: LANDMARKS.citadelGate,
           title: '민족 종교의 비포교 전통과 지리적 거리감',
           desc: '외부 민족에게 개종을 적극 권유하지 않는 힌두교의 특성과 먼 거리로 인해 아프리카 현지인 전파에 한계를 겪습니다.',
           score: -5
@@ -868,7 +815,7 @@ io.on('connection', (socket) => {
       step1Card = {
         headerTitle: '⚜ 전파 실패 ⚜',
         badgeText: `❌ 타 종교 강세 권역 (실제 주류: ${region.preferred})`,
-        img: HISTORICAL_ART.citadelGate,
+        img: LANDMARKS.citadelGate,
         landmarkName: `전파 실패: 기존 주류 종교(${region.preferred})의 강력한 문화 장벽`,
         title: `${activeReligion} ➔ ${region.name} 전파 좌절`,
         desc: `오답입니다! [${region.name}] 지역은 역사적으로 [${region.preferred}]의 전통과 교세가 압도적으로 강한 곳이어서 전파에 실패했습니다.`,
