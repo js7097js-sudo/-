@@ -54,7 +54,7 @@
       #game-view { display: none; height: auto; grid-template-rows: auto; grid-template-columns: 1fr; }
     }
 
-    /* 4방향 엔틱 종교 카드 */
+    /* 4방향 엔틱 종교 카드 (검증된 대표 사원 실사 배경 복원) */
     .religion-card {
       border: 2.5px solid #b38f48; border-radius: 8px; padding: 12px 16px;
       display: flex; flex-direction: column; justify-content: space-between;
@@ -72,22 +72,22 @@
     .panel-north {
       grid-column: 2; grid-row: 1;
       background: linear-gradient(90deg, rgba(34, 19, 62, 0.88) 0%, rgba(55, 32, 98, 0.68) 50%, rgba(28, 15, 52, 0.88) 100%),
-                  url('/api/image?url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fd%2Fd6%2FSt_Peter%2527s_Square%252C_Vatican_City_-_April_2007.jpg%2F800px-St_Peter%2527s_Square%252C_Vatican_City_-_April_2007.jpg') center/cover;
+                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/800px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg') center/cover;
     }
     .panel-west {
       grid-column: 1; grid-row: 2;
       background: linear-gradient(180deg, rgba(10, 38, 32, 0.92) 0%, rgba(16, 62, 52, 0.58) 55%, rgba(8, 28, 23, 0.86) 100%),
-                  url('/api/image?url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F2%2F22%2FAl-Azhar_Mosque_Cairo_Egypt.jpg%2F800px-Al-Azhar_Mosque_Cairo_Egypt.jpg') bottom center/cover;
+                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Al-Azhar_Mosque_Cairo_Egypt.jpg/800px-Al-Azhar_Mosque_Cairo_Egypt.jpg') bottom center/cover;
     }
     .panel-east {
       grid-column: 3; grid-row: 2;
       background: linear-gradient(180deg, rgba(52, 32, 11, 0.92) 0%, rgba(78, 48, 16, 0.58) 55%, rgba(38, 22, 8, 0.86) 100%),
-                  url('/api/image?url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fd%2Fd4%2FAngkor_Wat_from_North.jpg%2F800px-Angkor_Wat_from_North.jpg') bottom center/cover;
+                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Angkor_Wat_from_North.jpg/800px-Angkor_Wat_from_North.jpg') bottom center/cover;
     }
     .panel-south {
       grid-column: 2; grid-row: 3;
       background: linear-gradient(90deg, rgba(64, 26, 11, 0.88) 0%, rgba(96, 40, 17, 0.68) 50%, rgba(50, 20, 9, 0.88) 100%),
-                  url('/api/image?url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F0%2F04%2FVaranasi_Ghats_River_Ganga.jpg%2F800px-Varanasi_Ghats_River_Ganga.jpg') center/cover;
+                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Varanasi_Ghats_River_Ganga.jpg/800px-Varanasi_Ghats_River_Ganga.jpg') center/cover;
     }
 
     .card-top { display: flex; justify-content: space-between; align-items: center; z-index: 3; }
@@ -709,7 +709,6 @@
       document.getElementById('s1-header').innerText = s1.headerTitle;
       document.getElementById('s1-img').src = s1.img;
 
-      // 2단계 이미지 백그라운드 프리로드
       if (data.step2Event && data.step2Event.img) {
         const pre = new Image();
         pre.src = data.step2Event.img;
