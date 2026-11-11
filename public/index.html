@@ -13,7 +13,6 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Serif KR', -apple-system, BlinkMacSystemFont, serif; }
     
-    /* 전체 화면 바깥 배경에도 고풍스러운 종교 건축물 분위기 복원 */
     body {
       background:
         radial-gradient(circle at center, rgba(18, 28, 42, 0.80) 0%, rgba(7, 10, 16, 0.94) 100%),
@@ -60,7 +59,7 @@
       #game-view { display: none; height: auto; grid-template-rows: auto; grid-template-columns: 1fr; }
     }
 
-    /* 4방향 엔틱 종교 카드 (4대 종교 대표 건축물 배경 완벽 복원) */
+    /* 4방향 엔틱 종교 카드 */
     .religion-card {
       border: 2.5px solid #b38f48; border-radius: 8px; padding: 12px 16px;
       display: flex; flex-direction: column; justify-content: space-between;
@@ -444,18 +443,23 @@
     };
 
     const PIN_NODES = [
+      // 크리스트교 대표 3곳
       { key: '유럽(바티칸)', label: '유럽(바티칸)', lon: 12.5, lat: 43.0, dx: 0, dy: -22, hybrid: false },
       { key: '미국·캐나다', label: '미국·캐나다', lon: -100.0, lat: 40.0, dx: 0, dy: 0, hybrid: false },
       { key: '브라질·남미', label: '브라질·남미', lon: -55.0, lat: -15.0, dx: 0, dy: 0, hybrid: false },
+      // 이슬람교 대표 3곳
       { key: '서남아(메카)', label: '서남아(메카)', lon: 43.0, lat: 23.0, dx: -5, dy: 24, hybrid: false },
       { key: '북아프리카', label: '북아프리카', lon: 17.0, lat: 27.0, dx: -35, dy: -4, hybrid: false },
       { key: '중앙아시아', label: '중앙아시아', lon: 64.0, lat: 43.0, dx: -15, dy: -24, hybrid: false },
+      // 불교 대표 3곳 (중국 제외 -> 명확한 불교 우세 권역인 몽골·부탄으로 수정)
       { key: '태국·미얀마', label: '태국·미얀마', lon: 100.5, lat: 16.0, dx: 48, dy: -6, hybrid: false },
-      { key: '중국·티베트', label: '중국·티베트', lon: 104.0, lat: 34.0, dx: 0, dy: -22, hybrid: false },
+      { key: '몽골·부탄', label: '몽골·부탄', lon: 103.8, lat: 46.5, dx: 0, dy: -20, hybrid: false },
       { key: '스리랑카', label: '스리랑카', lon: 80.5, lat: 7.0, dx: -15, dy: 34, hybrid: false },
+      // 힌두교 대표 3곳
       { key: '북인도(갠지스)', label: '북인도(갠지스)', lon: 78.0, lat: 25.0, dx: -48, dy: -4, hybrid: false },
       { key: '남인도(마두라이)', label: '남인도(마두라이)', lon: 77.0, lat: 12.0, dx: -58, dy: 12, hybrid: false },
       { key: '네팔', label: '네팔', lon: 85.0, lat: 28.5, dx: -2, dy: -28, hybrid: false },
+      // 다종교 혼합 4곳
       { key: '한국(혼합)', label: '한국(혼합)', lon: 127.5, lat: 37.5, dx: 46, dy: -8, hybrid: true },
       { key: '싱가포르(혼합)', label: '싱가포르(혼합)', lon: 103.8, lat: 1.3, dx: 56, dy: 8, hybrid: true },
       { key: '인도네시아(혼합)', label: '인도네시아(혼합)', lon: 116.0, lat: -5.0, dx: 42, dy: 28, hybrid: true },
@@ -514,8 +518,8 @@
         { from: [43, 23], to: [64, 43] },
         { from: [43, 23], to: [116, -5] },
         { from: [78, 25], to: [100.5, 16] },
-        { from: [78, 25], to: [104, 34] },
-        { from: [104, 34], to: [127.5, 37.5] }
+        { from: [78, 25], to: [103.8, 46.5] },
+        { from: [103.8, 46.5], to: [127.5, 37.5] }
       ];
 
       routes.forEach(r => {
