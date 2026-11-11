@@ -9,25 +9,25 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 // ============================================================================
-// 1. Imgur에 직접 업로드한 특수 이벤트 & 오답 성벽 일러스트 9종 고정 링크
+// 1. Imgur에 업로드한 혼합 4개국 & 오답 성벽 전용 일러스트 (타 국가 중복 사용 금지)
 // ============================================================================
 const CUSTOM_EVENT_IMG = {
-  failWall: 'https://i.imgur.com/tisnR4Y.jpeg',      // 1. 오답 시 성벽 장벽 (fail_wall)
-  indonesiaBad: 'https://i.imgur.com/QLHj5DK.jpeg',  // 2. 인도네시아 부정 (서구 열강 무역항 점령)
-  indonesiaGood: 'https://i.imgur.com/JTRXdLk.jpeg', // 3. 인도네시아 긍정 (향신료 해상 무역 번영)
-  koreaBad: 'https://i.imgur.com/IS6h7Su.jpeg',      // 4. 한국 부정 (숭유억불 및 천주교 박해)
-  koreaGood: 'https://i.imgur.com/sDKYyyn.jpeg',     // 5. 한국 긍정 (호국불교 대장경과 근대 선교 학교)
-  nigeriaBad: 'https://i.imgur.com/m26Esi4.jpeg',    // 6. 나이지리아 부정 (남북 종교 경계선 충돌)
-  nigeriaGood: 'https://i.imgur.com/67fVv0T.jpeg',   // 7. 나이지리아 긍정 (북부 사하라 교역과 남부 해안 선교)
-  singaporeBad: 'https://i.imgur.com/LWjOSsO.jpeg',  // 8. 싱가포르 부정 (종교화합유지법 거리 포교 단속)
-  singaporeGood: 'https://i.imgur.com/wthzgCj.jpeg'  // 9. 싱가포르 긍정 (국제 무역항 개항과 다민족 사원 정착)
+  failWall: 'https://i.imgur.com/tisnR4Y.jpeg',      // 오답 시 성벽 장벽 (fail_wall)
+  indonesiaBad: 'https://i.imgur.com/QLHj5DK.jpeg',  // 인도네시아 전용 부정
+  indonesiaGood: 'https://i.imgur.com/JTRXdLk.jpeg', // 인도네시아 전용 긍정
+  koreaBad: 'https://i.imgur.com/IS6h7Su.jpeg',      // 한국 전용 부정 (조선 숭유억불·신유박해)
+  koreaGood: 'https://i.imgur.com/sDKYyyn.jpeg',     // 한국 전용 긍정 (고려 팔만대장경·근대 선교 학교)
+  nigeriaBad: 'https://i.imgur.com/m26Esi4.jpeg',    // 나이지리아 전용 부정
+  nigeriaGood: 'https://i.imgur.com/67fVv0T.jpeg',   // 나이지리아 전용 긍정
+  singaporeBad: 'https://i.imgur.com/LWjOSsO.jpeg',  // 싱가포르 전용 부정
+  singaporeGood: 'https://i.imgur.com/wthzgCj.jpeg'  // 싱가포르 전용 긍정
 };
 
 // ============================================================================
 // 2. 위키백과 공식 API 기반 랜드마크 & 역사 기록화 로더 (국기·도표·우표 차단)
 // ============================================================================
 const imageMemoryCache = new Map();
-const USER_AGENT = 'WorldReligionEduGame/5.0 (https://religion-gam.onrender.com; educational game)';
+const USER_AGENT = 'WorldReligionEduGame/6.0 (https://religion-gam.onrender.com; educational game)';
 
 function isValidImage(url) {
   if (!url) return false;
@@ -130,7 +130,7 @@ const RELIGIONS = [
 ];
 
 // ============================================================================
-// 3. 16개 권역 데이터 (혼합국은 Imgur 커스텀 일러스트 100% 적용)
+// 3. 16개 권역 데이터 (한국 일러스트는 한국에만 사용, 불교 권역은 몽골·부탄으로 명확화)
 // ============================================================================
 const REGIONS = {
   // ==================== 1. 크리스트교 대표 권역 (3곳) ====================
@@ -269,9 +269,9 @@ const REGIONS = {
     }
   },
 
-  // ==================== 3. 불교 대표 권역 (3곳) ====================
+  // ==================== 3. 불교 대표 권역 (3곳: 태국·미얀마, 몽골·부탄, 스리랑카) ====================
   '태국·미얀마': {
-    name: '동남아 대륙부(태국·미얀마)',
+    name: '동남아 대륙부(태국·미얀마·캄보디아)',
     type: 'pure',
     preferred: '불교',
     correctMethod: '직접전파',
@@ -287,30 +287,30 @@ const REGIONS = {
     },
     badEvent: {
       img: buildImgPath('en:Ayutthaya_Historical_Park', 'Ayutthaya ruins temple Thailand'),
-      title: '왕조 간 전쟁으로 인한 문화유산 피해',
-      desc: '인접 왕국과의 전쟁으로 고대 사원과 문화유산이 피해를 입었습니다. 복구에 자원을 사용하여 점수가 감소합니다.',
+      title: '왕조 간 전쟁으로 인한 고대 사원 피해',
+      desc: '인접 왕국과의 전쟁으로 고대 사원과 불상 문화유산이 피해를 입어 복구에 자원을 소모합니다.',
       score: -5
     }
   },
-  '중국·티베트': {
-    name: '동부 아시아(중국·티베트·일본)',
+  '몽골·부탄': {
+    name: '몽골·부탄(북방 대승·티베트 불교권)',
     type: 'pure',
     preferred: '불교',
     correctMethod: '장거리',
-    landmarkImg: buildImgPath('en:Longmen_Grottoes', 'Longmen Grottoes Luoyang Buddha statue'),
-    landmarkName: '동아시아 용문석굴 대불과 대사찰',
-    desc: '실크로드 교역로를 따라 인도에서 중국, 한반도, 일본으로 대승 불교가 확산된 문화권입니다.',
-    learnPoint: '동부 아시아에는 실크로드 육상 교역로를 통해 중생 구제를 강조하는 대승 불교가 장거리 전파되었습니다.',
+    landmarkImg: buildImgPath('en:Paro_Taktsang', 'Paro Taktsang Bhutan monastery cliff'),
+    landmarkName: '부탄 탁상 사원(호랑이 둥지 사원)과 초원 대사원',
+    desc: '실크로드와 히말라야·초원길을 따라 북방 불교(대승·티베트 불교)가 전파되어 전통과 일상을 지배하는 불교 우세 권역입니다.',
+    learnPoint: '인도 북부에서 실크로드와 내륙 교역로를 따라 북방 대승·티베트 불교가 몽골과 히말라야(부탄·티베트) 일대로 장거리 전파되었습니다.',
     goodEvent: {
-      img: buildImgPath('en:Xuanzang', 'Xuanzang Buddhist monk Silk Road painting'),
-      title: '실크로드 구법승(현장·혜초)의 활약과 경전 번역',
-      desc: '실크로드를 건넌 구법승들이 인도의 불경을 번역하고 대규모 석굴 사원을 조성하여 불교가 크게 융성합니다.',
+      img: buildImgPath('en:Mogao_Caves', 'Mogao Caves Dunhuang Buddhist mural statue'),
+      title: '실크로드·초원길 구법승의 활약과 대사원 건립',
+      desc: '내륙 교역로를 건넌 승려들이 불경을 번역하고 절벽 사원과 석굴 대불을 조성하여 북방 불교가 크게 융성합니다.',
       score: 10
     },
     badEvent: {
-      img: CUSTOM_EVENT_IMG.koreaBad,
-      title: '황실의 사원 탄압(폐불 사건)과 유교 견제',
-      desc: '사찰의 경제력이 커지자 황실이 사원을 강제 정리하고 유교 사대부들이 불교를 견제하여 교세가 일시 축소됩니다.',
+      img: buildImgPath('en:Gandantegchinlen_Monastery', 'Erdene Zuu Monastery Mongolia Buddhist wall'),
+      title: '내륙 왕조 교체기 전란과 사원 탄압 시련',
+      desc: '내륙 제국의 정변과 근현대 체제 변화 속에서 전통 사원들이 폐쇄되거나 훼손되어 교세가 일시 위축됩니다.',
       score: -5
     }
   },
@@ -330,8 +330,8 @@ const REGIONS = {
       score: 10
     },
     badEvent: {
-      img: CUSTOM_EVENT_IMG.indonesiaBad,
-      title: '대항해시대 유럽 열강의 식민 침략',
+      img: buildImgPath('en:Galle_Fort', 'Galle Fort colonial Sri Lanka'),
+      title: '대항해시대 유럽 열강의 해안 거점 침략',
       desc: '포르투갈·네덜란드·영국이 차례로 섬의 무역항을 점령하고 타 종교를 강요하여 전통 불교 사원이 시련을 겪습니다.',
       score: -5
     }
@@ -376,7 +376,7 @@ const REGIONS = {
       score: 10
     },
     badEvent: {
-      img: CUSTOM_EVENT_IMG.indonesiaBad,
+      img: buildImgPath('en:East_India_Company', 'East India Company ships painting'),
       title: '영국 동인도회사의 인도 식민 지배',
       desc: '영국의 인도 식민 통치가 본격화되면서 전통 사원의 자치권이 축소되고 서구 문물과의 마찰이 빚어집니다.',
       score: -5
@@ -405,7 +405,7 @@ const REGIONS = {
     }
   },
 
-  // ==================== 5. 다종교 혼합 권역 (4곳) — Imgur 일러스트 100% 매칭 ====================
+  // ==================== 5. 다종교 혼합 권역 (4곳) — 각국 전용 Imgur 일러스트 매칭 ====================
   '한국(혼합)': {
     name: '한국(동아시아 다종교 공존)',
     type: 'hybrid',
@@ -714,7 +714,7 @@ function resetMapOwnership() {
     '북아프리카': null,
     '중앙아시아': null,
     '태국·미얀마': '불교',
-    '중국·티베트': null,
+    '몽골·부탄': null,
     '스리랑카': null,
     '북인도(갠지스)': '힌두교',
     '남인도(마두라이)': null,
@@ -867,7 +867,6 @@ io.on('connection', (socket) => {
         learnPoint: region.learnPoint
       };
     } else {
-      // 타 종교 강세 권역 오답 시: Imgur에 업로드한 fail_wall.jpeg 성벽 일러스트 출력!
       territorialSuccess = false;
       step1Card = {
         headerTitle: '⚜ 전파 실패 ⚜',
