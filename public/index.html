@@ -12,8 +12,13 @@
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap');
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Serif KR', -apple-system, BlinkMacSystemFont, serif; }
+    
+    /* 전체 화면 바깥 배경에도 고풍스러운 종교 건축물 분위기 복원 */
     body {
-      background: radial-gradient(circle at center, #1b2838 0%, #090d14 100%);
+      background:
+        radial-gradient(circle at center, rgba(18, 28, 42, 0.80) 0%, rgba(7, 10, 16, 0.94) 100%),
+        url('/api/image?wiki=en%3APantheon%2C_Rome&q=Pantheon+Rome+interior+painting') center/cover no-repeat fixed;
+      background-color: #090d14;
       color: #f4ebd9;
       min-height: 100vh;
       display: flex;
@@ -26,7 +31,7 @@
     /* 대기실 */
     #lobby-view {
       width: 92%; max-width: 540px;
-      background: linear-gradient(180deg, #16202e 0%, #0d131c 100%);
+      background: linear-gradient(180deg, rgba(22, 32, 46, 0.96) 0%, rgba(13, 19, 28, 0.98) 100%);
       border: 3px solid #c5a059;
       box-shadow: 0 0 0 2px #090d14, 0 20px 50px rgba(0,0,0,0.9);
       border-radius: 12px; padding: 30px; text-align: center;
@@ -55,7 +60,7 @@
       #game-view { display: none; height: auto; grid-template-rows: auto; grid-template-columns: 1fr; }
     }
 
-    /* 4방향 엔틱 종교 카드 (검증된 대표 사원 실사 배경 복원) */
+    /* 4방향 엔틱 종교 카드 (4대 종교 대표 건축물 배경 완벽 복원) */
     .religion-card {
       border: 2.5px solid #b38f48; border-radius: 8px; padding: 12px 16px;
       display: flex; flex-direction: column; justify-content: space-between;
@@ -72,23 +77,23 @@
 
     .panel-north {
       grid-column: 2; grid-row: 1;
-      background: linear-gradient(90deg, rgba(34, 19, 62, 0.88) 0%, rgba(55, 32, 98, 0.68) 50%, rgba(28, 15, 52, 0.88) 100%),
-                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/800px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg') center/cover;
+      background: linear-gradient(90deg, rgba(34, 19, 62, 0.84) 0%, rgba(55, 32, 98, 0.58) 50%, rgba(28, 15, 52, 0.84) 100%),
+                  url('/api/image?wiki=en%3ASt._Peter%27s_Basilica&q=St.+Peter+Basilica+Vatican') center/cover;
     }
     .panel-west {
       grid-column: 1; grid-row: 2;
-      background: linear-gradient(180deg, rgba(10, 38, 32, 0.92) 0%, rgba(16, 62, 52, 0.58) 55%, rgba(8, 28, 23, 0.86) 100%),
-                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Al-Azhar_Mosque_Cairo_Egypt.jpg/800px-Al-Azhar_Mosque_Cairo_Egypt.jpg') bottom center/cover;
+      background: linear-gradient(180deg, rgba(10, 38, 32, 0.88) 0%, rgba(16, 62, 52, 0.52) 55%, rgba(8, 28, 23, 0.84) 100%),
+                  url('/api/image?wiki=en%3AMosque_of_Muhammad_Ali&q=Mosque+of+Muhammad+Ali+Cairo') bottom center/cover;
     }
     .panel-east {
       grid-column: 3; grid-row: 2;
-      background: linear-gradient(180deg, rgba(52, 32, 11, 0.92) 0%, rgba(78, 48, 16, 0.58) 55%, rgba(38, 22, 8, 0.86) 100%),
-                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Angkor_Wat_from_North.jpg/800px-Angkor_Wat_from_North.jpg') bottom center/cover;
+      background: linear-gradient(180deg, rgba(52, 32, 11, 0.88) 0%, rgba(78, 48, 16, 0.52) 55%, rgba(38, 22, 8, 0.84) 100%),
+                  url('/api/image?wiki=en%3AWat_Phra_Kaew&q=Wat+Phra+Kaew+Bangkok') bottom center/cover;
     }
     .panel-south {
       grid-column: 2; grid-row: 3;
-      background: linear-gradient(90deg, rgba(64, 26, 11, 0.88) 0%, rgba(96, 40, 17, 0.68) 50%, rgba(50, 20, 9, 0.88) 100%),
-                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Varanasi_Ghats_River_Ganga.jpg/800px-Varanasi_Ghats_River_Ganga.jpg') center/cover;
+      background: linear-gradient(90deg, rgba(64, 26, 11, 0.84) 0%, rgba(96, 40, 17, 0.58) 50%, rgba(50, 20, 9, 0.84) 100%),
+                  url('/api/image?wiki=en%3AVaranasi&q=Varanasi+Ghats+Ganga') center/cover;
     }
 
     .card-top { display: flex; justify-content: space-between; align-items: center; z-index: 3; }
@@ -703,10 +708,13 @@
       }
 
       document.getElementById('s1-header').innerText = s1.headerTitle;
-      document.getElementById('s1-img').src = s1.img;
+      const img1 = document.getElementById('s1-img');
+      img1.referrerPolicy = 'no-referrer';
+      img1.src = s1.img;
 
       if (data.step2Event && data.step2Event.img) {
         const pre = new Image();
+        pre.referrerPolicy = 'no-referrer';
         pre.src = data.step2Event.img;
       }
 
@@ -742,7 +750,9 @@
       }
 
       document.getElementById('s2-header').innerText = s2.headerTitle;
-      document.getElementById('s2-img').src = s2.img;
+      const img2 = document.getElementById('s2-img');
+      img2.referrerPolicy = 'no-referrer';
+      img2.src = s2.img;
 
       document.getElementById('s2-pill').innerText = s2.tag;
       document.getElementById('s2-title').innerText = s2.title;
