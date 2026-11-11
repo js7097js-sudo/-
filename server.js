@@ -9,7 +9,7 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 // ============================================================================
-// 1. Imgur에 업로드한 혼합 4개국 & 오답 성벽 전용 일러스트 (타 국가 중복 사용 금지)
+// 1. Imgur에 업로드한 혼합 4개국 & 오답 성벽 전용 일러스트 (한국 일러스트는 한국에만 사용)
 // ============================================================================
 const CUSTOM_EVENT_IMG = {
   failWall: 'https://i.imgur.com/tisnR4Y.jpeg',      // 오답 시 성벽 장벽 (fail_wall)
@@ -27,7 +27,7 @@ const CUSTOM_EVENT_IMG = {
 // 2. 위키백과 공식 API 기반 랜드마크 & 역사 기록화 로더 (국기·도표·우표 차단)
 // ============================================================================
 const imageMemoryCache = new Map();
-const USER_AGENT = 'WorldReligionEduGame/6.0 (https://religion-gam.onrender.com; educational game)';
+const USER_AGENT = 'WorldReligionEduGame/7.0 (https://religion-gam.onrender.com; educational game)';
 
 function isValidImage(url) {
   if (!url) return false;
@@ -130,7 +130,7 @@ const RELIGIONS = [
 ];
 
 // ============================================================================
-// 3. 16개 권역 데이터 (한국 일러스트는 한국에만 사용, 불교 권역은 몽골·부탄으로 명확화)
+// 3. 16개 권역 데이터 (전파 경로 해설 methodExplain 추가 & 혼합국 점수 비중 축소)
 // ============================================================================
 const REGIONS = {
   // ==================== 1. 크리스트교 대표 권역 (3곳) ====================
@@ -139,6 +139,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '크리스트교',
     correctMethod: '직접전파',
+    methodExplain: '팔레스타인에서 기원한 크리스트교는 지중해 연안과 로마 제국의 도로망을 따라 인접한 유럽 대륙으로 연속 확산되었으므로 [직접전파]에 해당합니다.',
     landmarkImg: buildImgPath("en:St._Peter's_Basilica", "St. Peter's Basilica Vatican"),
     landmarkName: '바티칸 성 베드로 대성당',
     desc: '로마 제국의 국교 공인 이후 유럽 전역으로 크리스트교가 확산된 역사적 중심지입니다.',
@@ -161,6 +162,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '크리스트교',
     correctMethod: '장거리',
+    methodExplain: '종교의 자유를 찾아 메이플라워호 등을 타고 대서양을 건넌 영국 청교도와 북서부 유럽 이주민들의 해양 이주로 전파되었으므로 [장거리 전파]에 해당합니다.',
     landmarkImg: buildImgPath("en:St._Patrick's_Cathedral_(New_York_City)", "St. Patrick's Cathedral New York"),
     landmarkName: '뉴욕 세인트 패트릭 대성당',
     desc: '종교의 자유를 찾아 대서양을 건넌 영국 청교도와 유럽 이주민들에 의해 크리스트교가 정착한 대륙입니다.',
@@ -183,6 +185,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '크리스트교',
     correctMethod: '장거리',
+    methodExplain: '대항해시대 스페인·포르투갈 탐험가와 가톨릭 선교사들이 대서양 바다를 건너 아메리카 대륙에 전파했으므로 [장거리 전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Christ_the_Redeemer_(statue)', 'Christ the Redeemer Rio de Janeiro statue'),
     landmarkName: '리우데자네이루 구속주 예수상',
     desc: '대항해시대 스페인과 포르투갈의 식민 지배 및 적극적인 가톨릭 선교로 대륙 대부분이 가톨릭을 믿는 지역입니다.',
@@ -207,6 +210,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '이슬람교',
     correctMethod: '직접전파',
+    methodExplain: '7세기 아라비아반도 메카에서 창시된 후, 이슬람 제국의 영토 확장과 함께 인접한 서남아시아 전역으로 연속 확산되었으므로 [직접전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Masjid_al-Haram', 'Kaaba Masjid al-Haram Mecca'),
     landmarkName: '성지 메카 마스지드 알하람과 카바 신전',
     desc: '무함마드가 이슬람교를 창시하고 전 세계 무슬림이 향해 기도하는 성지 메카가 위치한 발상지입니다.',
@@ -229,6 +233,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '이슬람교',
     correctMethod: '직접전파',
+    methodExplain: '서남아시아와 육로(시나이반도)로 맞닿아 있는 지리적 인접성을 통해 이집트와 북부 아프리카 연안으로 교세가 연속 확산되었으므로 [직접전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Mosque_of_Muhammad_Ali', 'Mosque of Muhammad Ali Cairo'),
     landmarkName: '카이로 무함마드 알리 대모스크',
     desc: '서남아시아와 인접하여 일찍부터 이슬람화되었으며 사하라 사막 종단 무역의 중심지가 된 지역입니다.',
@@ -251,6 +256,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '이슬람교',
     correctMethod: '장거리',
+    methodExplain: '아라비아에서 멀리 떨어진 중앙아시아 내륙의 오아시스 도시(사마르칸트 등)들을 잇는 실크로드 육상 교역로와 대상(카라반)을 통해 전파되었으므로 [장거리 전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Registan', 'Registan Samarkand Uzbekistan'),
     landmarkName: '사마르칸트 레기스탄 이슬람 신학교',
     desc: '동서양을 잇는 실크로드의 중심지로, 상업 교역을 통해 이슬람교가 깊이 뿌리내린 내륙 권역입니다.',
@@ -269,12 +275,13 @@ const REGIONS = {
     }
   },
 
-  // ==================== 3. 불교 대표 권역 (3곳: 태국·미얀마, 몽골·부탄, 스리랑카) ====================
+  // ==================== 3. 불교 대표 권역 (3곳) ====================
   '태국·미얀마': {
     name: '동남아 대륙부(태국·미얀마·캄보디아)',
     type: 'pure',
     preferred: '불교',
     correctMethod: '직접전파',
+    methodExplain: '인도 동부 및 스리랑카에서 인접한 미얀마·태국 등 인도차이나반도 대륙부로 상좌부 불교가 차례로 확산되었으므로 [직접전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Wat_Phra_Kaew', 'Wat Phra Kaew Bangkok golden stupa'),
     landmarkName: '방콕 에메랄드 사원(왓 프라깨우)',
     desc: '개인의 수행과 해탈을 중시하는 상좌부 불교가 인도차이나반도 전역에 국교 수준으로 자리 잡은 권역입니다.',
@@ -297,6 +304,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '불교',
     correctMethod: '장거리',
+    methodExplain: '인도에서 기원한 불교가 실크로드와 험준한 히말라야·초원길 교역로를 넘어 부탄·티베트 고원과 몽골 초원까지 원거리 확산되었으므로 [장거리 전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Paro_Taktsang', 'Paro Taktsang Bhutan monastery cliff'),
     landmarkName: '부탄 탁상 사원(호랑이 둥지 사원)과 초원 대사원',
     desc: '실크로드와 히말라야·초원길을 따라 북방 불교(대승·티베트 불교)가 전파되어 전통과 일상을 지배하는 불교 우세 권역입니다.',
@@ -319,6 +327,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '불교',
     correctMethod: '직접전파',
+    methodExplain: '기원전 3세기 인도 마우리아 왕조 아소카왕이 인도 바로 남쪽에 인접한 스리랑카에 전법사(마힌다 등)를 파견해 전파했으므로 [직접전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Temple_of_the_Tooth', 'Temple of the Tooth Kandy Sri Lanka'),
     landmarkName: '스리랑카 캔디 불치사(치아 사리 사원)',
     desc: '인도 아소카왕 시기 가장 먼저 불교가 전해져 원형 경전을 보존하고 동남아로 불교를 전파한 섬나라입니다.',
@@ -343,6 +352,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '힌두교',
     correctMethod: '직접전파',
+    methodExplain: '인더스 문명과 브라만교 신앙이 결합하여 북인도 갠지스강 유역에서 자연 발생하고 인접 평원으로 직접 퍼져나갔으므로 [직접전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Varanasi', 'Varanasi Ghats Ganga river India'),
     landmarkName: '바라나시 갠지스강 가트와 힌두 사원',
     desc: '갠지스강을 성스러운 강으로 숭배하며 윤회 사상과 카스트 제도가 뿌리내린 힌두교의 발상지입니다.',
@@ -365,6 +375,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '힌두교',
     correctMethod: '직접전파',
+    methodExplain: '북인도에서 형성된 힌두교 전통과 경전이 인도 아대륙 내부를 따라 남인도 타밀 지역으로 연속 확산되었으므로 [직접전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Meenakshi_Temple', 'Meenakshi Amman Temple Madurai gopuram'),
     landmarkName: '남인도 마두라이 미나크시 사원',
     desc: '화려하고 거대한 석조 탑문(고푸람)을 가진 정통 힌두 사원들이 원형 그대로 밀집한 남인도의 핵심지입니다.',
@@ -387,6 +398,7 @@ const REGIONS = {
     type: 'pure',
     preferred: '힌두교',
     correctMethod: '직접전파',
+    methodExplain: '북인도 갠지스 평원과 국경을 맞대고 있는 네팔 카트만두 분지로 지리적 인접성을 통해 힌두교가 확산되었으므로 [직접전파]에 해당합니다.',
     landmarkImg: buildImgPath('en:Pashupatinath_Temple', 'Pashupatinath Temple Kathmandu Nepal'),
     landmarkName: '네팔 카트만두 파슈파티나트 사원',
     desc: '인도와 맞닿은 히말라야 산맥의 국가로, 인구의 80% 이상이 힌두교를 믿는 대표적인 힌두 문화권입니다.',
@@ -405,21 +417,23 @@ const REGIONS = {
     }
   },
 
-  // ==================== 5. 다종교 혼합 권역 (4곳) — 각국 전용 Imgur 일러스트 매칭 ====================
-  '한국(혼합)': {
+  // ==================== 5. 다종교 혼합 권역 (4곳: 지도상 구분 숨김 & 점수 비중 축소) ====================
+  '한국': {
     name: '한국(동아시아 다종교 공존)',
     type: 'hybrid',
     desc: '삼국·고려시대의 불교 전통과 조선의 유교, 근현대의 천주교·개신교가 유입되어 평화롭게 공존하는 국가입니다.',
     learnPoint: '한국은 불교와 크리스트교(개신교·천주교)가 고르게 분포하며 종교 간 갈등 없이 공존하는 다종교 국가입니다.',
     byReligion: {
       '불교': {
+        correctMethod: '장거리',
+        methodExplain: '인도에서 기원한 불교가 실크로드 육상 교역로와 중국을 거쳐 삼국시대 한반도까지 원거리 이동해 전해졌으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Bulguksa', 'Bulguksa Temple Gyeongju Korea'),
         landmarkName: '경주 불국사와 다보탑·석가탑',
         good: {
           img: CUSTOM_EVENT_IMG.koreaGood,
           title: '삼국·고려 호국불교와 팔만대장경 판각',
           desc: '고려 팔만대장경으로 대표되는 호국불교 전통과 사찰 문화가 융성하여 찬란한 불교 유산을 꽃피웠습니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.koreaBad,
@@ -429,13 +443,15 @@ const REGIONS = {
         }
       },
       '크리스트교': {
+        correctMethod: '장거리',
+        methodExplain: '유럽에서 기원한 크리스트교가 청나라에 다녀온 사신단(서학 서적 유입) 및 개화기 바다를 건너온 서양 선교사들을 통해 전해졌으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Myeongdong_Cathedral', 'Myeongdong Cathedral Seoul'),
         landmarkName: '서울 명동대성당',
         good: {
           img: CUSTOM_EVENT_IMG.koreaGood,
           title: '실학자의 서학 수용과 개화기 근대 선교 학교 설립',
           desc: '실학자들의 자발적 서학 연구에 이어 개화기 선교사들이 근대 학교와 병원을 세우며 대중 속에 빠르게 확산됩니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.koreaBad,
@@ -445,13 +461,15 @@ const REGIONS = {
         }
       },
       '이슬람교': {
+        correctMethod: '장거리',
+        methodExplain: '서남아시아의 아랍·페르시아 상인들이 인도양과 남중국해를 가로지르는 해상 무역로를 따라 고려 벽란도 등에 내항하며 전해졌으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Seoul_Central_Mosque', 'Seoul Central Mosque Korea'),
         landmarkName: '서울 한남동 중앙성원',
         good: {
           img: CUSTOM_EVENT_IMG.koreaGood,
           title: '고려 벽란도 아랍 상인 교역과 현대 다종교 문화 교류',
           desc: '고려시대 아랍 상인들이 벽란도에서 교역하며 코리아를 알리고, 현대에는 서울 중앙성원이 건립되어 공존합니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.koreaBad,
@@ -461,13 +479,15 @@ const REGIONS = {
         }
       },
       '힌두교': {
+        correctMethod: '장거리',
+        methodExplain: '고대 인도 아유타국 허황옥 공주의 해양 도래 설화 및 현대 인도와의 원거리 문화·인적 교류를 통해 유입되었으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Swaminarayan_Akshardham_(Delhi)', 'Akshardham Hindu temple architecture'),
         landmarkName: '인도-가야 문화 교류 기념 사원 및 파사석탑',
         good: {
           img: CUSTOM_EVENT_IMG.koreaGood,
           title: '가야 허황옥 설화와 현대 다종교 문화 교류',
           desc: '고대 인도 아유타국 공주 허황옥의 도래 설화와 현대 한국 사회의 개방적인 문화 교류로 친밀도가 높아집니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.koreaBad,
@@ -479,20 +499,22 @@ const REGIONS = {
     }
   },
 
-  '인도네시아(혼합)': {
+  '인도네시아': {
     name: '인도네시아·말레이(동남아 도서 혼합)',
     type: 'hybrid',
     desc: '고대 힌두교·불교 왕국이 번성한 후 인도양 무슬림 상인의 해상 무역으로 이슬람교가 주류가 된 중층 문화권입니다.',
     learnPoint: '동남아시아 도서 지역은 불교(보로부두르)·힌두교(발리) 유적 위에 해상 무역으로 전파된 이슬람교가 공존합니다.',
     byReligion: {
       '이슬람교': {
+        correctMethod: '장거리',
+        methodExplain: '아라비아와 인도 구자라트의 무슬림 상인들이 인도양 해상 향신료 무역로를 따라 항해하며 동남아 도서 지역에 전파했으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Istiqlal_Mosque,_Jakarta', 'Istiqlal Mosque Jakarta Indonesia'),
         landmarkName: '자카르타 이스티클랄 대모스크',
         good: {
           img: CUSTOM_EVENT_IMG.indonesiaGood,
           title: '인도양 향신료 해상 무역과 이슬람 술탄국 확산',
           desc: '인도양 해상 무역로를 따라 온 무슬림 상인들과 교류하며 해안 왕국들이 평화적으로 개종해 세계 최대 무슬림 국가가 됩니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.indonesiaBad,
@@ -502,13 +524,15 @@ const REGIONS = {
         }
       },
       '불교': {
+        correctMethod: '장거리',
+        methodExplain: '인도와 중국을 잇는 해상 실크로드 무역선을 통해 바다 건너 자바섬과 수마트라섬에 불교가 전해졌으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Borobudur', 'Borobudur Temple Java Indonesia'),
         landmarkName: '자바섬 보로부두르 대불탑',
         good: {
           img: CUSTOM_EVENT_IMG.indonesiaGood,
           title: '해상 실크로드 무역 번영과 보로부두르 대불탑 건립',
           desc: '해상 무역로를 장악한 고대 스리위자야·샤일렌드라 왕조가 자바섬에 세계 최대 불교 유적인 보로부두르를 건립합니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.indonesiaBad,
@@ -518,13 +542,15 @@ const REGIONS = {
         }
       },
       '힌두교': {
+        correctMethod: '장거리',
+        methodExplain: '고대 인도 상인과 브라만 계층이 벵골만과 인도양 해로를 건너 자바섬과 발리섬에 힌두 문화를 전했으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Pura_Ulun_Danu_Bratan', 'Pura Ulun Danu Bratan Bali temple'),
         landmarkName: '발리 울룬 다누 브라탄 힌두 사원',
         good: {
           img: CUSTOM_EVENT_IMG.indonesiaGood,
           title: '마자파힛 해상 제국의 번영과 발리 힌두 문화 수호',
           desc: '인도양 해상 교류로 번영한 힌두 왕조의 전통과 사원 건축이 발리섬에 보존되어 독창적인 문화를 꽃피웁니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.indonesiaBad,
@@ -534,13 +560,15 @@ const REGIONS = {
         }
       },
       '크리스트교': {
+        correctMethod: '장거리',
+        methodExplain: '대항해시대 포르투갈·네덜란드 선박과 선교사들이 인도양 해로를 건너 동남아 군도에 전파했으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Jakarta_Cathedral', 'Jakarta Cathedral Indonesia'),
         landmarkName: '자카르타 대성당',
         good: {
           img: CUSTOM_EVENT_IMG.indonesiaGood,
           title: '해상 교역항 개방과 동부 도서 지역 공동체 정착',
           desc: '해상 교역로를 통해 유입된 크리스트교가 동부 도서 지역에 정착하며 이슬람·불교·힌두교와 평화롭게 공존합니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.indonesiaBad,
@@ -552,20 +580,22 @@ const REGIONS = {
     }
   },
 
-  '싱가포르(혼합)': {
+  '싱가포르': {
     name: '싱가포르(국제 교통 허브 다종교 공존)',
     type: 'hybrid',
     desc: '동서양 해상 무역의 요충지로 중국계(불교), 말레이계(이슬람), 인도계(힌두교), 유럽계(크리스트교)가 함께 살아가는 도시국가입니다.',
     learnPoint: '싱가포르는 국제 무역항으로 성장하며 이주해 온 다양한 민족에 의해 4대 종교가 한 도시에 조화롭게 분포합니다.',
     byReligion: {
       '불교': {
+        correctMethod: '장거리',
+        methodExplain: '19세기 무역항 개항 이후 중국 남부에서 남중국해 바다를 건너 이주한 중국계 화교들에 의해 정착했으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Buddha_Tooth_Relic_Temple_and_Museum', 'Buddha Tooth Relic Temple Singapore'),
         landmarkName: '싱가포르 차이나타운 불아사',
         good: {
           img: CUSTOM_EVENT_IMG.singaporeGood,
           title: '국제 무역항 개항과 중국계 화교의 불아사 건립',
           desc: '중계 무역항 개항 이후 대거 이주한 중국계 화교들이 사찰을 건립하여 불교가 싱가포르 최대 종교로 자리 잡습니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.singaporeBad,
@@ -575,13 +605,15 @@ const REGIONS = {
         }
       },
       '이슬람교': {
+        correctMethod: '직접전파',
+        methodExplain: '말레이반도 남단에 맞닿은 지리적 특성상 인접한 말레이 무슬림 토착민과 주변 해협 공동체를 통해 연속 확산되었으므로 [직접전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Masjid_Sultan', 'Sultan Mosque Kampong Glam Singapore'),
         landmarkName: '싱가포르 캄퐁글람 술탄 모스크',
         good: {
           img: CUSTOM_EVENT_IMG.singaporeGood,
           title: '국제 무역항 개항과 캄퐁글람 술탄 모스크 번영',
           desc: '말레이 무슬림과 아랍 무역상들이 국제 무역항 싱가포르에 황금 돔의 술탄 모스크를 세우고 활발히 교류합니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.singaporeBad,
@@ -591,13 +623,15 @@ const REGIONS = {
         }
       },
       '힌두교': {
+        correctMethod: '장거리',
+        methodExplain: '영국 식민 시기 남인도 타밀나두 지역에서 인도양 바다를 건너 이주한 인도계 상인과 노동자들에 의해 전해졌으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Sri_Mariamman_Temple,_Singapore', 'Sri Mariamman Temple Singapore gopuram'),
         landmarkName: '싱가포르 스리 마리암만 힌두 사원',
         good: {
           img: CUSTOM_EVENT_IMG.singaporeGood,
           title: '국제 무역항 개항과 스리 마리암만 힌두 사원 건립',
           desc: '해상 무역항으로 이주한 남인도 타밀족들이 화려한 고푸람 탑문의 힌두 사원을 세우고 문화를 정착시킵니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.singaporeBad,
@@ -607,13 +641,15 @@ const REGIONS = {
         }
       },
       '크리스트교': {
+        correctMethod: '장거리',
+        methodExplain: '영국 동인도회사의 개항과 함께 유럽에서 해양 항로를 따라 건너온 선교사들에 의해 전파되었으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath("en:St_Andrew's_Cathedral,_Singapore", "St Andrew's Cathedral Singapore"),
         landmarkName: '싱가포르 세인트 앤드류 대성당',
         good: {
           img: CUSTOM_EVENT_IMG.singaporeGood,
           title: '국제 무역항 개항과 다민족 종교 정착',
           desc: '동서양 해상 무역항 개항과 함께 대성당과 미션스쿨이 세워지며 다양한 민족의 종교와 조화롭게 정착합니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.singaporeBad,
@@ -625,20 +661,22 @@ const REGIONS = {
     }
   },
 
-  '나이지리아(혼합)': {
+  '나이지리아': {
     name: '나이지리아(아프리카 남북 종교 교차지)',
     type: 'hybrid',
     desc: '사하라 사막 무역로로 전파된 북부의 이슬람교(약 50%)와 대서양 해안 선교로 전파된 남부의 크리스트교(약 48%)가 맞닿은 국가입니다.',
     learnPoint: '나이지리아는 북부 이슬람교와 남부 크리스트교가 팽팽히 맞서는 아프리카의 대표적인 종교 점이지대입니다.',
     byReligion: {
       '이슬람교': {
+        correctMethod: '직접전파',
+        methodExplain: '일찍이 이슬람화된 북아프리카와 사하라 사막 남단(사헬 지대) 인접 지역에서 육로를 따라 나이지리아 북부로 연속 확산되었으므로 [직접전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Abuja_National_Mosque', 'Abuja National Mosque Nigeria golden dome'),
         landmarkName: '나이지리아 아부자 국립 모스크',
         good: {
           img: CUSTOM_EVENT_IMG.nigeriaGood,
           title: '북부 사하라 종단 교역과 소코토 이슬람 왕국 성립',
           desc: '사하라 무역로를 통해 이슬람을 받아들인 북부 하우사·풀라니족이 이슬람 왕국을 세우며 서아프리카 최대 교세를 이룹니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.nigeriaBad,
@@ -648,13 +686,15 @@ const REGIONS = {
         }
       },
       '크리스트교': {
+        correctMethod: '장거리',
+        methodExplain: '유럽 선교사들이 대서양 해상 항로를 통해 나이지리아 남부 기니만 해안 항구로 들어와 전파했으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:National_Christian_Centre', 'National Christian Centre Abuja Nigeria'),
         landmarkName: '나이지리아 아부자 국립 기독교 센터',
         good: {
           img: CUSTOM_EVENT_IMG.nigeriaGood,
           title: '남부 대서양 해안 선교와 아프리카 교회 대부흥',
           desc: '대서양 해안으로 들어온 선교사들과 현지 성직자들이 남부에 학교와 교회를 세워 열정적인 신앙 공동체를 이룹니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.nigeriaBad,
@@ -664,13 +704,15 @@ const REGIONS = {
         }
       },
       '불교': {
+        correctMethod: '장거리',
+        methodExplain: '아시아 불교권에서 대양을 건너온 현대 국제 교류와 도심 명상 센터 설립을 통해 유입되었으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Wat_Phra_Kaew', 'Buddhist temple golden statue meditation'),
         landmarkName: '서아프리카 국제 평화 명상 센터',
         good: {
           img: CUSTOM_EVENT_IMG.nigeriaGood,
           title: '해상 교류 확대와 비폭력 평화 명상 운동',
           desc: '종교 갈등에 지친 현지 청년들과 지식인들이 평화·명상 철학에 공감하며 도심 명상 센터가 문을 엽니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.nigeriaBad,
@@ -680,13 +722,15 @@ const REGIONS = {
         }
       },
       '힌두교': {
+        correctMethod: '장거리',
+        methodExplain: '영연방 해상 네트워크를 통해 인도에서 서아프리카 해안 도시(라고스 등)로 이주한 인도계 상인들에 의해 유입되었으므로 [장거리 전파]에 해당합니다.',
         landmarkImg: buildImgPath('en:Swaminarayan_Akshardham_(Delhi)', 'Hindu temple architecture stone'),
         landmarkName: '라고스 인도계 무역상 사원',
         good: {
           img: CUSTOM_EVENT_IMG.nigeriaGood,
           title: '대서양 해상 무역과 인도계 상인 공동체 정착',
           desc: '해상 무역과 기업 활동으로 남부 항구 도시에 정착한 인도계 주민들이 사원을 세우고 문화를 교류합니다.',
-          score: 10
+          score: 5
         },
         bad: {
           img: CUSTOM_EVENT_IMG.nigeriaBad,
@@ -719,10 +763,10 @@ function resetMapOwnership() {
     '북인도(갠지스)': '힌두교',
     '남인도(마두라이)': null,
     '네팔': null,
-    '한국(혼합)': null,
-    '인도네시아(혼합)': null,
-    '싱가포르(혼합)': null,
-    '나이지리아(혼합)': null
+    '한국': null,
+    '인도네시아': null,
+    '싱가포르': null,
+    '나이지리아': null
   };
 }
 resetMapOwnership();
@@ -811,19 +855,25 @@ io.on('connection', (socket) => {
     let territorialSuccess = false;
 
     if (region.type === 'hybrid') {
+      // 다종교 혼합 권역: 점수 비중 축소 (+20점 / 방식 착오 시 +10점) & 구체적인 전파 경로 해설 제공
       territorialSuccess = true;
       const relInfo = region.byReligion[activeReligion];
-      const baseGain = 40;
+      const isMethodRight = (relInfo.correctMethod === method);
+      const baseGain = isMethodRight ? 20 : 10;
 
       step1Card = {
         headerTitle: '⚜ 종교 전파 결과 ⚜',
-        badgeText: '🤝 다종교 혼합·공존 권역 (+40점)',
+        badgeText: isMethodRight
+          ? `🤝 다종교 혼합 권역 + 전파 방식 일치 (+${baseGain}점)`
+          : `🤝 다종교 혼합 권역 / 전파 방식 착오 (+${baseGain}점)`,
         img: relInfo.landmarkImg,
         landmarkName: relInfo.landmarkName,
         title: `${activeReligion} ➔ ${region.name}`,
         desc: region.desc,
         baseGain: baseGain,
-        methodNote: `전파 방식 [${method}] 완료! 이어서 ${region.name}에서 [${activeReligion}]가 겪은 실제 역사적 사건을 확인하세요.`
+        methodNote: isMethodRight
+          ? `✅ [전파 방식 정답: ${relInfo.correctMethod}] ${relInfo.methodExplain}`
+          : `⚠️ [선택: ${method} ➔ 실제 정답: ${relInfo.correctMethod}] ${relInfo.methodExplain}`
       };
 
       const ev = (Math.random() < 0.5) ? relInfo.good : relInfo.bad;
@@ -837,6 +887,7 @@ io.on('connection', (socket) => {
         learnPoint: region.learnPoint
       };
     } else if (region.preferred === activeReligion) {
+      // 주요 종교 우세 권역 정답 (+55점 / 방식 착오 시 +30점) & 구체적인 전파 경로 해설 제공
       territorialSuccess = true;
       const isMethodRight = (region.correctMethod === method);
       const baseGain = isMethodRight ? 55 : 30;
@@ -844,16 +895,16 @@ io.on('connection', (socket) => {
       step1Card = {
         headerTitle: '⚜ 종교 전파 결과 ⚜',
         badgeText: isMethodRight
-          ? '🌟 주류 종교 + 전파 방식 완벽 일치! (+55점)'
-          : '⚠️ 주류 종교 일치 / 전파 방식 착오 (+30점)',
+          ? `🌟 주류 종교 + 전파 방식 완벽 일치! (+${baseGain}점)`
+          : `⚠️ 주류 종교 일치 / 전파 방식 착오 (+${baseGain}점)`,
         img: region.landmarkImg,
         landmarkName: region.landmarkName,
         title: `${activeReligion} ➔ ${region.name}`,
         desc: region.desc,
         baseGain: baseGain,
         methodNote: isMethodRight
-          ? `정답! 실제 역사적 전파 경로인 [${region.correctMethod}]를 정확히 선택하여 +15점 보너스를 획득했습니다!`
-          : `이 지역의 주류 종교는 맞았으나, 실제 역사적 전파 방식은 [${region.correctMethod}]여서 점수가 일부 차감되었습니다.`
+          ? `✅ [전파 방식 정답: ${region.correctMethod}] ${region.methodExplain}`
+          : `⚠️ [선택: ${method} ➔ 실제 정답: ${region.correctMethod}] ${region.methodExplain}`
       };
 
       const ev = (Math.random() < 0.5) ? region.goodEvent : region.badEvent;
@@ -867,6 +918,7 @@ io.on('connection', (socket) => {
         learnPoint: region.learnPoint
       };
     } else {
+      // 타 종교 강세 권역 오답 시: -20점 감점 + 실제 주류 종교의 전파 방식 해설 제공
       territorialSuccess = false;
       step1Card = {
         headerTitle: '⚜ 전파 실패 ⚜',
@@ -876,7 +928,7 @@ io.on('connection', (socket) => {
         title: `${activeReligion} ➔ ${region.name} 전파 좌절`,
         desc: `오답입니다! [${region.name}] 지역은 역사적으로 [${region.preferred}]의 전통과 교세가 압도적으로 강한 곳이어서 전파에 실패했습니다.`,
         baseGain: -20,
-        methodNote: `기존 주류 종교(${region.preferred})의 강력한 문화 장벽에 부딪혀 명성이 20점 감소합니다.`
+        methodNote: `❌ [실제 주류 종교(${region.preferred})의 전파 방식: ${region.correctMethod}] ${region.methodExplain}`
       };
 
       step2Event = {
