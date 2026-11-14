@@ -9,7 +9,7 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 // ============================================================================
-// 1. Imgur에 업로드한 혼합 4개국 & 오답 성벽 전용 일러스트 (한국 일러스트는 한국에만 사용)
+// 1. Imgur에 업로드한 혼합 4개국 & 오답 성벽 전용 일러스트
 // ============================================================================
 const CUSTOM_EVENT_IMG = {
   failWall: 'https://i.imgur.com/tisnR4Y.jpeg',      // 오답 시 성벽 장벽 (fail_wall)
@@ -27,7 +27,7 @@ const CUSTOM_EVENT_IMG = {
 // 2. 위키백과 공식 API 기반 랜드마크 & 역사 기록화 로더 (국기·도표·우표 차단)
 // ============================================================================
 const imageMemoryCache = new Map();
-const USER_AGENT = 'WorldReligionEduGame/7.0 (https://religion-gam.onrender.com; educational game)';
+const USER_AGENT = 'WorldReligionEduGame/8.0 (https://religion-gam.onrender.com; educational game)';
 
 function isValidImage(url) {
   if (!url) return false;
@@ -130,7 +130,7 @@ const RELIGIONS = [
 ];
 
 // ============================================================================
-// 3. 16개 권역 데이터 (전파 경로 해설 methodExplain 추가 & 혼합국 점수 비중 축소)
+// 3. 16개 권역 데이터
 // ============================================================================
 const REGIONS = {
   // ==================== 1. 크리스트교 대표 권역 (3곳) ====================
@@ -387,7 +387,7 @@ const REGIONS = {
       score: 10
     },
     badEvent: {
-      img: buildImgPath('en:East_India_Company', 'East India Company ships painting'),
+      img: buildImgPath('en:Robert_Clive', 'Robert Clive British East India Company painting'),
       title: '영국 동인도회사의 인도 식민 지배',
       desc: '영국의 인도 식민 통치가 본격화되면서 전통 사원의 자치권이 축소되고 서구 문물과의 마찰이 빚어집니다.',
       score: -5
@@ -417,7 +417,7 @@ const REGIONS = {
     }
   },
 
-  // ==================== 5. 다종교 혼합 권역 (4곳: 지도상 구분 숨김 & 점수 비중 축소) ====================
+  // ==================== 5. 다종교 혼합 권역 (4곳) ====================
   '한국': {
     name: '한국(동아시아 다종교 공존)',
     type: 'hybrid',
@@ -774,15 +774,31 @@ resetMapOwnership();
 let religionStates = {};
 function resetReligionStates() {
   religionStates = {
-    '크리스트교': { score: 60, regions: ['유럽(바티칸)'], ownerId: null },
-    '이슬람교': { score: 60, regions: ['서남아(메카)'], ownerId: null },
-    '불교': { score: 60, regions: ['태국·미얀마'], ownerId: null },
-    '힌두교': { score: 60, regions: ['북인도(갠지스)'], ownerId: null }
+    '크리스트교': { score: 60, regions: ['유럽(바티칸)'], ownerId: null, ownerName: null },
+    '이슬람교': { score: 60, regions: ['서남아(메카)'], ownerId: null, ownerName: null },
+    '불교': { score: 60, regions: ['태국·미얀마'], ownerId: null, ownerName: null },
+    '힌두교': { score: 60, regions: ['북인도(갠지스)'], ownerId: null, ownerName: null }
   };
 }
 resetReligionStates();
 
 const turnOrder = ['크리스트교', '이슬람교', '불교', '힌두교'];
+
+// 2~3인 플레이 시 사람이 배정된 종교로만 턴이 넘어가도록 보장하는 함수
+function moveToNextActiveTurn() {
+  if (soloMode) {
+    currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
+    return;
+  }
+  for (let i = 1; i <= turnOrder.length; i++) {
+    const candidateIdx = (currentTurnIndex + i) % turnOrder.length;
+    const rName = turnOrder[candidateIdx];
+    if (religionStates[rName].ownerId) {
+      currentTurnIndex = candidateIdx;
+      return;
+    }
+  }
+}
 
 io.on('connection', (socket) => {
   socket.emit('initSync', {
@@ -814,19 +830,27 @@ io.on('connection', (socket) => {
     if (players.length === 0 || socket.id !== players[0].id) return;
     gameStarted = true;
     soloMode = (players.length === 1);
+    resetReligionStates();
 
     if (soloMode) {
       players[0].religion = 'ALL';
-      turnOrder.forEach(r => religionStates[r].ownerId = players[0].id);
+      turnOrder.forEach(r => {
+        religionStates[r].ownerId = players[0].id;
+        religionStates[r].ownerName = players[0].name;
+      });
+      currentTurnIndex = 0;
     } else {
       const shuffled = [...turnOrder].sort(() => Math.random() - 0.5);
       players.forEach((p, idx) => {
         p.religion = shuffled[idx];
         religionStates[p.religion].ownerId = p.id;
+        religionStates[p.religion].ownerName = p.name;
       });
+      // 첫 번째 턴도 실제 플레이어가 배정된 첫 종교부터 시작
+      currentTurnIndex = turnOrder.findIndex(r => religionStates[r].ownerId !== null);
+      if (currentTurnIndex === -1) currentTurnIndex = 0;
     }
 
-    currentTurnIndex = 0;
     io.emit('gameStarted', {
       players,
       soloMode,
@@ -855,7 +879,6 @@ io.on('connection', (socket) => {
     let territorialSuccess = false;
 
     if (region.type === 'hybrid') {
-      // 다종교 혼합 권역: 점수 비중 축소 (+20점 / 방식 착오 시 +10점) & 구체적인 전파 경로 해설 제공
       territorialSuccess = true;
       const relInfo = region.byReligion[activeReligion];
       const isMethodRight = (relInfo.correctMethod === method);
@@ -887,7 +910,6 @@ io.on('connection', (socket) => {
         learnPoint: region.learnPoint
       };
     } else if (region.preferred === activeReligion) {
-      // 주요 종교 우세 권역 정답 (+55점 / 방식 착오 시 +30점) & 구체적인 전파 경로 해설 제공
       territorialSuccess = true;
       const isMethodRight = (region.correctMethod === method);
       const baseGain = isMethodRight ? 55 : 30;
@@ -918,7 +940,6 @@ io.on('connection', (socket) => {
         learnPoint: region.learnPoint
       };
     } else {
-      // 타 종교 강세 권역 오답 시: -20점 감점 + 실제 주류 종교의 전파 방식 해설 제공
       territorialSuccess = false;
       step1Card = {
         headerTitle: '⚜ 전파 실패 ⚜',
@@ -966,11 +987,21 @@ io.on('connection', (socket) => {
       religionStates
     });
 
-    currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
+    moveToNextActiveTurn();
     io.emit('nextTurn', { currentReligion: turnOrder[currentTurnIndex] });
   });
 
   socket.on('disconnect', () => {
+    const leaving = players.find(p => p.id === socket.id);
+    if (leaving && leaving.religion && leaving.religion !== 'ALL' && religionStates[leaving.religion]) {
+      religionStates[leaving.religion].ownerId = null;
+      religionStates[leaving.religion].ownerName = `${leaving.name}(퇴장)`;
+      if (gameStarted && turnOrder[currentTurnIndex] === leaving.religion) {
+        moveToNextActiveTurn();
+        io.emit('nextTurn', { currentReligion: turnOrder[currentTurnIndex] });
+      }
+    }
+
     players = players.filter(p => p.id !== socket.id);
     if (players.length === 0) {
       gameStarted = false;
