@@ -27,7 +27,7 @@ const CUSTOM_EVENT_IMG = {
 // 2. 위키백과 공식 API 기반 랜드마크 & 역사 기록화 로더 (국기·도표·우표 차단)
 // ============================================================================
 const imageMemoryCache = new Map();
-const USER_AGENT = 'WorldReligionEduGame/8.0 (https://religion-gam.onrender.com; educational game)';
+const USER_AGENT = 'WorldReligionEduGame/9.0 (https://religion-gam.onrender.com; educational game)';
 
 function isValidImage(url) {
   if (!url) return false;
@@ -743,7 +743,11 @@ const REGIONS = {
   }
 };
 
-let players = [];
+// ============================================================================
+// 4. 참가 학생(최대 4명) 및 관리자/선생님(별도 인원) 상태 관리
+// ============================================================================
+let players = []; // 실제 종교를 배정받는 학생 목록 (최대 4명)
+let admins = [];  // 교탁 모니터를 띄우는 선생님(관리자) 목록 (정원 외 별도)
 let currentTurnIndex = 0;
 let gameStarted = false;
 let soloMode = false;
@@ -784,7 +788,6 @@ resetReligionStates();
 
 const turnOrder = ['크리스트교', '이슬람교', '불교', '힌두교'];
 
-// 2~3인 플레이 시 사람이 배정된 종교로만 턴이 넘어가도록 보장하는 함수
 function moveToNextActiveTurn() {
   if (soloMode) {
     currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
@@ -800,9 +803,19 @@ function moveToNextActiveTurn() {
   }
 }
 
+function broadcastLobby() {
+  io.emit('updateLobby', {
+    players,
+    admins,
+    hostId: players[0]?.id || null,
+    gameStarted
+  });
+}
+
 io.on('connection', (socket) => {
   socket.emit('initSync', {
     players,
+    admins,
     hostId: players.length > 0 ? players[0].id : null,
     gameStarted,
     mapOwnership,
@@ -811,28 +824,61 @@ io.on('connection', (socket) => {
     soloMode
   });
 
+  // 학생 참가자 입장 (최대 4명)
   socket.on('joinGame', (name) => {
     if (players.length >= 4 || gameStarted) {
-      socket.emit('errorMsg', '이미 정원이 찼거나 게임이 진행 중입니다.');
+      socket.emit('errorMsg', '이미 학생 정원(4명)이 찼거나 게임이 진행 중입니다.');
       return;
     }
-    const pName = (name && name.trim()) ? name.trim() : `참가자 ${players.length + 1}`;
+    const pName = (name && name.trim()) ? name.trim() : `학생 ${players.length + 1}`;
     players.push({ id: socket.id, name: pName, religion: null });
-
-    io.emit('updateLobby', {
-      players,
-      hostId: players[0].id,
-      gameStarted
-    });
+    broadcastLobby();
   });
 
+  // 선생님(관리자 모니터) 입장 (4명 정원과 별개로 언제든 입장 가능)
+  socket.on('joinAdmin', (name) => {
+    const adminName = (name && name.trim()) ? name.trim() : '선생님(관리자)';
+    if (!admins.some(a => a.id === socket.id)) {
+      admins.push({ id: socket.id, name: adminName });
+    }
+    socket.emit('adminJoined', { name: adminName });
+
+    // 만약 이미 게임이 시작된 상태에서 모니터를 새로고침해 재접속했다면 즉시 게임 화면으로 동기화
+    if (gameStarted) {
+      socket.emit('gameStarted', {
+        players,
+        admins,
+        soloMode,
+        mapOwnership,
+        religionStates,
+        currentReligion: turnOrder[currentTurnIndex]
+      });
+    } else {
+      broadcastLobby();
+    }
+  });
+
+  // 게임 시작 (1번 방장 학생 또는 선생님 관리자 모니터에서 시작 가능)
   socket.on('startGame', () => {
-    if (players.length === 0 || socket.id !== players[0].id) return;
+    const isHostStudent = players.length > 0 && socket.id === players[0].id;
+    const isAdminUser = admins.some(a => a.id === socket.id);
+    if (!isHostStudent && !isAdminUser) return;
+
     gameStarted = true;
-    soloMode = (players.length === 1);
     resetReligionStates();
 
-    if (soloMode) {
+    if (players.length === 0 && isAdminUser) {
+      // 학생 없이 선생님 혼자 테스트 시작을 누른 경우
+      soloMode = true;
+      const adminObj = admins.find(a => a.id === socket.id);
+      turnOrder.forEach(r => {
+        religionStates[r].ownerId = socket.id;
+        religionStates[r].ownerName = adminObj ? adminObj.name : '선생님';
+      });
+      currentTurnIndex = 0;
+    } else if (players.length === 1) {
+      // 학생 1명 솔로 모드
+      soloMode = true;
       players[0].religion = 'ALL';
       turnOrder.forEach(r => {
         religionStates[r].ownerId = players[0].id;
@@ -840,19 +886,21 @@ io.on('connection', (socket) => {
       });
       currentTurnIndex = 0;
     } else {
+      // 학생 2~4명 멀티플레이 모드 (종교 무작위 배정, 선생님은 관리자 모니터 모드)
+      soloMode = false;
       const shuffled = [...turnOrder].sort(() => Math.random() - 0.5);
       players.forEach((p, idx) => {
         p.religion = shuffled[idx];
         religionStates[p.religion].ownerId = p.id;
         religionStates[p.religion].ownerName = p.name;
       });
-      // 첫 번째 턴도 실제 플레이어가 배정된 첫 종교부터 시작
       currentTurnIndex = turnOrder.findIndex(r => religionStates[r].ownerId !== null);
       if (currentTurnIndex === -1) currentTurnIndex = 0;
     }
 
     io.emit('gameStarted', {
       players,
+      admins,
       soloMode,
       mapOwnership,
       religionStates,
@@ -860,12 +908,14 @@ io.on('connection', (socket) => {
     });
   });
 
+  // 종교 전파 액션 (해당 턴 학생 또는 교사 모니터에서 대리 실행 가능)
   socket.on('spreadReligion', ({ regionKey, method }) => {
     if (!gameStarted) return;
     const activeReligion = turnOrder[currentTurnIndex];
     const rState = religionStates[activeReligion];
+    const isAdminUser = admins.some(a => a.id === socket.id);
 
-    if (!soloMode && rState.ownerId !== socket.id) {
+    if (!soloMode && !isAdminUser && rState.ownerId !== socket.id) {
       socket.emit('errorMsg', '지금은 본인 종교의 턴이 아닙니다.');
       return;
     }
@@ -991,7 +1041,29 @@ io.on('connection', (socket) => {
     io.emit('nextTurn', { currentReligion: turnOrder[currentTurnIndex] });
   });
 
+  // 관리자 전용: 현재 턴 강제 넘기기
+  socket.on('adminSkipTurn', () => {
+    if (!admins.some(a => a.id === socket.id) || !gameStarted) return;
+    moveToNextActiveTurn();
+    io.emit('nextTurn', { currentReligion: turnOrder[currentTurnIndex] });
+  });
+
+  // 관리자 전용: 게임 전체 초기화 후 대기실로 복귀
+  socket.on('adminResetGame', () => {
+    if (!admins.some(a => a.id === socket.id)) return;
+    gameStarted = false;
+    soloMode = false;
+    currentTurnIndex = 0;
+    players = [];
+    admins = [];
+    resetMapOwnership();
+    resetReligionStates();
+    io.emit('gameReset');
+  });
+
   socket.on('disconnect', () => {
+    admins = admins.filter(a => a.id !== socket.id);
+
     const leaving = players.find(p => p.id === socket.id);
     if (leaving && leaving.religion && leaving.religion !== 'ALL' && religionStates[leaving.religion]) {
       religionStates[leaving.religion].ownerId = null;
@@ -1003,18 +1075,14 @@ io.on('connection', (socket) => {
     }
 
     players = players.filter(p => p.id !== socket.id);
-    if (players.length === 0) {
+    if (players.length === 0 && admins.length === 0) {
       gameStarted = false;
       soloMode = false;
       currentTurnIndex = 0;
       resetMapOwnership();
       resetReligionStates();
     }
-    io.emit('updateLobby', {
-      players,
-      hostId: players[0]?.id || null,
-      gameStarted
-    });
+    broadcastLobby();
   });
 });
 
