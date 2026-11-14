@@ -29,21 +29,44 @@
 
     /* 대기실 */
     #lobby-view {
-      width: 92%; max-width: 540px;
+      width: 92%; max-width: 560px;
       background: linear-gradient(180deg, rgba(22, 32, 46, 0.96) 0%, rgba(13, 19, 28, 0.98) 100%);
       border: 3px solid #c5a059;
       box-shadow: 0 0 0 2px #090d14, 0 20px 50px rgba(0,0,0,0.9);
-      border-radius: 12px; padding: 30px; text-align: center;
+      border-radius: 12px; padding: 28px; text-align: center;
     }
     .lobby-title { font-size: 25px; font-weight: 900; color: #f5d78e; margin-bottom: 10px; }
-    .lobby-desc { font-size: 13.5px; color: #cbd5e1; margin-bottom: 22px; line-height: 1.6; }
-    .input-row { display: flex; gap: 8px; margin-bottom: 15px; }
+    .lobby-desc { font-size: 13.5px; color: #cbd5e1; margin-bottom: 18px; line-height: 1.6; }
+    .input-row { display: flex; gap: 8px; margin-bottom: 10px; }
     input { flex: 1; padding: 12px 14px; border-radius: 6px; border: 1.5px solid #8a6d3b; background: #090d14; color: #f5d78e; font-size: 15px; outline: none; }
     button { cursor: pointer; font-weight: 700; border-radius: 6px; transition: 0.25s; }
-    .btn-join { background: linear-gradient(180deg, #d4af37 0%, #9a7b2c 100%); color: #090d14; border: 1px solid #f5d78e; padding: 12px 22px; font-size: 15px; }
-    .btn-start { width: 100%; background: linear-gradient(180deg, #10b981 0%, #047857 100%); color: white; border: 1.5px solid #6ee7b7; padding: 14px; font-size: 16px; margin-top: 15px; }
+    .btn-join { background: linear-gradient(180deg, #d4af37 0%, #9a7b2c 100%); color: #090d14; border: 1px solid #f5d78e; padding: 12px 20px; font-size: 15px; }
+    .btn-admin-join {
+      width: 100%;
+      background: linear-gradient(180deg, #1e3a8a 0%, #172554 100%);
+      color: #bae6fd;
+      border: 1.5px solid #38bdf8;
+      padding: 11px 16px;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .btn-admin-join:hover { filter: brightness(1.15); }
+    .btn-start { width: 100%; background: linear-gradient(180deg, #10b981 0%, #047857 100%); color: white; border: 1.5px solid #6ee7b7; padding: 14px; font-size: 16px; margin-top: 12px; }
 
-    .player-list { list-style: none; margin: 15px 0; background: rgba(0,0,0,0.45); border: 1px solid #4a3b22; border-radius: 8px; padding: 10px; text-align: left; }
+    .admin-status-box {
+      background: rgba(30, 58, 138, 0.35);
+      border: 1px solid #38bdf8;
+      color: #bae6fd;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .player-list { list-style: none; margin: 10px 0; background: rgba(0,0,0,0.45); border: 1px solid #4a3b22; border-radius: 8px; padding: 10px; text-align: left; }
     .player-item { padding: 9px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
     .tag-host { background: #d4af37; color: #090d14; font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: 900; }
 
@@ -115,9 +138,9 @@
       border-radius: 4px;
       font-size: 11.5px;
       font-weight: 900;
-      background: rgba(9, 13, 20, 0.82);
+      background: rgba(9, 13, 20, 0.85);
       border: 1px solid #94a3b8;
-      color: #e2e8f0;
+      color: #f8fafc;
     }
     .owner-badge.me {
       background: linear-gradient(180deg, #059669 0%, #065f46 100%);
@@ -157,14 +180,38 @@
       padding: 6px 11px; border-radius: 6px; font-size: 11px; color: #f5d78e; line-height: 1.45; pointer-events: none;
     }
 
-    /* 우측 상단: 내 활동명·배정 종교 및 현재 턴 플레이어 안내 바 */
+    /* 우측 상단: 내 활동명·배정 종교 및 교사 관리 컨트롤 바 */
     .my-status-banner {
       position: absolute; top: 10px; right: 10px;
       background: rgba(11, 17, 26, 0.94); border: 2px solid #f5d78e;
-      padding: 7px 14px; border-radius: 6px; font-size: 12.5px; color: #f8fafc;
+      padding: 8px 14px; border-radius: 6px; font-size: 12.5px; color: #f8fafc;
       line-height: 1.5; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.8);
       text-align: right;
     }
+    .admin-ctrl-row {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .btn-admin-ctrl {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #64748b;
+      padding: 4px 9px;
+      font-size: 11px;
+      border-radius: 4px;
+    }
+    .btn-admin-ctrl:hover { background: #334155; border-color: #fde047; }
+    .btn-admin-reset {
+      background: #7f1d1d;
+      color: #fecaca;
+      border: 1px solid #f87171;
+      padding: 4px 9px;
+      font-size: 11px;
+      border-radius: 4px;
+    }
+    .btn-admin-reset:hover { background: #991b1b; }
 
     /* 하단 조작 바 */
     .action-panel {
@@ -277,18 +324,30 @@
   <div id="lobby-view">
     <div class="lobby-title">⚜ 세계 주요 종교의 분포와 전파 ⚜</div>
     <div class="lobby-desc">
-      4대 종교별 대표 권역과 다종교 공존 권역의 실제 역사와 전파 경로(직접/장거리)를 탐구하는 보드게임입니다.<br>
-      <span style="color:#f5d78e;">(혼자 테스트 시 '솔로 테스트 시작'으로 4대 종교를 모두 플레이할 수 있습니다)</span>
+      학생 4명(종교별 담당)과 선생님(교탁 모니터 관리자)이 함께 진행하는 세계지리 보드게임입니다.
     </div>
 
-    <div id="join-form" class="input-row">
-      <input id="playerName" placeholder="참가자 이름을 입력하세요" maxlength="8" />
-      <button class="btn-join" onclick="joinGame()">입장</button>
+    <div id="join-form">
+      <div class="input-row">
+        <input id="playerName" placeholder="학생 활동명(이름)을 입력하세요" maxlength="8" />
+        <button class="btn-join" onclick="joinGame()">학생 입장</button>
+      </div>
+      <button class="btn-admin-join" onclick="joinAsAdmin()">👨‍🏫 선생님(교사 모니터·관리자)으로 입장 (정원 외)</button>
     </div>
+
     <div id="joined-msg" style="display:none; color:#6ee7b7; font-weight:bold; margin-bottom:12px;">
       ✅ 대기실 입장 완료!
     </div>
 
+    <!-- 교사 모니터 연결 상태 표시줄 -->
+    <div id="adminStatusBox" class="admin-status-box">
+      <span>🖥️ 교사(관리자) 모니터</span>
+      <span id="adminCountText" style="font-weight:900;">연결 대기 중</span>
+    </div>
+
+    <div style="text-align:left; font-size:12.5px; color:#f5d78e; font-weight:bold; margin-bottom:4px;">
+      👥 참가 학생 목록 (최대 4명)
+    </div>
     <ul id="playerList" class="player-list"></ul>
     <button id="startBtn" class="btn-start" onclick="startGame()" style="display:none;">게임 시작</button>
   </div>
@@ -348,7 +407,7 @@
         • 타 종교 강세지 오답 시: <strong>-20점 감점</strong>
       </div>
 
-      <!-- 우측 상단: 내 활동명과 배정받은 종교 & 현재 누구 차례인지 상시 표시 -->
+      <!-- 우측 상단: 내 활동명과 배정받은 종교 & 교사 관리자 컨트롤 -->
       <div id="myStatusBanner" class="my-status-banner">
         내 배정 정보 확인 중...
       </div>
@@ -479,6 +538,7 @@
     const socket = io();
     let myId = null;
     let myNickname = '';
+    let isAdmin = false;
     let selectedRegionKey = null;
     let selectedMethod = '직접전파';
     let currentActiveReligion = '크리스트교';
@@ -675,6 +735,19 @@
       socket.emit('joinGame', name);
       document.getElementById('join-form').style.display = 'none';
       document.getElementById('joined-msg').style.display = 'block';
+      document.getElementById('joined-msg').innerText = '✅ 학생 참가자로 입장 완료!';
+    }
+
+    function joinAsAdmin() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      isAdmin = true;
+      const nameInput = document.getElementById('playerName').value.trim();
+      const adminName = nameInput || '선생님(관리자)';
+      socket.emit('joinAdmin', adminName);
+      document.getElementById('join-form').style.display = 'none';
+      document.getElementById('joined-msg').style.display = 'block';
+      document.getElementById('joined-msg').style.color = '#38bdf8';
+      document.getElementById('joined-msg').innerText = '🖥️ 교사(관리자 모니터) 모드로 입장 완료! (학생 4명 정원 외)';
     }
 
     function startGame() {
@@ -682,34 +755,97 @@
       socket.emit('startGame');
     }
 
-    socket.on('updateLobby', ({ players, hostId, gameStarted }) => {
+    function adminSkipTurn() {
+      if (!isAdmin) return;
+      socket.emit('adminSkipTurn');
+    }
+
+    function adminResetGame() {
+      if (!isAdmin) return;
+      if (confirm('현재 게임을 초기화하고 모든 참가자를 대기실로 되돌리시겠습니까?')) {
+        socket.emit('adminResetGame');
+      }
+    }
+
+    socket.on('gameReset', () => {
+      window.location.reload();
+    });
+
+    function renderLobby({ players = [], admins = [], hostId, gameStarted }) {
       if (gameStarted) return;
+
+      const adminCountText = document.getElementById('adminCountText');
+      if (adminCountText) {
+        if (admins.length > 0) {
+          adminCountText.style.color = '#6ee7b7';
+          adminCountText.innerText = `✅ 연결됨 (${admins.map(a => a.name).join(', ')})`;
+        } else {
+          adminCountText.style.color = '#94a3b8';
+          adminCountText.innerText = '연결 대기 중';
+        }
+      }
+
       const list = document.getElementById('playerList');
-      list.innerHTML = players.map(p => `
-        <li class="player-item">
-          <span>${p.name} ${p.id === myId ? '<strong>(나)</strong>' : ''}</span>
-          ${p.id === hostId ? '<span class="tag-host">방장</span>' : ''}
-        </li>
-      `).join('');
+      if (players.length === 0) {
+        list.innerHTML = `<li class="player-item" style="color:#94a3b8; justify-content:center;">아직 입장한 학생이 없습니다 (0/4명)</li>`;
+      } else {
+        list.innerHTML = players.map(p => `
+          <li class="player-item">
+            <span>👤 ${p.name} ${p.id === myId ? '<strong style="color:#6ee7b7;">(나)</strong>' : ''}</span>
+            ${p.id === hostId ? '<span class="tag-host">방장</span>' : ''}
+          </li>
+        `).join('');
+      }
 
       const startBtn = document.getElementById('startBtn');
-      if (socket.id === hostId && players.length >= 1) {
+      const amIAdmin = isAdmin || admins.some(a => a.id === socket.id);
+      const amIHost = socket.id === hostId;
+
+      if (amIAdmin) {
+        startBtn.style.display = 'block';
+        if (players.length === 0) {
+          startBtn.innerText = '👨‍🏫 교사 단독 시연 모드로 시작 (학생 0명)';
+        } else if (players.length === 1) {
+          startBtn.innerText = `👨‍🏫 게임 시작 (학생 1명 솔로 + 교사 모니터)`;
+        } else {
+          startBtn.innerText = `👨‍🏫 게임 시작 (참가 학생 ${players.length}/4명 + 교사 모니터)`;
+        }
+      } else if (amIHost && players.length >= 1) {
         startBtn.style.display = 'block';
         startBtn.innerText = players.length === 1 ? '솔로 테스트 시작' : `게임 시작 (${players.length}/4명)`;
       } else {
         startBtn.style.display = 'none';
       }
+    }
+
+    socket.on('initSync', (data) => {
+      renderLobby(data);
     });
 
-    socket.on('gameStarted', ({ players, soloMode, mapOwnership, religionStates, currentReligion }) => {
+    socket.on('updateLobby', (data) => {
+      renderLobby(data);
+    });
+
+    socket.on('gameStarted', ({ players, admins = [], soloMode, mapOwnership, religionStates, currentReligion }) => {
       isSolo = soloMode;
       latestReligionStates = religionStates;
+      isAdmin = isAdmin || admins.some(a => a.id === socket.id);
+
       document.getElementById('lobby-view').style.display = 'none';
       document.getElementById('game-view').style.display = 'grid';
 
       const me = players.find(p => p.id === socket.id);
-      myAssignedReligion = me ? me.religion : null;
-      myNickname = me ? me.name : '관전자';
+      if (me) {
+        myAssignedReligion = me.religion;
+        myNickname = me.name;
+      } else if (isAdmin) {
+        const adm = admins.find(a => a.id === socket.id);
+        myAssignedReligion = 'ADMIN';
+        myNickname = adm ? adm.name : '선생님(관리자)';
+      } else {
+        myAssignedReligion = null;
+        myNickname = '관전자';
+      }
 
       setTimeout(() => {
         updateBoard(mapOwnership, religionStates);
@@ -719,7 +855,7 @@
     });
 
     function clickRegion(key) {
-      if (!isSolo && myAssignedReligion !== currentActiveReligion) {
+      if (!isSolo && !isAdmin && myAssignedReligion !== currentActiveReligion) {
         const turnOwner = latestReligionStates[currentActiveReligion]?.ownerName || '상대방';
         alert(`현재는 [${currentActiveReligion} - ${turnOwner}]님의 차례입니다!\n내 배정 종교: [${myAssignedReligion}]`);
         return;
@@ -858,22 +994,32 @@
         }
       });
 
-      const myTurn = isSolo || (myAssignedReligion === religion);
+      const myTurn = isSolo || isAdmin || (myAssignedReligion === religion);
       document.getElementById('execBtn').disabled = !myTurn || !selectedRegionKey;
 
-      // 우측 상단 내 정보 및 현재 턴 안내 업데이트
+      // 우측 상단 내 정보 및 교사 모니터 현황판 업데이트
       const banner = document.getElementById('myStatusBanner');
       if (banner) {
         const activeOwnerName = latestReligionStates[religion]?.ownerName || '미배정';
         const activeMeta = RELIGION_META[religion];
-        if (isSolo) {
+
+        if (isAdmin) {
+          banner.innerHTML = `
+            <div>🖥️ <strong style="color:#38bdf8;">교사(관리자) 모니터 모드</strong> (${myNickname})</div>
+            <div>🔔 현재 턴: <strong style="color:#fde047;">${activeMeta.symbol} ${religion} (${activeOwnerName} 학생)</strong></div>
+            <div class="admin-ctrl-row">
+              <button class="btn-admin-ctrl" onclick="adminSkipTurn()">⏭️ 턴 넘기기</button>
+              <button class="btn-admin-reset" onclick="adminResetGame()">🔄 게임 초기화</button>
+            </div>
+          `;
+        } else if (isSolo) {
           banner.innerHTML = `
             <div>👤 내 활동명: <strong style="color:#6ee7b7;">${myNickname}</strong> (솔로 전체 조작)</div>
             <div>🔔 현재 턴: <strong style="color:#fde047;">${activeMeta.symbol} ${religion}</strong></div>
           `;
         } else {
           const myMeta = RELIGION_META[myAssignedReligion] || { symbol: '❔' };
-          const turnNotice = myTurn
+          const turnNotice = (myAssignedReligion === religion)
             ? `<span style="color:#fde047; font-weight:900;">🔔 지금 내 차례입니다!</span>`
             : `⏳ 현재 턴: <strong>${activeMeta.symbol} ${religion} (${activeOwnerName} 님)</strong>`;
           banner.innerHTML = `
@@ -907,15 +1053,15 @@
           regionsElem.innerHTML = state.regions.map(r => `<span class="region-tag">${r}</span>`).join('');
         }
         if (ownerElem) {
-          if (isSolo) {
+          if (isSolo && !isAdmin) {
             ownerElem.className = 'owner-badge me';
             ownerElem.innerText = `👤 ${state.ownerName || myNickname} (솔로)`;
-          } else if (state.ownerId === socket.id) {
+          } else if (!isAdmin && state.ownerId === socket.id) {
             ownerElem.className = 'owner-badge me';
             ownerElem.innerText = `⭐ ${state.ownerName} (내 종교)`;
           } else if (state.ownerName) {
             ownerElem.className = 'owner-badge';
-            ownerElem.innerText = `👤 ${state.ownerName}`;
+            ownerElem.innerText = `👤 담당: ${state.ownerName}`;
           } else {
             ownerElem.className = 'owner-badge empty';
             ownerElem.innerText = `미배정 (턴 제외)`;
