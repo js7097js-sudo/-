@@ -50,8 +50,8 @@
     /* 인게임 4방면 레이아웃 */
     #game-view {
       display: none; width: 100vw; height: 100vh; max-width: 1640px;
-      grid-template-rows: 94px 1fr 100px;
-      grid-template-columns: 255px 1fr 255px;
+      grid-template-rows: 98px 1fr 102px;
+      grid-template-columns: 260px 1fr 260px;
       gap: 10px; padding: 10px;
     }
 
@@ -61,7 +61,7 @@
 
     /* 4방향 엔틱 종교 카드 */
     .religion-card {
-      border: 2.5px solid #b38f48; border-radius: 8px; padding: 12px 16px;
+      border: 2.5px solid #b38f48; border-radius: 8px; padding: 10px 15px;
       display: flex; flex-direction: column; justify-content: space-between;
       position: relative; overflow: hidden;
       box-shadow: inset 0 0 25px rgba(0,0,0,0.85), 0 6px 16px rgba(0,0,0,0.7);
@@ -107,7 +107,31 @@
     .turn-badge { font-size: 11px; background: linear-gradient(180deg, #fde047 0%, #ca8a04 100%); color: #090d14; padding: 2px 7px; border-radius: 4px; font-weight: 900; margin-left: 6px; }
     .religion-score { font-size: 24px; font-weight: 900; color: #ffffff; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
 
-    .region-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; z-index: 3; }
+    /* 플레이어 활동명(닉네임) 배지 스타일 */
+    .owner-badge {
+      display: inline-block;
+      margin-top: 3px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 900;
+      background: rgba(9, 13, 20, 0.82);
+      border: 1px solid #94a3b8;
+      color: #e2e8f0;
+    }
+    .owner-badge.me {
+      background: linear-gradient(180deg, #059669 0%, #065f46 100%);
+      border-color: #6ee7b7;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+    }
+    .owner-badge.empty {
+      background: rgba(15, 23, 42, 0.6);
+      border-color: #475569;
+      color: #94a3b8;
+    }
+
+    .region-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; z-index: 3; }
     .region-tag { font-size: 10.5px; padding: 2px 7px; border-radius: 4px; background: rgba(9, 13, 20, 0.85); border: 1px solid rgba(212, 175, 55, 0.45); color: #f5d78e; }
 
     /* 중앙 엔틱 고지도 보드 */
@@ -131,6 +155,15 @@
       position: absolute; top: 10px; left: 10px;
       background: rgba(11, 17, 26, 0.88); border: 1.5px solid #c5a059;
       padding: 6px 11px; border-radius: 6px; font-size: 11px; color: #f5d78e; line-height: 1.45; pointer-events: none;
+    }
+
+    /* 우측 상단: 내 활동명·배정 종교 및 현재 턴 플레이어 안내 바 */
+    .my-status-banner {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(11, 17, 26, 0.94); border: 2px solid #f5d78e;
+      padding: 7px 14px; border-radius: 6px; font-size: 12.5px; color: #f8fafc;
+      line-height: 1.5; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+      text-align: right;
     }
 
     /* 하단 조작 바 */
@@ -269,8 +302,11 @@
         <div class="emblem-group">
           <div class="gold-emblem">✝</div>
           <div>
-            <span class="religion-name">크리스트교</span>
-            <span id="turn-tag-christianity" class="turn-badge" style="display:none;">내 턴</span>
+            <div>
+              <span class="religion-name">크리스트교</span>
+              <span id="turn-tag-christianity" class="turn-badge" style="display:none;">현재 턴</span>
+            </div>
+            <div id="owner-christianity" class="owner-badge empty">미배정</div>
           </div>
         </div>
         <div id="score-christianity" class="religion-score">60점</div>
@@ -284,8 +320,11 @@
         <div class="emblem-group">
           <div class="gold-emblem">☪</div>
           <div>
-            <span class="religion-name">이슬람교</span>
-            <span id="turn-tag-islam" class="turn-badge" style="display:none;">내 턴</span>
+            <div>
+              <span class="religion-name">이슬람교</span>
+              <span id="turn-tag-islam" class="turn-badge" style="display:none;">현재 턴</span>
+            </div>
+            <div id="owner-islam" class="owner-badge empty">미배정</div>
           </div>
         </div>
         <div id="score-islam" class="religion-score">60점</div>
@@ -309,6 +348,11 @@
         • 타 종교 강세지 오답 시: <strong>-20점 감점</strong>
       </div>
 
+      <!-- 우측 상단: 내 활동명과 배정받은 종교 & 현재 누구 차례인지 상시 표시 -->
+      <div id="myStatusBanner" class="my-status-banner">
+        내 배정 정보 확인 중...
+      </div>
+
       <div class="action-panel">
         <div id="targetLabel" class="target-box">지역을 선택하세요</div>
         <button class="method-btn selected" id="btn-direct" onclick="setMethod('직접전파')">인접 지역 직접전파</button>
@@ -323,8 +367,11 @@
         <div class="emblem-group">
           <div class="gold-emblem">☸</div>
           <div>
-            <span class="religion-name">불교</span>
-            <span id="turn-tag-buddhism" class="turn-badge" style="display:none;">내 턴</span>
+            <div>
+              <span class="religion-name">불교</span>
+              <span id="turn-tag-buddhism" class="turn-badge" style="display:none;">현재 턴</span>
+            </div>
+            <div id="owner-buddhism" class="owner-badge empty">미배정</div>
           </div>
         </div>
         <div id="score-buddhism" class="religion-score">60점</div>
@@ -338,8 +385,11 @@
         <div class="emblem-group">
           <div class="gold-emblem">🕉</div>
           <div>
-            <span class="religion-name">힌두교</span>
-            <span id="turn-tag-hinduism" class="turn-badge" style="display:none;">내 턴</span>
+            <div>
+              <span class="religion-name">힌두교</span>
+              <span id="turn-tag-hinduism" class="turn-badge" style="display:none;">현재 턴</span>
+            </div>
+            <div id="owner-hinduism" class="owner-badge empty">미배정</div>
           </div>
         </div>
         <div id="score-hinduism" class="religion-score">60점</div>
@@ -428,39 +478,35 @@
   <script>
     const socket = io();
     let myId = null;
+    let myNickname = '';
     let selectedRegionKey = null;
     let selectedMethod = '직접전파';
     let currentActiveReligion = '크리스트교';
     let myAssignedReligion = null;
     let isSolo = false;
     let pendingStep2Data = null;
+    let latestReligionStates = {};
 
     const RELIGION_META = {
-      '크리스트교': { id: 'christianity', color: '#7c3aed' },
-      '이슬람교': { id: 'islam', color: '#059669' },
-      '불교': { id: 'buddhism', color: '#d97706' },
-      '힌두교': { id: 'hinduism', color: '#ea580c' }
+      '크리스트교': { id: 'christianity', symbol: '✝', color: '#7c3aed' },
+      '이슬람교': { id: 'islam', symbol: '☪', color: '#059669' },
+      '불교': { id: 'buddhism', symbol: '☸', color: '#d97706' },
+      '힌두교': { id: 'hinduism', symbol: '🕉', color: '#ea580c' }
     };
 
-    // 16개 권역 모두 동일한 황금색 테두리로 통일하고 '(혼합)' 표기를 제거하여 한눈에 구분되지 않도록 설정
     const PIN_NODES = [
-      // 크리스트교 대표 3곳
       { key: '유럽(바티칸)', label: '유럽(바티칸)', lon: 12.5, lat: 43.0, dx: 0, dy: -22 },
       { key: '미국·캐나다', label: '미국·캐나다', lon: -100.0, lat: 40.0, dx: 0, dy: 0 },
       { key: '브라질·남미', label: '브라질·남미', lon: -55.0, lat: -15.0, dx: 0, dy: 0 },
-      // 이슬람교 대표 3곳
       { key: '서남아(메카)', label: '서남아(메카)', lon: 43.0, lat: 23.0, dx: -5, dy: 24 },
       { key: '북아프리카', label: '북아프리카', lon: 17.0, lat: 27.0, dx: -35, dy: -4 },
       { key: '중앙아시아', label: '중앙아시아', lon: 64.0, lat: 43.0, dx: -15, dy: -24 },
-      // 불교 대표 3곳
       { key: '태국·미얀마', label: '태국·미얀마', lon: 100.5, lat: 16.0, dx: 48, dy: -6 },
       { key: '몽골·부탄', label: '몽골·부탄', lon: 103.8, lat: 46.5, dx: 0, dy: -20 },
       { key: '스리랑카', label: '스리랑카', lon: 80.5, lat: 7.0, dx: -15, dy: 34 },
-      // 힌두교 대표 3곳
       { key: '북인도(갠지스)', label: '북인도(갠지스)', lon: 78.0, lat: 25.0, dx: -48, dy: -4 },
       { key: '남인도(마두라이)', label: '남인도(마두라이)', lon: 77.0, lat: 12.0, dx: -58, dy: 12 },
       { key: '네팔', label: '네팔', lon: 85.0, lat: 28.5, dx: -2, dy: -28 },
-      // 다종교 혼합 4곳 (외형상 일반 권역과 완벽히 동일하게 표시)
       { key: '한국', label: '한국', lon: 127.5, lat: 37.5, dx: 42, dy: -8 },
       { key: '싱가포르', label: '싱가포르', lon: 103.8, lat: 1.3, dx: 50, dy: 8 },
       { key: '인도네시아', label: '인도네시아', lon: 116.0, lat: -5.0, dx: 38, dy: 28 },
@@ -657,22 +703,25 @@
 
     socket.on('gameStarted', ({ players, soloMode, mapOwnership, religionStates, currentReligion }) => {
       isSolo = soloMode;
+      latestReligionStates = religionStates;
       document.getElementById('lobby-view').style.display = 'none';
       document.getElementById('game-view').style.display = 'grid';
 
       const me = players.find(p => p.id === socket.id);
       myAssignedReligion = me ? me.religion : null;
+      myNickname = me ? me.name : '관전자';
 
       setTimeout(() => {
         updateBoard(mapOwnership, religionStates);
         setActiveTurn(currentReligion);
-      }, 300);
+      }, 200);
       playReligionSound(currentReligion);
     });
 
     function clickRegion(key) {
       if (!isSolo && myAssignedReligion !== currentActiveReligion) {
-        alert(`현재는 [${currentActiveReligion}] 차례입니다!`);
+        const turnOwner = latestReligionStates[currentActiveReligion]?.ownerName || '상대방';
+        alert(`현재는 [${currentActiveReligion} - ${turnOwner}]님의 차례입니다!\n내 배정 종교: [${myAssignedReligion}]`);
         return;
       }
       selectedRegionKey = key;
@@ -703,6 +752,7 @@
 
     socket.on('turnResultTwoStep', (data) => {
       pendingStep2Data = data;
+      latestReligionStates = data.religionStates;
       const s1 = data.step1Card;
 
       if (s1.baseGain < 0) {
@@ -810,9 +860,33 @@
 
       const myTurn = isSolo || (myAssignedReligion === religion);
       document.getElementById('execBtn').disabled = !myTurn || !selectedRegionKey;
+
+      // 우측 상단 내 정보 및 현재 턴 안내 업데이트
+      const banner = document.getElementById('myStatusBanner');
+      if (banner) {
+        const activeOwnerName = latestReligionStates[religion]?.ownerName || '미배정';
+        const activeMeta = RELIGION_META[religion];
+        if (isSolo) {
+          banner.innerHTML = `
+            <div>👤 내 활동명: <strong style="color:#6ee7b7;">${myNickname}</strong> (솔로 전체 조작)</div>
+            <div>🔔 현재 턴: <strong style="color:#fde047;">${activeMeta.symbol} ${religion}</strong></div>
+          `;
+        } else {
+          const myMeta = RELIGION_META[myAssignedReligion] || { symbol: '❔' };
+          const turnNotice = myTurn
+            ? `<span style="color:#fde047; font-weight:900;">🔔 지금 내 차례입니다!</span>`
+            : `⏳ 현재 턴: <strong>${activeMeta.symbol} ${religion} (${activeOwnerName} 님)</strong>`;
+          banner.innerHTML = `
+            <div>👤 내 배정: <strong style="color:#6ee7b7;">${myNickname} ➔ ${myMeta.symbol} ${myAssignedReligion}</strong></div>
+            <div>${turnNotice}</div>
+          `;
+        }
+      }
     }
 
     function updateBoard(mapOwnership, religionStates) {
+      latestReligionStates = religionStates;
+
       Object.keys(mapOwnership).forEach(key => {
         const owner = mapOwnership[key];
         const node = document.getElementById(`node-${key}`);
@@ -826,9 +900,26 @@
         const meta = RELIGION_META[rName];
         const scoreElem = document.getElementById(`score-${meta.id}`);
         const regionsElem = document.getElementById(`regions-${meta.id}`);
+        const ownerElem = document.getElementById(`owner-${meta.id}`);
+
         if (scoreElem) scoreElem.innerText = `${state.score}점`;
         if (regionsElem) {
           regionsElem.innerHTML = state.regions.map(r => `<span class="region-tag">${r}</span>`).join('');
+        }
+        if (ownerElem) {
+          if (isSolo) {
+            ownerElem.className = 'owner-badge me';
+            ownerElem.innerText = `👤 ${state.ownerName || myNickname} (솔로)`;
+          } else if (state.ownerId === socket.id) {
+            ownerElem.className = 'owner-badge me';
+            ownerElem.innerText = `⭐ ${state.ownerName} (내 종교)`;
+          } else if (state.ownerName) {
+            ownerElem.className = 'owner-badge';
+            ownerElem.innerText = `👤 ${state.ownerName}`;
+          } else {
+            ownerElem.className = 'owner-badge empty';
+            ownerElem.innerText = `미배정 (턴 제외)`;
+          }
         }
       });
     }
